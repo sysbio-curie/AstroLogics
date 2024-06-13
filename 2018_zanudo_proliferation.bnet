@@ -1,0 +1,22 @@
+# model in BoolNet format
+# the header targets, factors is mandatory to be importable in the R package BoolNet
+
+targets, factors
+AKT,              PIP3
+E2F,              !Rb
+EIF4F,            mTORC1
+FOXO3,            !MAPK | MAPK&!AKT
+GFs,              GFs
+MAPK,             !RAS&PIP3 | RAS
+PI3K,             !RTK&RAS | RTK
+PIP3,             PI3K
+PRAS40,           !AKT
+Proliferation_b1, !E2F&!EIF4F&Proliferation_b1&Proliferation_b2 | !E2F&EIF4F&!S6K&Proliferation_b1&Proliferation_b2 | !E2F&EIF4F&S6K | E2F
+Proliferation_b2, E2F&EIF4F&S6K&Proliferation_b1
+RAS,              RTK
+RTK,              !MAPK&!FOXO3&!S6K&GFs | !MAPK&FOXO3&GFs | MAPK&FOXO3&GFs
+Rb,               !cycE
+S6K,              mTORC1
+TSC,              !MAPK&!AKT
+cycE,             !FOXO3&!AKT&E2F | !FOXO3&AKT | FOXO3&E2F
+mTORC1,           !TSC&!PRAS40
