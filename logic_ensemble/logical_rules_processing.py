@@ -19,6 +19,18 @@ seed = 0
 np.random.seed(seed)
 
 def clause_string(logic):
+    """
+    Converts a list of logical clauses into a list of string representations.
+
+    Args:
+        logic (list or bool): A list of logical clauses where each clause is a list of tuples.
+                              Each tuple contains a variable and a boolean indicating its negation.
+                              If the input is a boolean, it will be converted to '0' or '1'.
+
+    Returns:
+        list: A list of strings representing the logical clauses. Each clause is represented as a 
+              string with variables joined by ' & '. Negated variables are prefixed with '!'.
+    """
     logic_rules = []
     if logic == False:
         logic_rules = ['0']
@@ -32,6 +44,18 @@ def clause_string(logic):
     return(logic_rules)
 
 def dataframe_model_dnf(model_dnf):
+    """
+    Converts a dictionary of Disjunctive Normal Form (DNF) logical rules into a DataFrame and 
+    returns a Series with the logical expressions for each node.
+
+    Args:
+        model_dnf (dict): A dictionary where keys are node names and values are lists of clauses 
+                          representing the DNF logical rules for each node.
+
+    Returns:
+        pd.Series: A Series where the index is the node names and the values are the combined 
+                   logical expressions in DNF format for each node.
+    """
     node_names = list(model_dnf.keys())
     logic_mtx = pd.DataFrame()
     for i in node_names:
@@ -45,6 +69,26 @@ def dataframe_model_dnf(model_dnf):
     return(logic_full)
 
 def load_model_logic(path):
+    """
+    Loads and processes logical models from a specified directory.
+
+    Args:
+        path (str): The directory path containing the model files.
+
+    Returns:
+        pd.DataFrame: A DataFrame containing the concatenated logical models in DNF format.
+
+    The function performs the following steps:
+    1. Lists all files in the specified directory.
+    2. Initializes an empty DataFrame to store the model logic.
+    3. Iterates over each file in the directory:
+        a. Loads the model file.
+        b. Converts the model to Disjunctive Normal Form (DNF).
+        c. Converts the DNF model to a DataFrame.
+        d. Sets the model name based on the file name (excluding the extension).
+        e. Concatenates the model DataFrame to the main DataFrame.
+    4. Returns the concatenated DataFrame containing all models.
+    """
     # Define models path
     model_files = os.listdir(path)
     model_logic = pd.DataFrame()
@@ -64,14 +108,49 @@ def load_model_logic(path):
 
 # Function to count strings in a row
 def count_strings_in_row(row):
+    """
+    Count the occurrences of each string in a given row.
+
+    Args:
+        row (iterable): An iterable containing strings to be counted.
+
+    Returns:
+        collections.Counter: A Counter object mapping each string to its count.
+    """
     return Counter(row)
 
 def split_gene_clauses(model_logic_mtx, gene): 
+    """
+    Splits the logical clauses for a given gene in the model logic matrix.
+
+    Args:
+        model_logic_mtx (pd.DataFrame): A DataFrame containing the logical rules for various genes.
+        gene (str): The gene for which the logical clauses need to be split.
+
+    Returns:
+        pd.DataFrame: A DataFrame where each row corresponds to a split clause of the original logical rules for the given gene.
+    """
     split_data = [item.split(" | ") for item in model_logic_mtx.loc[gene]]
     df = pd.DataFrame(split_data, index = model_logic_mtx.loc[gene].index)
     return(df)
 
 def logic_clause_frequency(model_logic_mtx):
+    """
+    Calculate the frequency of logic clauses in a given model logic matrix.
+
+    This function processes a matrix of logical rules, splits the gene clauses,
+    counts the occurrences of each clause, and computes the frequency of each
+    clause across all rows. The result is a DataFrame where each column 
+    represents the frequency of clauses for a corresponding index in the input matrix.
+
+    Parameters:
+    model_logic_mtx (pd.DataFrame): A DataFrame where each row represents a set of 
+                                    logical rules for a model.
+
+    Returns:
+    pd.DataFrame: A DataFrame containing the frequency of each logic clause. 
+                  Columns correspond to the indices of the input matrix.
+    """
     logic_clause = pd.DataFrame()
     for i in model_logic_mtx.index:
         df = split_gene_clauses(model_logic_mtx, i)
@@ -92,6 +171,21 @@ def logic_clause_frequency(model_logic_mtx):
     return(logic_clause)
 
 def create_flattend_logic_clause(model_logic_mtx):
+    """
+    Flattens the logical clauses from a given model logic matrix.
+
+    This function processes a DataFrame where each column represents a model's logical clauses.
+    It computes the frequency of each clause, stacks them, and concatenates them into a single
+    DataFrame. The resulting DataFrame has the same columns as the input, with rows representing
+    the flattened logical clauses and their frequencies.
+
+    Parameters:
+    model_logic_mtx (pd.DataFrame): A DataFrame where each column represents a model's logical clauses.
+
+    Returns:
+    pd.DataFrame: A DataFrame with flattened logical clauses as rows and models as columns, 
+                  filled with the frequency of each clause.
+    """
     model_name = list(model_logic_mtx.columns)
     logic_clause_flattend = pd.DataFrame()
 
@@ -111,6 +205,17 @@ def create_flattend_logic_clause(model_logic_mtx):
     return(logic_clause_flattend)
 
 def calculate_logic_pca(logic_clause_flattend, num_components = 10):
+    """
+    Perform Principal Component Analysis (PCA) on the provided logical clause data.
+
+    Parameters:
+    logic_clause_flattend (pd.DataFrame): A DataFrame containing the flattened logical clauses.
+    num_components (int, optional): The number of principal components to compute. Default is 10.
+
+    Returns:
+    pd.DataFrame: A DataFrame containing the principal components, with each column representing a principal component.
+    """
+
     # Initialize PCA (let's reduce to 2 principal components for this example)
     pca = PCA(n_components=num_components)
 
@@ -129,6 +234,15 @@ def calculate_logic_pca(logic_clause_flattend, num_components = 10):
     return(pca_df)
 
 def elbow_plot(num_components):
+    """
+    Generates an elbow plot to visualize the explained variance ratio for a given number of principal components.
+
+    Parameters:
+    num_components (int): The number of principal components to consider for PCA.
+
+    Returns:
+    None: This function displays a plot and does not return any value.
+    """
     # Define PCA
     pca = PCA(n_components=num_components)
     explained_variance_ratio = pca.explained_variance_ratio_
@@ -151,7 +265,17 @@ def elbow_plot(num_components):
     # Display the plot
     plt.show()
 
-def plot_logic_pca(pca_df, pca_dim = ['pc1','pc2'], fig_size = (8,6), color = 'cluster'):
+def plot_logic_pca(pca_df, pca_dim=['pc1', 'pc2'], fig_size=(8, 6), color='cluster'):
+    """
+    Plots a PCA scatter plot using the provided DataFrame.
+    Parameters:
+    pca_df (pd.DataFrame): DataFrame containing the PCA results.
+    pca_dim (list of str, optional): List containing the names of the principal components to plot. Defaults to ['pc1', 'pc2'].
+    fig_size (tuple, optional): Size of the figure. Defaults to (8, 6).
+    color (str, optional): Column name in pca_df to use for coloring the points. Defaults to 'cluster'.
+    Returns:
+    None
+    """
     
     #Define figure_size
     plt.figure(figsize=(8, 6))
@@ -170,6 +294,21 @@ def plot_logic_pca(pca_df, pca_dim = ['pc1','pc2'], fig_size = (8,6), color = 'c
     plt.show()
 
 def calculate_kmean_cluster(pca_df, num_cluster, plot = True):
+    """
+    Perform K-Means clustering on a PCA-transformed DataFrame and optionally plot the results.
+
+    Parameters:
+    pca_df (pd.DataFrame): DataFrame containing PCA-transformed data with at least two principal components.
+    num_cluster (int): Number of clusters to form.
+    plot (bool, optional): If True, generate a scatter plot of the clusters. Default is True.
+
+    Returns:
+    None: The function modifies the input DataFrame by adding a 'Kmean_Cluster' column with cluster labels.
+
+    Notes:
+    - The function assumes that the PCA DataFrame has columns named 'pc1' and 'pc2' for plotting purposes.
+    - The plot will display the clusters with different colors and mark the cluster centers with red 'X' markers.
+    """
     # Assume k=2 (you can choose a different number based on the Elbow Method)
     kmeans = KMeans(n_clusters=num_cluster)
 

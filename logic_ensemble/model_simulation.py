@@ -1,57 +1,173 @@
 import maboss
 from tqdm import tqdm
+import collections
 import os
 import pandas as pd
-import scanpy as sc
-import matplotlib.pyplot as plt
-import seaborn as sns
 
+"""
+This script is used to simulate the model with the given parameter set.
+"""
+_default_parameter_list = collections.OrderedDict([
+    ('time_tick', 1),
+    ('max_time', 100),
+    ('sample_count', 1000),
+    ('discrete_time', 0),
+    ('use_physrandgen', 1),
+    ('seed_pseudorandom', 0),
+    ('display_traj', 0),
+    ('statdist_traj_count', 0),
+    ('statdist_cluster_threshold', 1),
+    ('thread_count', 1),
+    ('statdist_similarity_cache_max_size', 20000)
+])
 
-def simulate_model(input_path, output_path, 
-                   project_name,
-                   parameter_set):
-    # Simulation results object
-    ensemble_results = {}
-    path = input_path
-    model_list = os.listdir(path)
+class Simulation:
+    """
+    Attributes:
+        network (Network): A Network object, that will be translated in a bnd file.
+        mutations (list): A list of nodes for which mutation can be triggered by modifying the cfg file.
+        palette (dict): A mapping of nodes to color for plotting the results of the simulation.
+        param (dict): A dictionary that contains global variables (keys starting with a '$'), and simulation parameters (keys not starting with a '$').
+    Methods:
+        __init__(model_path, parameters=collections.OrderedDict({}), **kwargs):
+                model_path (str): Path to the .bnet files.
+                parameters (dict, optional): Parameters of the simulation. Defaults to an empty OrderedDict.
+                kwargs (dict): Additional parameters of the simulation.
+        update_parameters(**kwargs):
+            Add elements to `self.param`.
+                **kwargs: Arbitrary keyword arguments to be added to `self.param`.
+        mutate(node, value):
+                node (str): The name of the node to be mutated.
+                value (int): The value of the mutation (0 or 1).
+        run_simulation(output_nodes=None):
+    """
+    def __init__(self, model_path, parameters=collections.OrderedDict({}), **kwargs):
+        """
+        Initialize the Simulation object.
 
-    for model in tqdm(model_list):
-        # Load model
-        simulations = maboss.loadBNet(path + model)
+        :param model_path: path to the .bnet files
+        :param dict kwargs: parameters of the simulation
+        """
+        self.model_path = model_path
 
-        # Setup the model initial condition
-        ## Put all inputs at 0
-        for i in model_nodes:
-            simulations.network.set_istate(i,[1,0])
-        ## Put all miR at 1
-        for i in mir_list:
-            simulations.network.set_istate(i,[0,1])
+        self.param = _default_parameter_list.copy()
+        self.palette = {}
+        for cfg in (parameters, kwargs):
+            for p in cfg:
+                if p in _default_parameter_list or p[0] == '$':
+                    self.param[p] = cfg[p]
+                elif p == "palette":
+                    self.palette = kwargs[p]
+                else:
+                    print("Warning: unused parameter %s" % p)
 
-        # Modify the parameter of the model
-        simulations.update_parameters(sample_count = 10000,
-                                    thread_count = 15,
-                                    max_time = 20,
-                                    time_tick = 1)
-        simulations.network.set_output(simulations.network.names)
+        self.mutations = []
+        self.mutationTypes = {}
+        self.refstate = {}
+        
+    def update_parameters(self, **kwargs):
+        """
+        Add elements to ``self.param``.
 
-        # Perform simulations
-        result = simulations.run()
+        This method updates the parameters stored in the `self.param` dictionary.
+        It accepts keyword arguments and adds them to `self.param` if they are 
+        present in the `_default_parameter_list` or if their key starts with a '$'.
+        If a parameter is not recognized, a warning message is printed.
 
-        # Get matrix
-        model_mtx = result.get_nodes_probtraj().copy()
+        Parameters:
+        **kwargs: Arbitrary keyword arguments.
+            The keyword arguments to be added to `self.param`.
 
-        # Setup cell matrix
-        ## Cells
-        model_mtx['model_id'] = model.replace('.bnet','')
-        ## Timepoint
-        model_mtx['timepoint'] = model_mtx.index
-        ## Change index
-        model_mtx.index = model_mtx.index.map(str)
-        model_mtx.index = model + '_' + model_mtx.index
+        Example:
+        >>> obj.update_parameters(param1=value1, param2=value2)
+        """
 
-        # Concatenate model results in dictionary
-        ensemble_results[model] = model_mtx
+        for p in kwargs:
+            if p in _default_parameter_list or p[0] == '$':
+                self.param[p] = kwargs[p]
+            else:
+                print("Warning: unused parameter %s" % p)
 
-    # Save the simulation to /tmp folder
-    simulation_df = pd.concat(ensemble_results.values(), ignore_index = True)
-    simulation_df.to_csv('/home/spankaew/Git/BooleanBenchmark/tmp/Invasion_simulation_miR.csv')
+    def mutate(self, node, value):
+        """
+        Add a mutation to the simulation.
+
+        This method adds a mutation to the simulation. It accepts a node name and a value
+        (0 or 1) as arguments. The mutation is stored in the `self.mutations` list.
+
+        Parameters:
+        node: str
+            The name of the node to be mutated.
+        value: int
+            The value of the mutation (0 or 1).
+
+        Example:
+        >>> obj.mutate("node1", 0)
+        """
+
+        self.mutations.append((node, value))
+
+    def run_simulation(self, output_nodes = None):
+        """
+        Run simulations for a list of models and store the results.
+        Parameters:
+        output_nodes (list, optional): List of nodes to set as output for the simulation. 
+                                       If None, all nodes will be set as output. Default is None.
+        Returns:
+        None: The results of the simulations are stored in the `self.simulation_df` attribute.
+        The function performs the following steps:
+        1. Initializes an empty dictionary to store the results of each model.
+        2. Retrieves the list of models from the specified model path.
+        3. Iterates over each model in the list:
+           a. Loads the model using `maboss.loadBNet`.
+           b. Updates the model parameters with `self.param`.
+           c. Sets the output nodes for the simulation.
+           d. Runs the simulation.
+           e. Retrieves the probability trajectory matrix of the nodes.
+           f. Adds model ID and timepoint information to the matrix.
+           g. Stores the matrix in the results dictionary.
+        4. Concatenates the results from all models into a single DataFrame.
+        5. Saves the concatenated DataFrame to the `self.simulation_df` attribute.
+        """
+        # Simulation results object
+        ensemble_results = {}
+        path = self.model_path
+        model_list = os.listdir(path)
+        
+
+        # For loop to run the simulation
+        for model in tqdm(model_list):
+            # Load model
+            simulations = maboss.loadBNet(path + model)
+
+            # Setup the model initial condition
+            simulations.update_parameters(self.param)
+
+            # Set the output of the simulation
+            if output_nodes is not None:
+                simulations.network.set_output(output_nodes)
+            else:
+                simulations.network.set_output(simulations.network.names)
+
+            # Perform simulations
+            result = simulations.run()
+            # Get matrix
+            model_mtx = result.get_nodes_probtraj().copy()
+
+            # Setup cell matrix
+            ## Cells
+            model_mtx['model_id'] = model.replace('.bnet','')
+            ## Timepoint
+            model_mtx['timepoint'] = model_mtx.index
+            ## Change index
+            model_mtx.index = model_mtx.index.map(str)
+            model_mtx.index = model + '_' + model_mtx.index
+
+            # Concatenate model results in dictionary
+            ensemble_results[model] = model_mtx
+
+        # Save the simulation to /tmp folder
+        simulation_df = pd.concat(ensemble_results.values(), ignore_index = True)
+        
+        # Save the simulation to the object
+        self.simulation_df = simulation_df

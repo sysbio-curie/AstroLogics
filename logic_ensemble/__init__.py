@@ -1,5 +1,5 @@
 """
-{Test script for scPROFILE v05}
+{Test script for the Boolean Benchmark project}
 """
 __author__ = 'Saran PANKAEW'
 __version__ = '1'
