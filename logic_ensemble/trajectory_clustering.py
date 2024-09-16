@@ -7,9 +7,9 @@ import numpy as np
 from sklearn.decomposition import PCA
 # For Trajectory clustering
 from tslearn.clustering import TimeSeriesKMeans
-#from tslearn.datasets import CachedDatasets
-#from tslearn.preprocessing import TimeSeriesScalerMeanVariance
-#from tslearn.preprocessing import TimeSeriesResampler
+from tslearn.datasets import CachedDatasets
+from tslearn.preprocessing import TimeSeriesScalerMeanVariance
+from tslearn.preprocessing import TimeSeriesResampler
 # Define key parameters
 seed = 0
 np.random.seed(seed)
@@ -63,7 +63,9 @@ class trajectory:
         # Store the PCA DataFrame
         self.pca_df = pca_df
 
-    def plot_trajectory(self, fig_size=(8,6), color='model_id', size=10):
+    def plot_trajectory(self, fig_size=(8,6), 
+                        color='model_id', size=10,
+                        show_legend = False):
         """
         Plot trajectory from PCA of simulated models.
         Parameters:
@@ -80,15 +82,25 @@ class trajectory:
         plt.figure(figsize = fig_size)
         
         # Line plot using seaborn
+        plot = sns.lineplot(data = pca_df, 
+                    x = 'pc1',y='pc2',
+                    units = 'model_id', estimator = None, lw=2, alpha = .5,
+                    sort = False)
+        
+        # Line plot using seaborn
         plot = sns.lineplot(data = pca_df,
                             x = 'pc1', y = 'pc2',
-                            hue = pca_df[color], sort = False,
+                            units = 'model_id', estimator = None, 
+                            hue = color, sort = False,
                             marker = 'o', markersize = size, 
                             linewidth = 2,
                             alpha = .5 
                             )
-        plot.get_legend().remove()
-        
+        # Show legend
+        if show_legend == False:
+            plot.get_legend().remove()
+
+        # Show the plot
         plot.grid(True)
         plt.show()
 
@@ -155,25 +167,32 @@ class trajectory:
         self.pca_df = pca_df
         self.cluster_dict = cluster_dict
 
-    def plot_trajectory_cluster(pca_df,
-                            fig_size = (8,6)):
+    def plot_trajectory_cluster(self, 
+                                fig_size = (8,6),
+                                show_legend = False):
         """
         Plot the calculated clusters onto the trajectory
         """
+        pca_df = self.pca_df
+
         ## Calculate the mean position
         kmean_cluster = pca_df.groupby(['timepoint','kmean_cluster'])[['pc1','pc2']].mean()
 
+        # Adjust figure size
+        plt.figure(figsize = fig_size)
+
         ## Plot with Seaborn
         plot = sns.lineplot(data = pca_df, 
-                            x = 'pc1',y='pc2',
-                            hue = 'kmean_cluster', units = 'model_id', estimator = None, lw=2, alpha = .1,
-                            sort = False)
-        plot.get_legend().remove()
-
+                    x = 'pc1', y='pc2',
+                    hue = 'kmean_cluster', units = 'model_id', estimator = None, lw=2, alpha = .1,
+                    sort = False)
+        if show_legend == False:
+            plot.get_legend().remove()
         plot2 = sns.lineplot(data = kmean_cluster, 
                             x = 'pc1',y='pc2',
                             hue = 'kmean_cluster',
                             sort = False, marker = 'o', linewidth = 5, markersize = 10)
+        plot2.get_legend().remove()
         plt.show()
 
 #### I'm not sure if this function is necessary
@@ -197,7 +216,7 @@ class trajectory:
         model_id = list(pca_df['model_id'])
 
         # Compact data into the right format
-        kmean_cluster = pca_df.groupby(['model_id','timepoint'])[['pca1','pca2']].mean()
+        kmean_cluster = pca_df.groupby(['model_id','timepoint'])[['pc1','pc2']].mean()
 
         # Calculate Euclidean distances between clusters
         distance_matrix = pd.DataFrame()

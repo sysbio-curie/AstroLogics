@@ -17,8 +17,8 @@ class LogicEnsemble:
         self.path = path
         self.project = project_name
 
-    def create_simulation(self, parameters = None):
-        self.simulation = simulation(self.path, parameters)
+    def create_simulation(self):
+        self.simulation = simulation(self.path)
         print('Simulation object created')
 
     def create_trajectory(self, parameters = None):
@@ -27,9 +27,14 @@ class LogicEnsemble:
             print('Simulation object is not created yet')
             return
         else:
-            self.trajectory = trajectory(self.path, self.simulation.simulation_df)
+            self.trajectory = trajectory(self.simulation.simulation_df)
             print('Trajectory object created')
 
-    def create_logic(self, parameters = None):
-        self.logic = logic(self.path, parameters)
+    def create_logic(self):
+        self.logic = logic(self.path)
         print('Logic object created')
+
+    def __repr__(self):
+        print(f'LogicEnsemble object for the project {self.project}')
+        print(f'Path: {self.path}')
+        print(f'Simulation object: {self.simulation}')

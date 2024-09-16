@@ -19,29 +19,30 @@ seed = 0
 np.random.seed(seed)
 
 def clause_string(logic):
-        """
-        Converts a list of logical clauses into a list of string representations.
+    """
+    Converts a list of logical clauses into a list of string representations.
 
-        Args:
-            logic (list or bool): A list of logical clauses where each clause is a list of tuples.
-                                Each tuple contains a variable and a boolean indicating its negation.
-                                If the input is a boolean, it will be converted to '0' or '1'.
+    Args:
+        logic (list or bool): A list of logical clauses where each clause is a list of tuples.
+                            Each tuple contains a variable and a boolean indicating its negation.
+                            If the input is a boolean, it will be converted to '0' or '1'.
 
-        Returns:
-            list: A list of strings representing the logical clauses. Each clause is represented as a 
-                string with variables joined by ' & '. Negated variables are prefixed with '!'.
-        """
-        logic_rules = []
-        if logic == False:
-            logic_rules = ['0']
-        elif logic == True:
-            logic_rules = ['1']
+    Returns:
+        list: A list of strings representing the logical clauses. Each clause is represented as a 
+            string with variables joined by ' & '. Negated variables are prefixed with '!'.
+    """
+    logic_rules = []
+    if logic == False:
+        logic_rules = ['0']
+    elif logic == True:
+        logic_rules = ['1']
+    else:
         for i in range(len(logic)):
             logic_clause = logic[i].copy()
             formatted_strings = [f"{t[0]}" if t[1] else f"!{t[0]}" for t in logic_clause]
             single_line_string = ' & '.join(formatted_strings)
             logic_rules.append(single_line_string)
-        return(logic_rules)
+    return(logic_rules)
 
 def dataframe_model_dnf(model_dnf):
     """
@@ -161,6 +162,18 @@ class logic:
         self.model_logic = model_logic
         print('Model logic loaded')
 
+    def count_logic_function(self):
+        model_logic = self.model_logic
+        model_logic_t= model_logic.transpose()
+
+        # Ordinal encoding
+        encoder = OrdinalEncoder()
+        encoded_data = encoder.fit_transform(model_logic_t)
+        encoded_df = pd.DataFrame(encoded_data, columns=model_logic_t.columns)
+
+        # 
+        sort_index = encoded_df.max().sort_values().index
+
     def create_flattend_logic_clause(self):
         """
         Flattens the logical clauses from a given model logic matrix.
@@ -263,7 +276,7 @@ class logic:
         # Display the plot
         plt.show()
 
-    def plot_logic_pca(pca_df, pca_dim=['pc1', 'pc2'], fig_size=(8, 6), color='cluster'):
+    def plot_logic_pca(self, pca_dim=['pc1', 'pc2'], fig_size=(8, 6), color='cluster'):
         """
         Plots a PCA scatter plot using the provided DataFrame.
         Parameters:
@@ -274,6 +287,7 @@ class logic:
         Returns:
         None
         """
+        pca_df = self.pca_df
         
         #Define figure_size
         plt.figure(figsize=(8, 6))
@@ -291,7 +305,7 @@ class logic:
         plt.grid(True)
         plt.show()
 
-    def calculate_kmean_cluster(pca_df, num_cluster, plot = True):
+    def calculate_kmean_cluster(self, num_cluster, plot = True):
         """
         Perform K-Means clustering on a PCA-transformed DataFrame and optionally plot the results.
 
@@ -308,6 +322,7 @@ class logic:
         - The plot will display the clusters with different colors and mark the cluster centers with red 'X' markers.
         """
         # Assume k=2 (you can choose a different number based on the Elbow Method)
+        pca_df = self.pca_df
         kmeans = KMeans(n_clusters=num_cluster)
 
         # Fit the k-means model and predict cluster labels

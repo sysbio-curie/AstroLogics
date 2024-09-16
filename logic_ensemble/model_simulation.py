@@ -48,19 +48,9 @@ class simulation:
         :param model_path: path to the .bnet files
         :param dict kwargs: parameters of the simulation
         """
-        self.model_path = model_path
-
+        self.path = model_path
         self.param = _default_parameter_list.copy()
         self.palette = {}
-        for cfg in (parameters, kwargs):
-            for p in cfg:
-                if p in _default_parameter_list or p[0] == '$':
-                    self.param[p] = cfg[p]
-                elif p == "palette":
-                    self.palette = kwargs[p]
-                else:
-                    print("Warning: unused parameter %s" % p)
-
         self.mutations = []
         self.mutationTypes = {}
         self.refstate = {}
@@ -107,7 +97,7 @@ class simulation:
 
         self.mutations.append((node, value))
 
-    def run_simulation(self, output_nodes = None):
+    def run_simulation(self, output_nodes = None, initial_state = None):
         """
         Run simulations for a list of models and store the results.
         Parameters:
@@ -129,19 +119,34 @@ class simulation:
         4. Concatenates the results from all models into a single DataFrame.
         5. Saves the concatenated DataFrame to the `self.simulation_df` attribute.
         """
+        
         # Simulation results object
         ensemble_results = {}
-        path = self.model_path
+        path = self.path
         model_list = os.listdir(path)
+        print('Start simulation')
         
-
         # For loop to run the simulation
         for model in tqdm(model_list):
             # Load model
             simulations = maboss.loadBNet(path + model)
 
             # Setup the model initial condition
-            simulations.update_parameters(self.param)
+            simulations.param = self.param
+
+            # Set the initial condition
+            if initial_state is not None:
+                node_names = simulations.network.names
+                assigned_node = list(initial_state.keys())
+                unassigned_node = list(set(node_names) - set(assigned_node))
+
+                # Set the initial condition - assigned node
+                for i in assigned_node:
+                    simulations.network.set_istate(i, [1 - initial_state[i], initial_state[i]])
+
+                # Set the initial condition - unassigned node
+                for i in unassigned_node:
+                    simulations.network.set_istate(i, [0.5, 0.5])
 
             # Set the output of the simulation
             if output_nodes is not None:
@@ -171,3 +176,4 @@ class simulation:
         
         # Save the simulation to the object
         self.simulation_df = simulation_df
+        print('Simulation completed')
