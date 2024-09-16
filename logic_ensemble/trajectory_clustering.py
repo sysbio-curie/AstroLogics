@@ -15,11 +15,16 @@ seed = 0
 np.random.seed(seed)
 
 
-class Trajectory:
+class trajectory:
 
-    def __init__(self, simulation_df, project_name = None):        
+    def __init__(self, simulation_df):        
+        """
+        Initializes the TrajectoryClustering object.
+
+        Parameters:
+        simulation_df (pd.DataFrame): DataFrame containing the simulation data.
+        """
         self.simulation_df = simulation_df
-        self.project_name = project_name
 
     def pca_trajectory(self, n_components = 10):
         """
@@ -37,7 +42,7 @@ class Trajectory:
         simulation_df = self.simulation_df
 
         # Initialize PCA (let's reduce to 2 principal components for this example)
-        pca = PCA(n_components=10)
+        pca = PCA(n_components=n_components)
 
         # Fit and transform the data
         df_pca = simulation_df.drop(['model_id','timepoint'], axis = 1) 

@@ -21,7 +21,7 @@ _default_parameter_list = collections.OrderedDict([
     ('statdist_similarity_cache_max_size', 20000)
 ])
 
-class Simulation:
+class simulation:
     """
     Attributes:
         network (Network): A Network object, that will be translated in a bnd file.
