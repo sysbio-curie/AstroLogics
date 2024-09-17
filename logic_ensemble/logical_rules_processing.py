@@ -147,6 +147,7 @@ class logic:
         model_files = os.listdir(path)
         model_logic = pd.DataFrame()
 
+# It would be interesting to make it multiprocessing - to speed up the process
         # For loop to load the model
         for i in tqdm(model_files):
             # Load file
@@ -194,6 +195,7 @@ class logic:
         model_name = list(model_logic_mtx.columns)
         logic_clause_flattend = pd.DataFrame()
 
+    # This too can perhaps be made multiprocessing --- to speed up the process
         for i in tqdm(model_name):
             clause = logic_clause_frequency(model_logic_mtx[[i]]).transpose()
             clause = clause.stack()

@@ -11,6 +11,7 @@ __date__ = '16/09/2024'
 from .model_simulation import simulation
 from .trajectory_clustering import trajectory
 from .logical_rules_processing import logic
+# from .logic_analysis import analysis
 
 class LogicEnsemble:
     def __init__(self, path, project_name):
@@ -38,3 +39,5 @@ class LogicEnsemble:
         print(f'LogicEnsemble object for the project {self.project}')
         print(f'Path: {self.path}')
         print(f'Simulation object: {self.simulation}')
+
+    
