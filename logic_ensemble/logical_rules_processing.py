@@ -14,6 +14,9 @@ from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
 # Model collections
 from collections import Counter
+# multiprocessing
+from multiprocessing import Pool
+
 # Define key parameters
 seed = 0
 np.random.seed(seed)
@@ -121,7 +124,6 @@ def logic_clause_frequency(model_logic_mtx):
     return(logic_clause)
 
 class logic:
-
     def __init__(self, path):
         """
         Loads and processes logical models from a specified directory.
@@ -147,17 +149,21 @@ class logic:
         model_files = os.listdir(path)
         model_logic = pd.DataFrame()
 
-# It would be interesting to make it multiprocessing - to speed up the process
-        # For loop to load the model
-        for i in tqdm(model_files):
-            # Load file
-            model = mpbn.load(path + i)
-            # Convert to dnf and dnf string
+        # Define function to process each model file
+        def process_model_file(file):
+            model = mpbn.load(path + file)
             model = model.as_dnf()
             model = dataframe_model_dnf(model)
-            model.name = i.split('.')[0]
-            # Concatenate to matrix
-            model_logic = pd.concat([model_logic, model], axis = 1, ignore_index = False)
+            model.name = file.split('.')[0]
+            return model
+
+        # Process all model files in parallel
+        with Pool() as pool:
+            results = list(tqdm(pool.imap(process_model_file, model_files), total=len(model_files)))
+
+        # Concatenate results into a single DataFrame
+        for model in tqdm(results):
+            model_logic = pd.concat([model_logic, model], axis=1, ignore_index=False)
 
         # Attach the model logic to the class
         self.model_logic = model_logic
@@ -195,19 +201,25 @@ class logic:
         model_name = list(model_logic_mtx.columns)
         logic_clause_flattend = pd.DataFrame()
 
-    # This too can perhaps be made multiprocessing --- to speed up the process
-        for i in tqdm(model_name):
+        def process_model_name(i):
             clause = logic_clause_frequency(model_logic_mtx[[i]]).transpose()
             clause = clause.stack()
             clause.index = clause.index.map('_'.join)
             clause = clause.loc[~(clause == 0)]
-            logic_clause_flattend= pd.concat([logic_clause_flattend,clause], ignore_index = False, axis = 1)
+            clause.name = i
+            return clause
+
+        print('Flatten models logic clauses')
+        # Use multiprocessing to speed up the process
+        with Pool() as pool:
+            results = list(tqdm(pool.imap(process_model_name, model_name), total=len(model_name)))
+        print('Concatenate results into matrix')
+        # Concatenate the results
+        for clause in tqdm(results):
+            logic_clause_flattend = pd.concat([logic_clause_flattend, clause], ignore_index=False, axis=1)
 
         # Fill NA to 0
         logic_clause_flattend = logic_clause_flattend.fillna(0)
-
-        # Add the column name
-        logic_clause_flattend.columns = model_name
 
         # Attach the model logic to the class
         self.logic_clause_flattend = logic_clause_flattend
