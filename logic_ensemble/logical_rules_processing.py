@@ -123,6 +123,23 @@ def logic_clause_frequency(model_logic_mtx):
     logic_clause.columns = model_logic_mtx.index
     return(logic_clause)
 
+# Define function to process each model file
+def process_model_file(file):
+    model = mpbn.load(file)
+    model = model.as_dnf()
+    model = dataframe_model_dnf(model)
+    model.name = file.split('.')[0]
+    return model
+
+# Define function to process each model's clauses
+def process_model_name(i, model_logic_mtx):
+    clause = logic_clause_frequency(model_logic_mtx[[i]]).transpose()
+    clause = clause.stack()
+    clause.index = clause.index.map('_'.join)
+    clause = clause.loc[~(clause == 0)]
+    clause.name = i
+    return clause
+
 class logic:
     def __init__(self, path):
         """
@@ -146,29 +163,73 @@ class logic:
         4. Attaches the model logic DataFrame to the class.
         """
         # Define models path
+        os.chdir(path)
         model_files = os.listdir(path)
         model_logic = pd.DataFrame()
 
-        # Define function to process each model file
-        def process_model_file(file):
-            model = mpbn.load(path + file)
-            model = model.as_dnf()
-            model = dataframe_model_dnf(model)
-            model.name = file.split('.')[0]
-            return model
-
+        print('Loading models logics')
         # Process all model files in parallel
         with Pool() as pool:
             results = list(tqdm(pool.imap(process_model_file, model_files), total=len(model_files)))
 
         # Concatenate results into a single DataFrame
+        print('Concatenate results into matrix')
         for model in tqdm(results):
             model_logic = pd.concat([model_logic, model], axis=1, ignore_index=False)
 
         # Attach the model logic to the class
         self.model_logic = model_logic
-        print('Model logic loaded')
+        self.path = path
 
+    def create_hash(self):
+        """
+        Creates a hash representation for each model file in the specified directory and stores it in the class instance.
+        This method performs the following steps:
+        1. Defines the model paths.
+        2. Lists all model files in the specified directory.
+        3. Converts each model to a hash representation using a for loop.
+        4. Creates model names by removing the '.bnet' extension from each file name.
+        5. Converts the list of hash models to a pandas Series.
+        6. Attaches the hash models to the class instance.
+        Attributes:
+        -----------
+        self.path : str
+            The directory path where model files are located.
+        self.hash_models : pandas.Series
+            A Series containing the hash representations of the models, indexed by model names.
+        Prints:
+        -------
+        'Convert model logics to hash' : str
+            Indicates the start of the hash conversion process.
+        'Hash of models created' : str
+            Indicates the completion of the hash conversion process.
+        """
+        
+        # Define model paths
+        path = self.path
+
+        # Define models
+        model_files = os.listdir(path)
+
+        # For loop to convert models to hash
+        hash_models = []
+        print('Convert model logics to hash')
+        for i in tqdm(model_files):
+            model = mpbn.load(path + i)
+            model = model.make_hash()
+            hash_models.append(model)
+        
+        # Create model names
+        model_names = [file.replace('.bnet', '') for file in model_files]
+
+        # Convert to numpy array
+        hash_models = pd.Series(hash_models)
+        hash_models.index = model_names
+
+        # Attach the hash models to the class
+        self.hash_models = hash_models
+        print('Hash of models created')
+    
     def count_logic_function(self):
         model_logic = self.model_logic
         model_logic_t= model_logic.transpose()
@@ -201,18 +262,10 @@ class logic:
         model_name = list(model_logic_mtx.columns)
         logic_clause_flattend = pd.DataFrame()
 
-        def process_model_name(i):
-            clause = logic_clause_frequency(model_logic_mtx[[i]]).transpose()
-            clause = clause.stack()
-            clause.index = clause.index.map('_'.join)
-            clause = clause.loc[~(clause == 0)]
-            clause.name = i
-            return clause
-
         print('Flatten models logic clauses')
         # Use multiprocessing to speed up the process
         with Pool() as pool:
-            results = list(tqdm(pool.imap(process_model_name, model_name), total=len(model_name)))
+            results = list(tqdm(pool.starmap(process_model_name, [(i, model_logic_mtx) for i in model_name]), total=len(model_name)))
         print('Concatenate results into matrix')
         # Concatenate the results
         for clause in tqdm(results):
