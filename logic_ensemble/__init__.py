@@ -2,12 +2,13 @@
 {Test script for the Boolean Benchmark project}
 """
 __author__ = 'Saran PANKAEW'
-__version__ = '0.1'
+__version__ = '0.2'
 __maintainer__ = 'Saran PANKAEW'
 __email__ = 'saran.pankeaw@curie.fr'
 __status__ = 'development'
-__date__ = '16/09/2024'
+__date__ = '06/01/2025'
 
+from .model_attractors import attractors
 from .model_simulation import simulation
 from .trajectory_clustering import trajectory
 from .logical_rules_processing import logic
@@ -17,6 +18,10 @@ class LogicEnsemble:
     def __init__(self, path, project_name):
         self.path = path
         self.project = project_name
+
+    def create_attractor(self):
+        self.attractor = attractors(self.path)
+        print('Attractor object created')    
 
     def create_simulation(self):
         self.simulation = simulation(self.path)
