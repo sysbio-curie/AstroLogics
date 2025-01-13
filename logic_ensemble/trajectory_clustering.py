@@ -168,8 +168,7 @@ class trajectory:
         self.cluster_dict = cluster_dict
 
     def plot_trajectory_cluster(self, 
-                                fig_size = (8,6),
-                                show_legend = False):
+                                fig_size = (8,6)):
         """
         Plot the calculated clusters onto the trajectory
         """
@@ -185,14 +184,11 @@ class trajectory:
         plot = sns.lineplot(data = pca_df, 
                     x = 'pc1', y='pc2',
                     hue = 'kmean_cluster', units = 'model_id', estimator = None, lw=2, alpha = .1,
-                    sort = False)
-        if show_legend == False:
-            plot.get_legend().remove()
+                    sort = False, legend=False)
         plot2 = sns.lineplot(data = kmean_cluster, 
                             x = 'pc1',y='pc2',
                             hue = 'kmean_cluster',
                             sort = False, marker = 'o', linewidth = 5, markersize = 10)
-        plot2.get_legend().remove()
         plt.show()
 
 #### I'm not sure if this function is necessary
