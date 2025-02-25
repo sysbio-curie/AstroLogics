@@ -1,4 +1,4 @@
-# BooleanBenchmark
+# AstroLogics
 
 The AstroLOGIC project aims to develop a comprehensive methodology for benchmarking Boolean models, addressing a critical gap in the field of regulatory network modeling. While multiple methods exist for Boolean model synthesis, there hasn't been a standardized way to evaluate and compare these generated models.
 
