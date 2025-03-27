@@ -65,7 +65,7 @@ def dataframe_model_dnf(model_dnf):
     for i in node_names:
         logic_mtx = pd.concat([logic_mtx,pd.DataFrame(clause_string(model_dnf[i]))], 
                         axis = 1, ignore_index = False,)
-    logic_mtx = logic_mtx.applymap(lambda x: f"({x})" if isinstance(x, str) else x)    
+    logic_mtx = logic_mtx.map(lambda x: f"({x})" if isinstance(x, str) else x)    
     logic_mtx=logic_mtx.transpose()
     logic_mtx = logic_mtx.fillna('')
     logic_mtx.index = node_names
