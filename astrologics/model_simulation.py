@@ -51,7 +51,7 @@ class simulation:
         self.path = model_path
         self.param = _default_parameter_list.copy()
         self.palette = {}
-        self.mutations = []
+        self.mutations = {}
         self.mutationTypes = {}
         self.refstate = {}
         
@@ -78,7 +78,7 @@ class simulation:
             else:
                 print("Warning: unused parameter %s" % p)
 
-    def mutate(self, node, value):
+    def mutate(self, condition ,node, value):
         """
         Add a mutation to the simulation.
 
@@ -95,9 +95,9 @@ class simulation:
         >>> obj.mutate("node1", 0)
         """
 
-        self.mutations.append((node, value))
+        self.mutations[condition] = (node,value)
 
-    def run_simulation(self, output_nodes = None, initial_state = None):
+    def run_simulation(self, output_nodes = None, initial_state = None, mutation = None):
         """
         Run simulations for a list of models and store the results.
         Parameters:
@@ -147,6 +147,12 @@ class simulation:
                 # Set the initial condition - unassigned node
                 for i in unassigned_node:
                     simulations.network.set_istate(i, [0.5, 0.5])
+            
+            # Set the mutation condition
+            if mutation is not None:
+                condition = self.mutations[mutation]
+                # Set the condition
+                simulations.mutate(condition[0],condition[1])
 
             # Set the output of the simulation
             if output_nodes is not None:
