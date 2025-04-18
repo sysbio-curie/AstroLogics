@@ -10,23 +10,33 @@ from sklearn.manifold import MDS
 from tqdm import tqdm
 from sklearn.metrics import adjusted_rand_score
 from sklearn.cluster import KMeans
+from tslearn.metrics import dtw
 
 
-def calculate_endtimepoint_distancematrix(simulation_df):
-    end_timepoint = simulation_df.timepoint.unique().max()
-    simulation_df = simulation_df[simulation_df.timepoint == end_timepoint]
-
+def calculate_total_distancematrix(simulation_df):
     # Make the model_id the index
-    simulation_df = simulation_df.set_index('model_id')
-    model_name = simulation_df.index
-    simulation_df = simulation_df.drop(columns=['timepoint'])
-
+    simulation_df.model_id = simulation_df.model_id.astype('category')
+    node_list = simulation_df.columns.drop(['timepoint','model_id'])
+    model_name = simulation_df.model_id.unique()
+    
     # Convert simulation_df to numpy.array
-    simulation_array = simulation_df.to_numpy()
+    model_original_all = {}
+    for i in model_name:
+        model_original = simulation_df.loc[simulation_df.model_id == i,node_list].values
+        model_original_all[i] = np.array(model_original)
+    pca_all_trajectory = np.array(list(model_original_all.values()))
 
-    # Create the distance matrix from the simulation
-    distance_matrix = squareform(pdist(simulation_array, metric='euclidean'))
-    distance_matrix = pd.DataFrame(distance_matrix, columns=model_name, index=model_name)
+    # Initialize an empty distance matrix
+    num_trajectories = len(pca_all_trajectory)
+    distance_matrix = np.zeros((num_trajectories, num_trajectories))
+
+    # Calculate DTW distance for each pair of trajectories
+    for i in tqdm(range(num_trajectories)):
+        for j in range(num_trajectories):
+            distance_matrix[i, j] = dtw(pca_all_trajectory[i], pca_all_trajectory[j])
+
+    # Display the distance matrix
+    distance_matrix = pd.DataFrame(distance_matrix, index=model_name, columns=model_name)
 
     return(distance_matrix)
 
@@ -50,13 +60,13 @@ simulation_df = pd.read_csv(save_path + 'BN_TUTO_Fx_simulation.csv')
 # Calculate distance_matrix
 attractor_combo_list = vis_bar.index
 concatenated_columns = model_1.attractor.attractors_df.apply(lambda col: ''.join(col.astype(str)), axis=0)
-distance_matrix = calculate_endtimepoint_distancematrix(simulation_df)
+distance_matrix = calculate_total_distancematrix(simulation_df)
 
 # For loop to calculate clustering and rand index
-rand_index_score = []
 total_index_score = pd.DataFrame()
 # For loop to calculate clustering and rand index
 for x in tqdm(range(0, 100)):
+    rand_index_score = []
     for i in range(0, len(attractor_combo_list)-1):
         if i == 0:
             attractor_combo = attractor_combo_list
@@ -86,8 +96,8 @@ for x in tqdm(range(0, 100)):
         # Calculate the adjusted Rand index
         ari = adjusted_rand_score(cluster_df.Cluster, cluster_df.Attractor)
         rand_index_score = rand_index_score + [ari]
-        rand_index_score = pd.DataFrame(rand_index_score)
+    rand_index_score = pd.DataFrame(rand_index_score)
     total_index_score = pd.concat([total_index_score, rand_index_score], axis=1)
 
 # Save the results
-total_index_score.to_csv("/home/spankaew/Git/astrologics/tmp/rand_index_endpointclustering.csv", index = False)
+total_index_score.to_csv("/home/spankaew/Git/astrologics/tmp/rand_index_alltrajclustering.csv", index = False)
