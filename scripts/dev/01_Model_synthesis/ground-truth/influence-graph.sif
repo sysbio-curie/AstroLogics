@@ -2,8 +2,8 @@ x0 activates x9
 x0 activates x17
 x0 inhibits x1
 x1 activates x1
-x1 activates x13
 x1 activates x8
+x1 activates x13
 x11 activates x10
 x11 inhibits x6
 x12 activates x14
@@ -15,8 +15,8 @@ x2 activates x0
 x20 inhibits x2
 x23 activates x12
 x3 activates x1
-x3 activates x2
 x3 activates x24
+x3 activates x2
 x4 activates x1
 x6 activates x21
 x8 inhibits x11
