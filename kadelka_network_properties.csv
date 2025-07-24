@@ -1,0 +1,78 @@
+File,Nodes,Regulators
+Cortical Area Development_20862356,5,11
+fMRI - Regulation of the Lac Operon_25790483,8,5
+Regulation of the L-arabinose operon of Escherichia coli_28639170,9,16
+Toll Pathway of Drosophila Signaling Pathway_23868318,9,11
+Cell Cycle Transcription by Coupled CDK and Network Oscillators_18463633,9,19
+Lac Operon_21563979,10,22
+VEGF Pathway of Drosophila Signaling Pathway_23868318,10,18
+Mammalian Cell Cycle 2006_16873462,10,31
+HH Pathway of Drosophila Signaling Pathways_23868318,11,30
+SKBR3 Breast Cell Line Short-term ErbB Network_24970389,11,29
+HCC1954 Breast Cell Line Short-term ErbB Network_24970389,11,33
+BT474 Breast Cell Line Short-term ErbB Network_24970389,11,33
+Metabolic Interactions in the Gut Microbiome_26102287,11,18
+Wg Pathway of Drosophila Signalling Pathways_23868318,12,29
+CD4+ T Cell Differentiation and Plasticity_26090929,12,71
+Body Segmentation in Drosophila 2013_23520449,14,12
+FGF pathway of Drosophila Signaling Pathways_23868318,14,24
+Predicting Variabilities in Cardiac Gene_26207376,14,28
+Arabidopsis thaliana Cell Cycle_26340681,14,67
+Cardiac development_23056457,14,24
+TOL Regulatory Network_23171249,14,50
+Fanconi anemia and checkpoint recovery_26385365,15,64
+Neurotransmitter Signaling Pathway_17010384,16,8
+Budding Yeast Cell Cycle_23049686,16,40
+B cell differentiation_26751566,17,38
+Budding Yeast Cell Cycle 2009_19185585,18,51
+Oxidative Stress Pathway_23134720,18,30
+Processing of Spz Network from the Drosophila Signaling Pathway_23868318,18,20
+T-LGL Survival Network 2011 Reduced Network_22102804,18,41
+T cell differentiation_16542429,19,32
+Human Gonadal Sex Determination_26573569,19,76
+Aurora Kinase A in Neuroblastoma_26616283,19,42
+Mammalian Cell Cycle_19118495,19,44
+Iron acquisition and oxidative stress response in aspergillus fumigatus_25908096,20,37
+BT474 Breast Cell Line Long-term ErbB Network_24970389,21,41
+SKBR3 Breast Cell Line Long-term ErbB Network_24970389,21,52
+HCC1954 Breast Cell Line Long-term ErbB Network_24970389,21,42
+Septation Initiation Network_26244885,23,57
+Death Receptor Signaling_20221256,25,45
+Trichostrongylus retortaeformis_22253585,25,56
+Pro-inflammatory Tumor Microenvironment in Acute Lymphoblastic Leukemia_27594840,26,14
+manual_mod_Treatment of Castration-Resistant Prostate Cancer_28361666,28,55
+FA BRCA pathway_22267503,28,119
+CD4+ T cell Differentiation_22871178,29,94
+Tumour Cell Invasion and Migration_26528548,30,155
+Lymphoid and myeloid cell specification and transdifferentiation_28584084,31,62
+Bordetella bronchiseptica_22253585,33,75
+Cholesterol Regulatory Pathway_19025648,34,14
+T-Cell Signaling 2006_16464248,37,49
+Apoptosis Network_19422837,39,73
+Guard Cell Abscisic Acid Signaling_16968132,40,68
+Differentiation of T lymphocytes_23743337,41,97
+Stomatal Opening Model_27542373,44,95
+Inflammatory Bowel Disease (IBD) Model_29513758,47,242
+Senescence Associated Secretory Phenotype_29206223,49,89
+MAPK Cancer Cell Fate Network_24250280,49,95
+B bronchiseptica and T retortaeformis coinfection_22253585,52,69
+T-LGL Survival Network 2008_18852469,54,188
+T-LGL Survival Network 2011_22102804,54,190
+Glucose Repression Signaling 2009_19144179,55,87
+Yeast Apoptosis_23233838,60,131
+PC12 Cell Differentiation_27148350,61,108
+Bortezomib Responses in U266 Human Myeloma Cells_26163548,62,128
+HGF Signaling in Keratinocytes_22962472,62,94
+Lymphopoiesis Regulatory Network_26408858,67,159
+Colitis-associated colon cancer_26446703,69,153
+IL-6 Signaling_21968890,71,97
+EGFR & ErbB Signaling_19662154,76,221
+IGVH mutations in chronic lymphocytic leukemia_26088082,91,125
+T Cell Receptor Signaling_17722974,94,142
+IL-1 Signaling_21968890,104,165
+Influenza A Virus Replication Cycle_23081726,120,13
+HIV-1 interactions with T-Cell Signaling Pathway_25431332,124,265
+Signal Transduction in Fibroblasts_18250321,130,373
+CD4 T cell signaling_25538703,154,294
+ErbB (1-4) Receptor Signaling_23637902,225,478
+Signaling in Macrophage Activation_18433497,302,261

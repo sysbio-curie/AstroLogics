@@ -1,0 +1,124 @@
+gp120,	CD45 | ITK | MAPK14_p38
+BAD,	( ( ( nef & ( PAK & PI3K ) ) & ! AKT ) & ! PAK )
+B_arrestin,	protease
+WASP,	( CDC42 & ( LCP2_SLP76 & NCK ) )
+nucleocapsid,	DLGH1
+PLCB,	tat | Gby
+MAP3K1_Mekk1,	CDC42 | RAC | MAP4K1_Hpk1
+CYC1,	! ( GSK3 )
+LCK,	gp160 | ( ( ( CD45 & ( CD4 ) ) & ! CSK ) & ! PTPN6_SHP1 ) | gp120 | tat
+AC,	gp41
+CDKN1A_p21,	vpr | gp120 | tat
+Cam,	( Ca2+ )
+NCF1,	PKCB_D
+PDPK1,	PIP3
+PKA,	cAMP
+PLCy1,	( gp120 & ( LCK ) ) | ( ( ZAP70 & ( LCP2_SLP76 & Rik & LAT & VAV1 ) ) & ! CBL ) | ( ( LCP2_SLP76 & ( ZAP70 & ITK & LAT & VAV1 ) ) & ! CBL ) | tat | LAT
+FOS,	MAPK1_3_Erk
+vif,	MAPK1_3_Erk
+ROCK,	RHOA
+RHOA,	VAV1
+Ca2+,	IP3
+MAP3K7_TAK1,	PKCth | gp41 | MAP4K1_Hpk1
+CDC42,	VAV1 | RAP
+RAC,	PRKCZPar3Tiam1 | DOCK2_CRK_ELMO1 | VAV1 | P_REX1
+CBLB,	ZAP70 | CTLA4 | ( nef & ( LCK ) )
+CaN,	Cam
+MAP3K8_COT,	AKT
+GRAP2_GADS,	LAT | CD28
+CARMA1BCL10MALT1,	PKCth
+ITK,	( CD28 & ( LCK ) ) | ( PIP3 & ( ZAP70 & LCP2_SLP76 ) )
+CD28,	! ( vpr | gp41 | nef )
+RAF,	( gp120 & ( CD4 & LCK ) ) | RAS | nef
+SOS,	GRB2 | RASGRP1
+DOCK2_CRK_ELMO1,	nef | Src
+PPP2R4_PP2A,	CTLA4
+PIP2,	( PIP3 & ( PTEN ) )
+PAK,	( RAC & ( CDC42 ) ) | nef | NCK
+Ccblp,	FYN
+CRK,	ZAP70
+nef,	LCP2_SLP76 | PKA
+MAP2K1_2_MEK1_2,	RAF
+P_REX1,	( PIP3 & ( Gby ) )
+TCR,	nucleocapsid | ( FYN & ( LCK ) ) | antigen
+PI3K,	( ( LCK & ! PTPN6_SHP1 ) & ! CBLB ) | ( ( Src & ! PTPN6_SHP1 ) & ! CBLB ) | tat | ( ( CD28 & ! CBL ) & ! PTPN11_SHP2 ) | ICOS | ( gp160 & ( CD4 & LCK ) ) | ( nef & ( ZAP70 & Src ) ) | LAT | Gby
+CTLA4,	vpr
+CTNNB1_bcat,	! ( vpu | GSK3 )
+FOXO3,	! ( AKT )
+PKCth,	gp160 | AKT | ( DAG & ( ( PDPK1 & ( VAV1 | VAV3 ) ) ) )
+CCR5_CXCR4,	Chemokine | gp120 | gp41
+RAS,	RASGRP1 | ( SOS & ( GRB2 & LAT ) ) | ( SHC & ( SOS & GRB2 ) )
+GRK,	GRKL
+SIT1,	FYN | LCK
+NCK,	TCR
+FYN,	( CD45 & ( LCK ) ) | gp120 | ( TCR & ( LCK ) )
+matrix,	PKCB_D | PAK | PRKCZ | nef | PKCth | MAPK1_3_Erk
+PKCB_D,	( VAV3 & ( DAG & PDPK1 ) ) | gp160 | ( VAV1 & ( DAG & PDPK1 ) )
+Gby,	GaiGby
+IKB,	( Ikkb_Ikky_Ikka & ( IKBNFKB ) ) | vpu
+CREB,	RPS6KA1_RSK
+API,	( JUN & ( FOS ) )
+BCL2L1,	! ( BAD )
+cAMP,	AC | matrix
+p6,	MAPK1_3_Erk
+JUN,	MAPK8_JNK
+CD4,	vif | gp160
+capsid,	STAT | PKA
+Gai,	GaiGby
+vpr,	PKA
+rt,	PKCB_D | PRKCZ | PKCth | NFAT | MAP2K1_2_MEK1_2 | MAPK1_3_Erk
+NFKB,	( protease & ( IKBNFKB ) ) | ( Ikkb_Ikky_Ikka & ( IKBNFKB ) )
+AKT,	PDPK1 | PIP3
+IP3,	( PLCy1 & ( PIP2 ) ) | ( PLCB & ( PIP2 ) ) | nef
+DAG,	( PLCB & ( PIP2 ) ) | ( PLCy1 & ( PIP2 ) )
+NFAT,	PXN | CaN
+PIP3,	( PI3K & ( PIP2 ) )
+MAPK1_3_Erk,	MAP2K1_2_MEK1_2 | PRKCZ
+PTK2B_Pyk2,	FYN | Src
+Ikkb_Ikky_Ikka,	MAP3K14_NIK | nef | ( CARMA1BCL10MALT1 & ( MAP3K7_TAK1 ) )
+STAT,	tat | JAK3
+SHC,	Src | tat | TCR
+gp160,	! ( DLGH1 )
+DNA,	( vpr & ( NFKB ) ) | STAT | ( API & ( NFAT ) ) | NFKB | ( FOXO3 & ( NFAT ) ) | NFAT
+MAP2K7_MKK7,	MAP3K7_TAK1
+MAPK14_p38,	ZAP70 | DLGH1
+RASGRP2,	( Ca2+ & ( DAG ) ) | ( DAG & ( PKCB_D ) )
+ABL,	FYN | LCK
+MAP2K4_Mkk4,	MAP3K7_TAK1 | MAP3K1_Mlk3 | MAP3K1_Mekk1
+PRKCZ,	PIP3 | gp160
+rev,	MAPK1_3_Erk
+GaiGby,	( ( CCR5_CXCR4 & ( GRK ) ) & ! B_arrestin )
+GRB2,	CD28 | LAT | SHC
+Rik,	( CD28 & ( LCK ) )
+RAP,	RASGRP2
+RASGRP1,	( DAG & ( PKCth ) )
+PTEN,	CBLB | RHOA | tat
+MAPK8_JNK,	MAP2K4_Mkk4 | MAP2K7_MKK7 | MAP3K1_Mekk1
+JAK3,	CCR5_CXCR4
+CBL,	PTEN | ZAP70
+VAV3,	( ITK & ( LAT ) ) | nef | SH3BP2
+NOX4,	NCF1
+PRKCZPar3Tiam1,	CDC42
+RPS6KA1_RSK,	MAPK1_3_Erk
+PAG,	TCR | FYN
+GSK3,	! ( AKT )
+SH3BP2,	( ZAP70 & ( LAT ) )
+LCP2_SLP76,	( gp120 & ( LCK ) ) | ( ZAP70 & ( GRAP2_GADS ) )
+PTK2,	( gp120 & ( CD4 ) ) | Src | tat
+ZAP70,	( TCR & ( ABL ) ) | ( gp120 & ( LCK ) )
+Src,	PTK2B_Pyk2 | Gai
+MAP4K1_Hpk1,	( PTK2B_Pyk2 & ( CRKL & CRK & BCAR1 & PXN ) ) | ( CRK & ( CRKL ) ) | LAT | GRAP2_GADS
+VAV1,	CD28 | ( ITK & ( LAT ) ) | ( ZAP70 & ( SH3BP2 ) ) | nef
+CSK,	PAG
+Sre,	CDC42 | RAC
+in,	! ( CDKN1A_p21 )
+GAB2,	( GRB2 & ( ZAP70 & LAT ) ) | ( GRAP2_GADS & ( ZAP70 & LAT ) )
+PTPN11_SHP2,	CTLA4 | PDCD1_PD1 | GAB2
+DGK,	TCR
+MAP3K14_NIK,	tat | MAP3K8_COT
+PXN,	MAPK8_JNK | Src | ( MAPK14_p38 & ( MAPK8_JNK ) )
+protease,	! ( PRKCZ | PKCth | PKCB_D )
+PTPN6_SHP1,	CTLA4 | LCK | PDCD1_PD1
+LAT,	ZAP70 | ( gp120 & ( LCK ) )
+tat,	IKB | PRKCZ | PKCth | nef
+MAP3K1_Mlk3,	CDC42 | RAC | MAP4K1_Hpk1

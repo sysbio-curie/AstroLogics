@@ -1,0 +1,62 @@
+FLIP,	pNFKB
+Apo,	Cl_PARP
+cJun,	JNK
+Prot,	! ( Bort )
+MEK1,	RAF
+XIAP,	( ( pSTAT3 & ! p53 ) & ! Smac ) | ( ( pNFKB & ! p53 ) & ! Smac )
+CYCE,	MYC
+DNAdam,	STRESS | Cas3
+BCL2,	( ( pSTAT3 & ! p53 ) & ! BAD ) | ( ( pNFKB & ! p53 ) & ! BAD )
+p27,	( ( ( p53 & ! AKT ) & ! MYC ) & ! CDK4 )
+CYCD,	AKT | MYC | ERK
+IKK,	AKT | ( RIP & ( NIK ) )
+pSTAT3,	( ( JAK2 & ( ( ( JAK1 & STAT3 ) & ( ! IKK ) ) ) ) & ! JNK ) | ( JAK1 & ( STAT3 & JAK2 ) )
+CDK4,	( ( CYCD & ! p27 ) & ! p21 )
+Bclxl,	( ( ( pSTAT3 & ! p53 ) & ! BAD ) & ! BAX ) | ( ( ( pNFKB & ! p53 ) & ! BAD ) & ! BAX )
+JAK1,	( gp130 & ( IL6 ) )
+BAD,	! ( AKT )
+CDK2,	( CYCE & ! p21 )
+MYC,	pSTAT3 | MEKK | ERK
+ERK,	MAPK
+PIP3,	( PIP3 & ! PTEN )
+MITO,	BAX
+MEKK2,	RAC
+JAK2,	( ( IL6 & ( gp130 ) ) & ! SHP1 )
+PI3K,	( IL6 & ( gp130 ) )
+JNK,	( MKK4 & ! Prot )
+Cas3,	( Cas8 & ! XIAP ) | ( Cas9 & ! XIAP )
+Cytc,	MITO
+pRB,	( CDK2 & ( CDK6 & CDK4 ) ) | ( CDK4 & ( CDK6 ) )
+Fas,	FasL | p53
+gp130,	! ( Cas3 )
+MKK4,	MEKK2
+STRESS,	( DNAdam ) | ! ( DNAdam | Prot )
+IL6,	pNFKB
+RAC,	STRESS
+MDM,	( AKT & ! ATM ) | ( p53 & ! ATM )
+pNFKB,	pSTAT3 | X | pIKB | ( Prot & ( pIKB ) )
+TRAF3,	! ( CIAP )
+AKT,	PIP3
+CIAP,	TNFAR
+Smac,	MITO
+MAPK,	MEK1
+pIKB,	IKK
+Cas8,	( ( Fas & ( FasL ) ) & ! FLIP )
+GROWTH,	pRB
+STAT3,	! ( Cas3 )
+NIK,	! ( TRAF3 )
+p21,	( ( ( ( p53 & ! MYC ) & ! AKT ) & ! CDK4 ) & ! MDM )
+RAS,	SHP1 | ( IL6 & ( gp130 ) )
+ATM,	DNAdam | Cas3
+p53,	( JNK & ! ( MDM & ( Prot ) ) ) | ( DNAPK & ! ( MDM & ( Prot ) ) )
+BID,	( ( STRESS & ! BCL2 ) & ! Bclxl ) | ( ( Cas8 & ! BCL2 ) & ! Bclxl ) | ( ( Fas & ! BCL2 ) & ! Bclxl )
+RIP,	Bort | ( TNFAR & ( TNFA ) )
+BAX,	( ( BID & ! Bclxl ) & ! BCL2 ) | ( ( p53 & ! Bclxl ) & ! BCL2 )
+FasL,	cJun | Fas
+RAF,	RAS
+Cl_PARP,	Cas3
+CDK6,	CYCD
+MEKK,	MEK1
+PTEN,	p53
+DNAPK,	ATM
+Cas9,	( ( Cytc & ! XIAP ) & ! AKT )

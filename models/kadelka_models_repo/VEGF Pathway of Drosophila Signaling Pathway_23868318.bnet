@@ -1,0 +1,10 @@
+Rl,	( Dsor1 & ( msk ) )
+Ras,	( Sos & ! Sty )
+Sos,	Drk
+Drk,	Pvr
+Aop,	! ( Rl )
+Pnt,	Rl
+Pvr,	Pvf2 | Pvf3 | Pvf1
+Raf,	( Ras & ( CNK & Src42 & Ksr ) )
+Dsor1,	Raf
+Targets,	( Pnt & ! Aop )

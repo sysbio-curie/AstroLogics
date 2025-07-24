@@ -1,0 +1,8 @@
+,project_name,num_model,num_attractors,gini_score
+0,Toll Pathway of Drosophila Signaling Pathway_23868318,16,6,0.16666666666666652
+1,HH Pathway of Drosophila Signaling Pathways_23868318,1000,1000,0.0
+2,Cortical Area Development_20862356,1000,5,0.7432000000000001
+3,VEGF Pathway of Drosophila Signaling Pathway_23868318,1000,390,0.24740512820512817
+4,SKBR3 Breast Cell Line Short-term ErbB Network_24970389,1000,268,0.43376865671641784
+5,Regulation of the L-arabinose operon of Escherichia coli_28639170,1000,130,0.5037076923076924
+6,Lac Operon_21563979,1000,61,0.5440327868852459

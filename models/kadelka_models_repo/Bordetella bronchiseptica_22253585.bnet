@@ -1,0 +1,33 @@
+TrI,	TrII
+TTSSII,	TTSSI
+Bb,	( Bb & ! PH )
+IL10I,	( Th2I & ( TTSSI ) ) | TrI | MPI
+MPI,	( IFNgI & ( Bb ) ) | ( PIC & ( Bb ) )
+Th1I,	Th1II
+AgAb,	( IgA & ( Bb ) ) | ( IgG & ( Bb ) )
+BC,	T0 | BC
+Oag,	Bb
+C,	( Bb & ! Oag ) | ( IgG & ( AgAb ) )
+DCI,	( IFNgI & ( Bb ) ) | ( PIC & ( Bb ) )
+Th1II,	( DCII & ( ( T0 ) & ( IL12II ) ) )
+IL12II,	( ( DCII & ( T0 ) ) & ! IL4II )
+NE,	PIC
+AP,	( AgAb & ( ( MPI & Th1I ) & ( Bb ) ) ) | ( IgG & ( ( Bb ) & ( C ) & ( MPI & Th1I ) ) )
+IgG,	IgG | BC
+IFNgI,	( MPI & ! IL4I ) | ( DCI & ! IL4I ) | ( ( Th1I & ! IL10I ) & ! IL4I )
+Th2II,	( ( DCII & ( T0 ) ) & ! IL12II )
+Th2I,	Th2II
+IL4I,	IL4II
+TTSSI,	( ( Bb & ! IgG ) & ! IgA )
+T0,	DCII
+PIC,	( DP & ! IL10I ) | ( EC & ! IL10I ) | ( AP & ! IL10I )
+TrII,	( DCII & ( T0 ) )
+IL10II,	IL10I
+PH,	( AP & ( Bb ) )
+DCII,	DCI
+EC,	Bb
+IgA,	( IgA & ( Bb ) ) | ( BC & ( Bb ) )
+IFNgII,	IFNgI
+DP,	( NE & ( TTSSI ) )
+IL12I,	( ( DCII & ( T0 ) ) & ! IL4II )
+IL4II,	( ( ( DCII & ( T0 ) ) & ! IFNgII ) & ! IL12II ) | ( ( Th2II & ! IFNgII ) & ! IL12II )

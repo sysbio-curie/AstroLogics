@@ -1,0 +1,86 @@
+# model in BoolNet format
+# the header targets, factors is mandatory to be importable in the R package BoolNet
+
+targets, factors
+AKT,                     PI3K&MTORC2
+APC,                     !Wnt
+ATM,                     !DSB&ATR | DSB
+ATR,                     !SSB_RS&RPA | SSB_RS
+Apoptosis,               !Replication_Catastrophe&Mitotic_Catastrophe | Replication_Catastrophe
+BRAF,                    RAS&!ERK&!AKT
+BRCA,                    RAD51
+CHEK1,                   ATR&CLSPN
+CHEK2,                   ATM
+CLSPN,                   !NFkB&ATR | NFkB
+Cdc25A,                  !pRB&!CyclinE&FoxM1&!CyclinA&CyclinB | !pRB&!CyclinE&FoxM1&CyclinA | !pRB&CyclinE&FoxM1
+Cdc25B,                  FoxM1&!CHEK1
+Cdc25C,                  CyclinB&!Cdc25B&!Plk1&Cdk1&!CHEK1 | CyclinB&!Cdc25B&Plk1&!CHEK1 | CyclinB&Cdc25B&!CHEK1
+Cdc6,                    !E2F1&ORC&Cdc6&Cdt1&Pre_RC | E2F1&ORC
+Cdk1,                    !Wee1&CyclinB&!Cdc25B&Cdc25C | !Wee1&CyclinB&Cdc25B
+Cdt1,                    !Myc&E2F1&ORC&Cdc6 | Myc&!E2F1&ORC&Cdc6&Pre_RC | Myc&E2F1&ORC&Cdc6
+Cell_division,           CyclinB&Cdk1
+CyclinA,                 CyclinA_mRNA&Cdc25A
+CyclinA_mRNA,            !pRB&!E2F1&FoxM1 | !pRB&E2F1 | pRB&FoxM1
+CyclinB,                 FoxM1
+CyclinD1,                !p21&!Myc&NFkB | !p21&Myc
+CyclinE,                 !pRB&!p27Kip1&E2F1&Cdc6&Pre_RC
+DSB,                     !SSB_RS&!BRCA&!PARP&Cell_division | SSB_RS&!BRCA&!PARP
+DUSP1,                   p38
+E2F1,                    !pRB&Myc
+EGF,                     EGF
+EGFR,                    EGF&!ERK
+ERK,                     MEK&!p38
+FoxM1,                   !Myc&!Cdc25A&CyclinB&Plk1&Cdk1 | !Myc&Cdc25A&!CyclinA&CyclinB&Plk1&Cdk1 | !Myc&Cdc25A&CyclinA&!CyclinB&Cdc25B | !Myc&Cdc25A&CyclinA&CyclinB&!Cdc25B&Plk1&Cdk1 | !Myc&Cdc25A&CyclinA&CyclinB&Cdc25B | Myc&!CyclinE&!Cdc25A&CyclinB&Plk1&Cdk1 | Myc&!CyclinE&Cdc25A&!CyclinA&CyclinB&Plk1&Cdk1 | Myc&!CyclinE&Cdc25A&CyclinA&!CyclinB&Cdc25B | Myc&!CyclinE&Cdc25A&CyclinA&CyclinB&!Cdc25B&Plk1&Cdk1 | Myc&!CyclinE&Cdc25A&CyclinA&CyclinB&Cdc25B | Myc&CyclinE
+GSK3,                    !ERK&!S6K1&!AKT&APC
+IKKa_b,                  TAK1&NEMO
+IL1R,                    IL1R
+IL6,                     IL6
+IL6R,                    IL6
+IkBs,                    !IKKa_b
+JAK,                     IL6R
+JNK,                     !ERK&!p38&!DUSP1&!TAK1&Wnt | !ERK&!p38&!DUSP1&TAK1 | ERK&!p38&!DUSP1
+LEF1,                    bCAT
+MDM2,                    AKT&!ATM&!ATR
+MEK,                     BRAF
+MK2,                     p38
+MTORC1,                  AKT
+MTORC2,                  PI3K
+Mitotic_Catastrophe,     DSB&Cell_division
+Myc,                     !ERK&!GSK3&LEF1&!SMAD2_3_4_complex | !ERK&GSK3&eIF4E&LEF1&!SMAD2_3_4_complex | ERK&!GSK3&!SMAD2_3_4_complex | ERK&GSK3&eIF4E&!SMAD2_3_4_complex
+NEMO,                    ATM
+NFkB,                    !IkBs&STAT3
+ORC,                     !E2F1&Cdc6&Cdt1&Pre_RC | E2F1
+PARP,                    RPA
+PI3K,                    !EGFR&RAS&!S6K1&!PTEN | EGFR&!S6K1&!PTEN
+PTEN,                    TP53
+Plk1,                    FoxM1&!Cdc25A&!Wee1&CyclinB&Cdk1 | FoxM1&Cdc25A&!CyclinA&!Wee1&CyclinB&Cdk1 | FoxM1&Cdc25A&CyclinA&!Wee1
+Pre_RC,                  ORC&Cdc6&Cdt1
+RAD51,                   !SSB_RS&DSB&!CHEK1&TP53 | !SSB_RS&DSB&CHEK1 | SSB_RS&!CHEK1&TP53 | SSB_RS&CHEK1
+RAS,                     EGFR
+RPA,                     !SSB_RS&DSB&TP53 | SSB_RS&TP53
+Replication_Catastrophe, DSB
+S6K1,                    MTORC1
+SMAD2,                   SMAD2
+SMAD2_3_4_complex,       SMAD4&SMAD2_3_complex
+SMAD2_3_complex,         TGFb&SMAD2&SMAD3
+SMAD3,                   SMAD3
+SMAD4,                   !ERK
+SSB_RS,                  !Cdc6&!PARP&Cell_division | Cdc6&!PARP
+STAT3,                   !JNK&JAK | JNK
+Survival,                !CyclinA&CyclinB&Cdk1&!Replication_Catastrophe&!Mitotic_Catastrophe | CyclinA&!Replication_Catastrophe&!Mitotic_Catastrophe
+TAB1_2,                  !p38&!TRAF6&TNF | !p38&TRAF6
+TAK1,                    TAB1_2
+TAO1,                    ATM
+TGFb,                    TGFb
+TNF,                     TNF
+TP53,                    !ATM&!MDM2&CHEK2 | ATM&!MDM2
+TRAF6,                   IL1R
+Wee1,                    !CyclinA&!CyclinB&CHEK1 | !CyclinA&CyclinB&!Plk1&CHEK1 | !CyclinA&CyclinB&Plk1&!Cdk1&CHEK1 | CyclinA&!Plk1&CHEK1 | CyclinA&Plk1&!Cdk1&CHEK1
+Wnt,                     Wnt
+bCAT,                    !GSK3&Wnt&!APC
+eIF4E,                   MTORC1
+p21,                     !CyclinE&p21_mRNA
+p21_mRNA,                !Myc&TP53
+p27Kip1,                 MK2
+p38,                     !DUSP1&!TAK1&!TP53&TAO1 | !DUSP1&TAK1&!TP53
+pRB,                     !pRB&p27Kip1&!CyclinD1&!CyclinE | pRB&!CyclinD1&!CyclinE

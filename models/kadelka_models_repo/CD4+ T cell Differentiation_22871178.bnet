@@ -1,0 +1,29 @@
+STAT1,	Jak1 | ( IL27 & ( NFAT ) )
+IL23R,	( ( IL23 & ( STAT3 ) ) & ! Tbet ) | STAT3
+Foxp3,	( ( ( TGFbR & ! GATA3 ) & ! ( IL6R & ( STAT3 ) ) ) & ! IL21R ) | ( ( ( STAT5 & ! GATA3 ) & ! ( IL6R & ( STAT3 ) ) ) & ! IL21R )
+IL4,	( ( GATA3 & ( NFAT ) ) & ! STAT1 )
+IL12R,	( STAT4 & ! GATA3 ) | ( TCR & ! GATA3 ) | Tbet | ( IL12 & ( NFAT ) )
+RORgt,	( ( ( ( TGFbR & ( ( STAT3 & IL6R ) | ( IL21R & STAT3 ) ) ) & ! GATA3 ) & ! Tbet ) & ! Foxp3 )
+SOCS1,	Tbet | STAT1
+IL2,	( ( NFAT & ( NFkB ) ) & ! Tbet )
+NFAT,	( TCR & ! Foxp3 )
+IFNgR,	( IFNg & ( NFAT ) ) | ( IFNg_e & ( NFAT ) )
+Tbet,	( ( STAT4 & ! ( R|gt ) ) & ! Foxp3 ) | ( ( STAT1 & ! ( R|gt ) ) & ! Foxp3 ) | ( ( ( Tbet & ( ! IFNg & ! IL12 ) ) & ! ( R|gt ) ) & ! Foxp3 )
+STAT3,	IL21R | IL6R | IL23R
+IL2R,	( IL2 & ( NFAT ) )
+GATA3,	( ( ( ( STAT5 & ! Tbet ) & ! ( R|gt ) ) & ! TGFb ) & ! Foxp3 ) | ( ( ( ( ( STAT6 & ( NFAT ) ) & ! Tbet ) & ! ( R|gt ) ) & ! TGFb ) & ! Foxp3 ) | ( GATA3 & ! Tbet )
+IL6R,	IL6 | IL6_e
+IL17,	( ( R|gt ) & ! STAT1 ) | ( ( ( STAT3 & ( ( IL17 ) & ( IL23R ) ) ) & ! STAT5 ) & ! STAT1 )
+TGFbR,	( TGFb & ( NFAT ) )
+IL4R,	( IL4 & ! SOCS1 ) | IL4_e
+IRAK,	IL18R
+IFNg,	( ( ( STAT4 & ( ( NFkB ) & ( NFAT ) ) ) & ! STAT6 ) & ! STAT3 ) | ( Tbet & ! STAT3 ) | NFkB
+IL21,	( STAT3 & ( NFAT ) )
+STAT5,	IL2R
+NFkB,	( IRAK & ! Foxp3 )
+IL18R,	( ( IL18 & ( IL12 ) ) & ! STAT6 )
+STAT4,	( ( IL12R & ( IL12 ) ) & ! GATA3 )
+STAT6,	( ( IL4R & ! SOCS1 ) & ! IFNg )
+IL21R,	IL21
+IL6,	( R|gt )
+Jak1,	( IFNgR & ! SOCS1 )

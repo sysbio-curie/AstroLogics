@@ -1,0 +1,12 @@
+Nemo,	Pan
+Pan,	( Arm & ! Nemo )
+Dlp,	( Ttv & ! Wf )
+Arr,	Wg
+Sgg,	! ( Dsh )
+Targets,	( ( Pygo & ( Nej & Lgs & Pan & Hyx ) ) & ! Gro )
+Dsh,	( Arr & ! Nkd ) | ( Fz & ! Nkd )
+Arm,	( ( Hipk & ( CK1alpha ) ) & ! ( Sgg & ( APC & Proteasome & Axin & Slmb ) ) )
+Axin,	! ( Dsh )
+APC,	! ( Dsh )
+Dally,	( Ttv & ! Wf )
+Fz,	( Wg & ( Boca ) )

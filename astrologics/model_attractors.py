@@ -5,6 +5,7 @@ import os
 import pandas as pd
 from multiprocessing import Pool
 from tqdm import tqdm
+import gc
 
 """
 This script is used to generate sequence of attractors from the model.
@@ -56,32 +57,26 @@ class attractors:
         self.path = model_path
         self.attractors_df = None
     
-    def get_attractors(self, num_cores = 10):
+    def get_attractors(self, num_cores=10, chunksize=10):
         """
-        Calculate and retrieve the attractors for the models in the specified path.
-        This method processes all model files in parallel using a specified number of CPU cores.
-        The results are concatenated into a single DataFrame and saved to the object's `attractors_df` attribute.
-        Parameters:
-        num_cores (int): The number of CPU cores to use for parallel processing. Default is 10.
-        Returns:
-        pd.DataFrame: A DataFrame containing the concatenated results of the attractors for all models.
+        Improved multiprocessing version with better memory management.
         """
-        # Define models path
         os.chdir(self.path)
-        model_files = os.listdir(self.path)
+        model_files = [f for f in os.listdir(self.path) if f.endswith('.bnet')]
         model_logic = pd.DataFrame()
         
-        
-        # Process all model files in parallel with limited number of cores
+        # Use imap with chunking for better memory efficiency
         with Pool(processes=num_cores) as pool:
-            results = list(tqdm(pool.imap(calculate_attractors, model_files), total=len(model_files)))
-
-        # Concatenate results into a single DataFrame
-        print('Concatenate results into matrix')
-        for model in tqdm(results):
-            model_logic = pd.concat([model_logic, model], axis=1, ignore_index=False)
-    
-        # Save the attractors to the object
-        self.attractors_df = model_logic.fillna(0)
+            # Process in chunks to avoid memory buildup
+            for result in tqdm(
+                pool.imap(calculate_attractors, model_files, chunksize=chunksize), 
+                total=len(model_files),
+                desc="Processing models"
+            ):
+                model_logic = pd.concat([model_logic, result], axis=1, ignore_index=False)
+                # Periodic garbage collection
+                if len(model_logic.columns) % 100 == 0:
+                    gc.collect()
         
+        self.attractors_df = model_logic.fillna(0)
         print('Attractors calculation completed')

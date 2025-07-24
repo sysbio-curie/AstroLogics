@@ -1,0 +1,14 @@
+ProX,	( Glu & ! CellDens )
+Meta,	( ( XylSh & ( RpoS | RpoH | RpoD ) ) & ! Crc ) | ( ( m-xyl & ( ( Upper ) & ( RpoS | RpoH | RpoD ) & ( XylS ) ) ) & ! Crc ) | ( ( 3MBz & ( ( RpoS | RpoH | RpoD ) & ( XylS ) ) ) & ! Crc )
+XylS,	RpoD
+Meta2,	( ( ( XylSh & ( RpoS | RpoH | RpoD ) ) & ! ProX ) & ! Crc ) | ( ( ( m-xyl & ( ( XylS ) & ( RpoS | RpoH | RpoD ) & ( Upper ) ) ) & ! ProX ) & ! Crc ) | ( ( ( 3MBz & ( ( RpoS | RpoH | RpoD ) & ( XylS ) ) ) & ! ProX ) & ! Crc )
+XylSh,	( ( ( m-xyl & ( HU & XylR & RpoN ) ) & ! PtsN ) & ! Crc )
+PprA,	Cold
+XylR,	( ( RpoD & ! ProX ) & ! Crc )
+RpoS,	CellDens
+Crc,	( CAA & ! CellDens )
+RpoH,	Heat
+IHF,	CellDens
+PtsN,	( Glu & ! CellDens )
+TurA,	Cold
+Upper,	( ( ( ( ( m-xyl & ( IHF & XylR & RpoN ) ) & ! Crc ) & ! PtsN ) & ! TurA ) & ! PprA )

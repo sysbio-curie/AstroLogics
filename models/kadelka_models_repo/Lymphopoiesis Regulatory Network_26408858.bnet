@@ -1,0 +1,67 @@
+Helios,	NFkB
+IL12R,	( IL12 & ( ! STAT6 ) )
+Foxp3,	( Foxp3 & ( ! STAT3 & ! R|gt & ! Tbet & ! GATA3 ) ) | ( SMAD2 & ( ! STAT3 & ! R|gt & ! Tbet & ! GATA3 ) ) | ( SMAD3 & ( ! STAT3 & ! R|gt & ! Tbet & ! GATA3 ) )
+ERK,	Flt3 | BCR
+NFAT,	TCR
+PU1,	Irf4
+EOMES,	( Tbet & ( Runx3 ) ) | ( IL27R & ( Runx3 ) )
+STAT3,	IL21R | JAK3 | IL23R | IL10R
+Ebf1,	( Runx1 & ( ! Runx3 ) )
+AKT,	TNFR2
+IL21R,	IL21
+TNFa,	( R|gt )
+Gfi1,	Ikaros
+SMAD3,	( TGFbR & ( ! AKT ) )
+IL4,	( GATA3 & ( ! STAT1 ) )
+JAK1,	IFNgR
+IL27R,	IL27
+IFNg,	( STAT4 & ( ! STAT3 ) ) | ( EOMES & ( ! STAT3 ) ) | ( IRAK & ( ! STAT3 ) ) | ( Tbet & ( ! STAT3 ) )
+IL23R,	IL23
+Notch1,	Dll1
+Irf4,	( Blimp1 & ( ( ( ! Flt3 ) & ( Ebf1 ) ) ) ) | ( NFkB & ( ( ( ! Flt3 ) & ( Ebf1 ) ) ) )
+GATA3,	( TCF1 & ( ! Runx1 & ! R|gt & ! Foxp3 & ! Tbet & ! HEB ) ) | ( STAT6 & ( ! Runx1 & ! R|gt & ! Foxp3 & ! Tbet & ! HEB ) ) | ( GATA3 & ( ! Runx1 & ! R|gt & ! Foxp3 & ! Tbet & ! HEB ) )
+HEB,	Notch1
+IFNbR,	IFNb
+IL10R,	IL10
+Gzmb,	EOMES
+RORgt,	( R|gt & ( ! Foxp3 & ! Tbet & ! GATA3 ) ) | ( SMAD2 & ( STAT3 ) )
+FR4,	( Foxp3 & ( B9 ) )
+Bcl2,	STAT5 | FR4
+IFNgR,	IFNg
+IRAK,	IL18R
+Runx3,	( CD8 & ( ! STAT5 & ! CD4 & ! ThPOK ) ) | ( STAT5 & ( CD8 ) )
+Blimp1,	( Irf4 & ( ! Bcl6 & ! Bach2 & ! Pax5 ) )
+IL6,	( R|gt )
+TCF1,	Notch1
+Bcl6,	( IL21R & ( ( Ebf1 & ( ! Irf4 & ! Blimp1 ) ) ) )
+Runx1,	( Runx1 & ( ! TCR & ! Runx3 & ! ThPOK & ! Notch1 ) )
+IL17,	( R|gt )
+STAT5,	( IL2R & ( ! SOCS1 ) ) | ( JAK3 & ( ! SOCS1 ) )
+CD8,	( Runx3 & ( ! TCR & ! ThPOK & ! Ebf1 ) ) | ( Notch1 & ( ! TCR & ! ThPOK & ! Ebf1 ) ) | ( CD8 & ( ! TCR & ! ThPOK & ! Ebf1 ) )
+IL18R,	( IL18 & ( ! STAT6 ) )
+Pax5,	( Ebf1 & ( ! Irf4 & ! Blimp1 & ! Flt3 & ! ThPOK ) ) | ( STAT5 & ( ( ( ! Irf4 & ! Blimp1 & ! ThPOK ) & ( Ebf1 ) ) ) )
+Bach2,	Bcl6 | Pax5
+STAT6,	IL4R
+SMAD2,	TGFbR
+Prf1,	EOMES
+TGFbR,	TGFb
+NFkB,	BCR
+IL7R,	( IL7 & ( ! TCR ) )
+ThPOK,	ThPOK | ( CD4 & ( ! CD8 ) ) | TCR | ( Tbet & ( ! Runx3 ) ) | ( R|gt ) | GATA3 | Foxp3
+STAT4,	( IL12R & ( ! GATA3 ) )
+IL2R,	IL2
+IL6R,	IL6
+Flt3,	( Flt3L & ( ! Pax5 ) ) | ( Hoxa9 & ( ! Pax5 ) )
+CD4,	( ThPOK & ( ! Runx3 & ! Ebf1 ) ) | ( Notch1 & ( ! Runx3 & ! Ebf1 ) ) | ( CD4 & ( ! Runx3 & ! Ebf1 ) )
+IL4R,	( IL4 & ( ! SOCS1 ) )
+STAT1,	IFNbR | IL27R | JAK1
+XBP1,	Blimp1
+Ikaros,	PU1
+TNFR2,	TNFa
+JAK3,	( IL7R & ( ! Notch1 ) ) | ( IL6R & ( ! Notch1 ) )
+CD19,	Pax5
+TGFb,	Foxp3
+Bcl11b,	( Notch1 & ( TCF1 ) )
+SOCS1,	Tbet | STAT1
+Tbet,	( Tbet & ( ! R|gt & ! Foxp3 & ! GATA3 ) ) | ( STAT1 & ( ! R|gt & ! Foxp3 & ! GATA3 ) )
+IL10,	GATA3
