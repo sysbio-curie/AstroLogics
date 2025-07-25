@@ -1,0 +1,28 @@
+IGFR1A_B,	IGF
+RP6SKB1,	( mTOR & ( ! Temsirolimus ) ) | PDPK1 | ( ERK1_2 )
+p21,	! ( AKT )
+mTOR,	RHEB
+Ras,	( GRB2_SOS )
+TMPRSS2,	( AR_AR & ( ! Enzalutamide ) )
+CDK2-CyclinE,	! ( p21 )
+Raf,	( PIK3CA & ( ! BKM120 ) ) | Ras
+AR_AR,	AKT | ( AR_HSP )
+EGFR_ERBB2,	EGF
+SRF-ELK1,	( ERK1_2 & ( RP6SKB1 ) )
+MEK1,	Raf
+AR_HSP,	Androgens
+AKT,	( ( NKX3_1 & ( ! PDPK1 & ! PTEN ) ) | ( PTEN & ( ! PDPK1 & ! NKX3_1 ) ) | PDPK1 ) | ! ( PDPK1 | PTEN | NKX3_1 )
+PDPK1,	PIP3
+GRB2_SOS,	( EFGR & ( ! Lapatinib ) ) | ( EGFR_ERBB2 & ( ! Lapatinib ) ) | ( ERBB2_3 & ( ! Lapatinib ) ) | ( IGFR1A_B )
+PIK3CA,	Ras | IRS1 | ( ERBB2_3 )
+ERK1_2,	( MEK1 & ( ! AZD6244 ) )
+SP1,	( ERK1_2 )
+ERBB2_3,	NRG1
+PSA,	( AR_AR & ( ! Enzalutamide ) )
+TSC1_2,	! ( ( AKT & ( ! AZD5363 ) ) )
+PIP3,	( PIK3CA & ! PTEN )
+BCL2,	! ( BAD )
+RHEB,	! ( TSC1_2 )
+EFGR,	HBEGF | EGF
+IRS1,	( IGFR1A_B & ( ! Cixutumumab ) )
+BAD,	! ( AKT | RP6SKB1 )

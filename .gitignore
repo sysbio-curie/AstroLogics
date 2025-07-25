@@ -1,6 +1,7 @@
-dev/notebooks_for_bonesis
-models/dev
-models/tmp
-models/calzone_cellfate
-models/complex_attractor_model
 dev/
+models/dev/
+models/tmp/
+models/complex_attractor_model/
+inferred_model/
+inferred_model_archive/
+data/attractor_group/calculated_attractor/BT474 Breast Cell Line Long-term ErbB Network_24970389_attractors.csv

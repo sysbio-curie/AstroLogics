@@ -1,0 +1,12 @@
+TGFB,	( TGFB & ! IL21 ) | ( FOXP3 & ! IL21 ) | TGFBe
+IL4,	( ( IL4e & ! IL21 ) & ! IFNG ) | ( ( ( ( GATA3 & ( IL4 | IL2 ) ) & ! IL21 ) & ! IFNG ) & ! TBET )
+IL2,	( ( ( IL2e & ! IL21 ) & ! IL10 ) & ! IFNG ) | ( ( ( ( IL2 & ! IL21 ) & ! IL10 ) & ! FOXP3 ) & ! IFNG )
+FOXP3,	( ( ( IL2 & ( FOXP3 | TGFB ) ) & ! ( R|GT ) ) & ! IL21 )
+IL9,	( ( ( IL4 & ( ( IL10 & IL2 ) | ( TGFB ) ) ) & ! IFNG ) & ! IL21 )
+RORGT,	( ( ( ( ( IL21 & ( TGFB ) ) & ! TBET ) & ! BCL6 ) & ! GATA3 ) & ! FOXP3 )
+IL10,	( IL10 & ( IFNG | GATA3 | IL21 | TGFB ) ) | IL10e
+BCL6,	( ( ( IL21 & ! IL2 ) & ! TGFB ) & ! TBET )
+TBET,	( ( ( ( ( TBET & ! IL21 ) & ! IL4 ) & ! BCL6 ) & ! IL9 ) & ! GATA3 ) | ( ( ( ( ( IFNG & ! IL21 ) & ! IL4 ) & ! BCL6 ) & ! IL9 ) & ! GATA3 )
+IL21,	( ( ( ( ( IL21 & ! IFNG ) & ! IL9 ) & ! IL2 ) & ! IL10 ) & ! IL4 ) | ( ( ( ( ( BCL6 & ! IFNG ) & ! IL9 ) & ! IL2 ) & ! IL10 ) & ! IL4 ) | ( ( ( ( ( ( R|GT ) & ! IFNG ) & ! IL9 ) & ! IL2 ) & ! IL10 ) & ! IL4 ) | ( ( ( ( ( IL21e & ! IFNG ) & ! IL9 ) & ! IL2 ) & ! IL10 ) & ! IL4 )
+GATA3,	( ( ( ( ( ( IL4 & ( IL2 ) ) & ! IL21 ) & ! TBET ) & ! BCL6 ) & ! TGFB ) & ! IFNG ) | ( ( ( ( ( GATA3 & ! IL21 ) & ! TBET ) & ! BCL6 ) & ! TGFB ) & ! IFNG )
+IFNG,	( ( ( ( ( ( ( IFNG & ! IL9 ) & ! IL4 ) & ! BCL6 ) & ! IL10 ) & ! TGFB ) & ! GATA3 ) & ! IL21 ) | ( ( ( ( ( ( ( TBET & ! IL9 ) & ! IL4 ) & ! BCL6 ) & ! IL10 ) & ! TGFB ) & ! GATA3 ) & ! IL21 ) | ( ( ( ( IFNGe & ! IL9 ) & ! IL4 ) & ! IL10 ) & ! IL21 )

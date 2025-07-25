@@ -1,8 +1,25 @@
-,project_name,num_model,num_attractors,gini_score
-0,Toll Pathway of Drosophila Signaling Pathway_23868318,16,6,0.16666666666666652
-1,HH Pathway of Drosophila Signaling Pathways_23868318,1000,1000,0.0
-2,Cortical Area Development_20862356,1000,5,0.7432000000000001
-3,VEGF Pathway of Drosophila Signaling Pathway_23868318,1000,390,0.24740512820512817
-4,SKBR3 Breast Cell Line Short-term ErbB Network_24970389,1000,268,0.43376865671641784
-5,Regulation of the L-arabinose operon of Escherichia coli_28639170,1000,130,0.5037076923076924
-6,Lac Operon_21563979,1000,61,0.5440327868852459
+,"project_name","num_model","num_attractors","gini_score"
+0,"toy_reprogramming_1",8,8,0
+0,"Toll Pathway of Drosophila Signaling Pathway_23868318",16,6,0.166666666666667
+0,"HH Pathway of Drosophila Signaling Pathways_23868318",1000,1000,0
+0,"VEGF Pathway of Drosophila Signaling Pathway_23868318",1000,390,0.247405128205128
+0,"FGF pathway of Drosophila Signaling Pathways_23868318",1000,570,0.250484210526316
+0,"toy_reprogramming",8,8,0
+0,"HCC1954 Breast Cell Line Short-term ErbB Network_24970389",1000,304,0.469868421052631
+0,"SKBR3 Breast Cell Line Long-term ErbB Network_24970389",1000,41,0.442780487804878
+0,"BT474 Breast Cell Line Long-term ErbB Network_24970389",1000,249,0.506200803212851
+0,"B cell differentiation_26751566",1000,287,0.273749128919861
+0,"HCC1954 Breast Cell Line Long-term ErbB Network_24970389",1000,542,0.313284132841328
+0,"Body Segmentation in Drosophila 2013_23520449",1000,86,0.549325581395349
+0,"SKBR3 Breast Cell Line Short-term ErbB Network_24970389",1000,268,0.433768656716418
+0,"Human Gonadal Sex Determination_26573569",1000,6,0.522
+0,"test_bonesis",88,2,0.090909090909091
+0,"Death Receptor Signaling_20221256",1000,16,0.2855
+0,"Mammalian Cell Cycle_19118495",1000,7,0.642571428571429
+0,"herault_hematopoiesis",616,1,0
+0,"synthetic_random_diff",1000,1,0
+0,"Cardiac development_23056457",1000,6,0.637
+0,"Processing of Spz Network from the Drosophila Signaling Pathway_23868318",1000,152,0.398947368421053
+0,"Lac Operon_21563979",1000,61,0.544032786885246
+0,"Cortical Area Development_20862356",1000,5,0.7432
+0,"Regulation of the L-arabinose operon of Escherichia coli_28639170",1000,130,0.503708

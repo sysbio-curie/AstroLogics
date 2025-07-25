@@ -1,0 +1,69 @@
+ROS,	( TNFR & ! SOD )
+MEK,	RAF | ROS
+Proliferation,	( ( ( CYCLIND1 & ( FOS ) ) & ! P21 ) & ! CASP3 )
+SMAD7,	NFKB | SMAD
+SMAD,	( TGFR & ! JUN )
+CFLIP,	NFKB
+PP2A,	( CERAMIDE & ! AKT )
+TH1,	( ( ( IFNG & ! IL4 ) & ! IL10 ) & ! TGFB ) | ( ( ( IL12 & ! IL4 ) & ! IL10 ) & ! TGFB )
+JNK,	MEKK1 | ASK1
+BCATENIN,	! ( ( APC & ( GSK3B ) ) )
+TNFR,	TNFA
+IL10,	TH2 | TREG
+TGFB,	TREG
+IFNG,	CTL | TH1
+STAT3,	JAK
+RAS,	EP2 | GP130
+MOMP,	( CERAMIDE & ! BCL2 ) | ( BAX & ! BCL2 ) | ( TBID & ! BCL2 )
+DC,	( TNFA & ! IL10 ) | ( CCL2 & ! IL10 )
+CERAMIDE,	( SMASE & ! SPHK1 )
+IL6,	MAC | DC | NFKB
+CASP9,	( ( CYTC & ! P21 ) & ! IAP )
+Apoptosis,	CASP3
+ATM,	ROS
+CYTC,	MOMP
+P53,	( PTEN & ! MDM2 ) | ( ATM & ! MDM2 ) | ( JNK & ! MDM2 )
+SMAC,	MOMP
+CTL,	( IFNG & ! TGFB )
+COX2,	( TNFR & ( S1P ) )
+CASP3,	( CASP9 & ! IAP ) | ( CASP8 & ! IAP )
+ERK,	MEK
+GSK3B,	! ( AKT | EP2 )
+FOS,	ERK
+TREG,	( IL10 & ! IL6 ) | ( DC & ! IL6 )
+MEKK1,	TGFR | CERAMIDE | TNFR
+NFKB,	! ( IKB )
+FADD,	FAS | TNFR
+TNFA,	MAC
+BCL2,	( ( STAT3 & ! P53 ) & ! PP2A ) | ( ( NFKB & ! P53 ) & ! PP2A )
+CYCLIND1,	( BCATENIN & ! GSK3B ) | ( JUN & ! GSK3B ) | ( STAT3 & ! GSK3B )
+JAK,	( GP130 & ! SOCS )
+PTEN,	( ( P53 & ! JUN ) & ! NFKB )
+SMASE,	FADD | P53
+IL4,	DC | TH2
+MDM2,	( ( ( P53 & ( AKT ) ) & ! ATM ) & ! GSK3B )
+TBID,	( CASP8 & ! BCL2 )
+JUN,	( ( BCATENIN & ( JNK ) ) & ! GSK3B ) | ( ( ERK & ( JNK ) ) & ! GSK3B )
+S1P,	SPHK1
+SPHK1,	TNFR | ERK
+MAC,	( IFNG & ! IL10 ) | ( CCL2 & ! IL10 )
+TGFR,	( TGFB & ! SMAD7 )
+PGE2,	COX2
+RAF,	CERAMIDE | RAS
+SOCS,	STAT3
+P21,	( ( P53 & ! CASP3 ) & ! GSK3B ) | ( ( SMAD & ! CASP3 ) & ! GSK3B )
+BAX,	( ( TBID & ( PP2A ) ) & ! AKT ) | ( ( P53 & ( PP2A ) ) & ! AKT )
+IKK,	AKT | ( TNFR & ( S1P ) )
+FAS,	CTL
+CCL2,	NFKB
+EP2,	PGE2
+SOD,	STAT3 | NFKB
+PI3K,	( EP2 & ! PTEN ) | ( RAS & ! PTEN )
+AKT,	( ( PI3K & ! CASP3 ) & ! PP2A )
+IL12,	MAC | DC
+CASP8,	( ( FADD & ! P21 ) & ! CFLIP )
+ASK1,	( ROS & ! P21 )
+IKB,	! ( IKK )
+GP130,	IL6
+TH2,	( ( IL4 & ! IFNG ) & ! TGFB )
+IAP,	( NFKB & ! SMAC ) | ( STAT3 & ! SMAC )

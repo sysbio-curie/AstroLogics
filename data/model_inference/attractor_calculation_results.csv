@@ -1,0 +1,54 @@
+model,time_used,error
+Mammalian Cell Cycle_19118495,0.4504547119140625,Error while loading model
+Aurora Kinase A in Neuroblastoma_26616283,0.006232738494873047,Error while loading model
+Pro-inflammatory Tumor Microenvironment in Acute Lymphoblastic Leukemia_27594840,2.592921257019043,
+HH Pathway of Drosophila Signaling Pathways_23868318,0.003721952438354492,Error while loading model
+SKBR3 Breast Cell Line Long-term ErbB Network_24970389,0.0036177635192871094,Error while loading model
+VEGF Pathway of Drosophila Signaling Pathway_23868318,0.004761457443237305,Error while loading model
+MAPK Cancer Cell Fate Network_24250280,0.006382942199707031,Error while loading model
+Processing of Spz Network from the Drosophila Signaling Pathway_23868318,0.0029172897338867188,Error while loading model
+Trichostrongylus retortaeformis_22253585,0.002775907516479492,Error while loading model
+HCC1954 Breast Cell Line Short-term ErbB Network_24970389,0.003047943115234375,Error while loading model
+herault_hematopoiesis,0.10406827926635742,
+B bronchiseptica and T retortaeformis coinfection_22253585,0.003106832504272461,Error while loading model
+T-Cell Signaling 2006_16464248,0.001611471176147461,Error while loading model
+Colitis-associated colon cancer_26446703,0.002227306365966797,Error while loading model
+Wg Pathway of Drosophila Signalling Pathways_23868318,0.0013921260833740234,Error while loading model
+Lac Operon_21563979,0.00165557861328125,Error while loading model
+HGF Signaling in Keratinocytes_22962472,0.003638744354248047,Error while loading model
+Cholesterol Regulatory Pathway_19025648,2.956923246383667,
+Bortezomib Responses in U266 Human Myeloma Cells_26163548,0.0028018951416015625,Error while loading model
+toy_reprogramming,0.10083317756652832,
+T cell differentiation_16542429,0.0017025470733642578,Error while loading model
+PC12 Cell Differentiation_27148350,0.0022547245025634766,Error while loading model
+B cell differentiation_26751566,0.003476381301879883,Error while loading model
+Fanconi anemia and checkpoint recovery_26385365,0.10708880424499512,
+Iron acquisition and oxidative stress response in aspergillus fumigatus_25908096,0.001821279525756836,Error while loading model
+Body Segmentation in Drosophila 2013_23520449,0.0014050006866455078,Error while loading model
+SKBR3 Breast Cell Line Short-term ErbB Network_24970389,0.002274751663208008,Error while loading model
+Toll Pathway of Drosophila Signaling Pathway_23868318,0.00141143798828125,Error while loading model
+FGF pathway of Drosophila Signaling Pathways_23868318,0.0011310577392578125,Error while loading model
+HCC1954 Breast Cell Line Long-term ErbB Network_24970389,0.0018990039825439453,Error while loading model
+Arabidopsis thaliana Cell Cycle_26340681,0.32050275802612305,
+T Cell Receptor Signaling_17722974,0.002529144287109375,Error while loading model
+Death Receptor Signaling_20221256,0.0028624534606933594,Error while loading model
+T-LGL Survival Network 2011_22102804,0.0036101341247558594,Error while loading model
+IGVH mutations in chronic lymphocytic leukemia_26088082,0.002368450164794922,Error while loading model
+T-LGL Survival Network 2008_18852469,0.002349853515625,Error while loading model
+Guard Cell Abscisic Acid Signaling_16968132,0.0019006729125976562,Error while loading model
+CD4+ T cell Differentiation_22871178,0.0022864341735839844,Error while loading model
+Human Gonadal Sex Determination_26573569,0.3778707981109619,
+synthetic_random_diff,0.10424089431762695,
+FA BRCA pathway_22267503,5.348737955093384,
+Apoptosis Network_19422837,0.0019428730010986328,Error while loading model
+IL-1 Signaling_21968890,0.0019626617431640625,Error while loading model
+T-LGL Survival Network 2011 Reduced Network_22102804,0.08827614784240723,
+test_bonesis_network,0.08318853378295898,
+Cortical Area Development_20862356,0.07407665252685547,
+Bordetella bronchiseptica_22253585,1.0161433219909668,
+Budding Yeast Cell Cycle 2009_19185585,1.7380166053771973,
+Cell Cycle Transcription by Coupled CDK and Network Oscillators_18463633,0.12451601028442383,
+Mammalian Cell Cycle 2006_16873462,0.11095833778381348,
+Septation Initiation Network_26244885,0.003541707992553711,Error while loading model
+manual_mod_Treatment of Castration-Resistant Prostate Cancer_28361666,0.0015707015991210938,Error while loading model
+Neurotransmitter Signaling Pathway_17010384,0.6078696250915527,

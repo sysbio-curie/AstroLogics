@@ -1,0 +1,11 @@
+ERK1_2,	ERK1_2 | MEK1_2
+AKT,	( mTOR ) | AKT | p70S6K | ERBB3 | PDK1
+ERBB1,	( ( EGF & ! pertuzumab ) & ! erlotinib ) | ( ( PLCg & ! pertuzumab ) & ! erlotinib ) | ( ( ERBB1 & ! pertuzumab ) & ! erlotinib )
+mTOR,	( mTOR ) | AKT
+ERBB3,	( ( ERBB3 & ! pertuzumab ) & ! erlotinib ) | ( ( HRG & ! pertuzumab ) & ! erlotinib ) | ( ( ERK1_2 & ! pertuzumab ) & ! erlotinib )
+PDK1,	ERBB3 | ERBB1 | PDK1 | ERBB2
+PLCg,	ERBB3 | PLCg | ERBB1 | ERBB2
+ERBB2,	( ( ( ERBB1 & ! trastuzumab ) & ! pertuzumab ) & ! erlotinib ) | ( ( ( PDK1 & ! trastuzumab ) & ! pertuzumab ) & ! erlotinib ) | ( ( ( ERBB2 & ! trastuzumab ) & ! pertuzumab ) & ! erlotinib )
+MEK1_2,	ERBB3 | MEK1_2 | ERBB1 | PDK1 | ERBB2
+p70S6K,	( mTOR ) | ERK1_2 | AKT | p70S6K | erlotinib
+PKCa,	trastuzumab | PKCa | PLCg

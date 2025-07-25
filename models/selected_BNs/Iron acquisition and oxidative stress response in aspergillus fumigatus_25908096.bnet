@@ -1,0 +1,20 @@
+ThP,	Yap1
+Cat1_2,	( Yap1 & ! HapX )
+ROS,	( Superoxide & ! ( SOD2_3 & ( ThP & Cat1_2 ) ) ) | LIP | ( ROS & ! ( SOD2_3 & ( ThP & Cat1_2 ) ) )
+ICP,	( VAC & ! HapX ) | ( FCplusFe & ! HapX )
+FCminusFe,	SidA
+SreA,	( LIP & ( sreA ) )
+sreA,	! ( HapX )
+SidA,	( HapX & ! SreA )
+TAFC,	SidA
+HapX,	( hapX & ! LIP )
+LIP,	( RIA & ( Iron ) ) | ( TAFC & ( EstB & MirB ) )
+CccA,	! ( HapX )
+EstB,	! ( SreA )
+Yap1,	ROS
+hapX,	! ( SreA )
+VAC,	( CccA & ( LIP ) )
+MirB,	( HapX & ! SreA )
+SOD2_3,	Yap1
+RIA,	! ( SreA )
+FCplusFe,	( FCminusFe & ( LIP ) )

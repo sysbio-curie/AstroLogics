@@ -1,0 +1,23 @@
+dma1,	( sid4 & ( CK1 ) )
+plo1,	( ( ( cdk-H ) & ! ( sid4 & ( dma1 ) ) ) & ! ( cdk-L ) ) | ( sid4 & ! ( sid4 & ( dma1 ) ) )
+pom1,	pak1
+sid2,	( cdc11 & ( cdc7 & SIP ) ) | cdc7
+Rga4,	! ( pom1 )
+fin1,	( cdk-H )
+SIP,	( ( cdk-H ) & ! ( cdk-0 & ( ppc89 ) ) )
+byr4-cdc16,	( byr4 & ( cdc16 ) )
+byr4,	( ( ( cdk-L ) & ! ( cdk-H & ( plo1 ) ) ) & ! cdc42 )
+cdc11,	cdc16 | ( flp1 & ( sid4 ) ) | sid4 | cdc7
+cdc7,	( spg1 & ( cdc11 ) )
+sid4,	ppc89
+flp1,	( ( sid2-mob1 ) & ! ( cdk-H ) ) | ( ( cdk-0 ) & ! ( cdk-H ) )
+scd1,	ras1
+spg1,	( cdc11 & ! ( byr4-cdc16 ) ) | ( etd1 & ! ( byr4-cdc16 ) )
+gef1,	orb6
+cdc16,	! ( fin1 )
+cdc42,	( scd1 & ! Rga4 ) | ( gef1 & ! Rga4 )
+pak1,	cdc42
+orb6,	nak1 | pak1
+pmo25,	( cdc14-sid1 ) | cdc7
+nak1,	( sid2-mob1 & ( cdk-H ) ) | pmo25
+cdc14-sid1,	cdc7
