@@ -1,0 +1,15 @@
+name: astrologics
+channels:
+  - conda-forge
+  - colomoto
+dependencies:
+  - pandas
+  - numpy
+  - scipy
+  - scikit-learn
+  - pymaboss
+  - boolsim-python 
+  - mpbn
+  - pip
+  - pip:
+    - git+https://github.com/saran-pankaew/AstroLogics

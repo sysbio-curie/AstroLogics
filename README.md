@@ -38,6 +38,37 @@ Our framework includes two major processes
 </br>
 </p>
 
+## Tutorials
+
+Tutorials are available as Jupyter notebooks
+
+### Run with Binder
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/saran-pankaew/AstroLogics/main?filepath=AstroLogics)
+
+
+### Run locally with Docker
+To run this notebook using the built docker image, run : 
+```
+docker run -p 8888:8888 -d sysbiocurie/astrologics
+```
+
+### Run locally with Conda
+Creating the conda environment
+```
+conda env create--file=environments.yml
+```
+
+To activate it : 
+```
+conda activate icd
+```
+
+To run the notebook: 
+```
+jupyter notebook
+```
+ 
 ## Installation 
 Coming soon
 
