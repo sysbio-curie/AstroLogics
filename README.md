@@ -1,19 +1,8 @@
 # AstroLogics : An analysis framework for monotonous Boolean model ensemble
 
 This is a repository of data, code and analyses of AstroLogics framework.
-A step-by step tutorial can be found in the folder tutorial. Please have a look at our tutorial [add link to the tutorial page]. 
+A step-by step tutorial can be found in the folder tutorial. Please have a look at our [tutorials](https://astrologics.readthedocs.io/en/latest/tutorials.html). 
 
-## Getting Started
-### Requirements (for AstroLogics)
-- Python version 3.8 or greater
-- Python's packages listed here:
-    - pandas
-    - numpy
-    - scipy, sklearn
-    - maboss
-    - boolsim
-    - bonesis
-    - mpbn
 
 ## Overview
 AstroLogics is a Python package designed for analysing monotonous Boolean model ensemble, a product of Boolean model synthesis from method such as [Bonesis](https://bnediction.github.io/bonesis/index.html).
@@ -30,6 +19,45 @@ Our framework includes two major processes
 <em> Overview of the framework showing the two major processes in the framework. <strong>Dynamics</strong>: dynamical properties analysis. <strong>Logics</strong>: Logical function evaluation </em>
 </br>
 </p>
+
+## Getting Started
+### Requirements (for AstroLogics)
+- Python version 3.8 or greater
+- Python's packages listed here:
+    - pandas
+    - numpy
+    - scipy, sklearn
+    - maboss
+    - boolsim
+    - bonesis
+    - mpbn
+### Installation 
+
+There are several ways to install AstroLogics
+
+
+#### PyPi
+
+```
+pip install astrologics
+```
+
+#### Conda
+```
+conda install -c colomoto astrologics
+```
+
+#### From source
+First clone this directory:
+```
+git clone https://https://github.com/saran-pankaew/AstroLogics
+```
+
+Then install AstroLogics with pip
+```
+pip install AstroLogics
+```
+
 
 ## Tutorials
 
@@ -49,25 +77,23 @@ docker run -p 8888:8888 -d sysbiocurie/astrologics
 ### Run locally with Conda
 Creating the conda environment
 ```
-conda env create--file=environments.yml
+conda env create--file=environment.yml
 ```
 
 To activate it : 
 ```
-conda activate icd
+conda activate astrologics
 ```
 
 To run the notebook: 
 ```
 jupyter notebook
 ```
- 
-## Installation 
-Coming soon
 
 ## Documentation
-Coming soon
-- [ ] Create a page for AstroLogics documentation + Tutorial
+
+Our documentation is available on [ReadTheDocs](https://astrologics.readthedocs.io/)
+
 
 ## Citing AstroLogics
 Coming soon
