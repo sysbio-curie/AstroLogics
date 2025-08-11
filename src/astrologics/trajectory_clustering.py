@@ -3,14 +3,20 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
+from tqdm import tqdm
+
 # For PCA
 from sklearn.decomposition import PCA
-# For Trajectory clustering
-from tslearn.clustering import TimeSeriesKMeans
-from tslearn.datasets import CachedDatasets
-from tslearn.preprocessing import TimeSeriesScalerMeanVariance
-from tslearn.preprocessing import TimeSeriesResampler
-from tqdm import tqdm
+
+# For distance matrix calculation and clustering
+from scipy.spatial.distance import pdist, squareform
+from sklearn.cluster import KMeans
+from tslearn.metrics import dtw
+
+# For latent space visualization
+from sklearn.manifold import MDS
+
+
 # Define key parameters
 seed = 0
 np.random.seed(seed)
@@ -28,6 +34,7 @@ class trajectory:
         self.simulation_df = simulation_df
         self.node_list = list(simulation_df.columns.drop(['model_id','timepoint']))
 
+    ##### In this part of the script, we focus on visualizing the whole simulation trajectory by performing PCA on the simulation data. ######
     def pca_trajectory(self, n_components = 10):
         """
         Perform PCA on the given simulation DataFrame and return the transformed DataFrame.
@@ -65,19 +72,138 @@ class trajectory:
         # Store the PCA DataFrame
         self.pca_df = pca_df
 
-    def plot_trajectory(self, fig_size=(8,6), 
-                        color='model_id', size=10,
-                        show_legend = False):
-        """
-        Plot trajectory from PCA of simulated models.
-        Parameters:
-        pca_df (DataFrame): DataFrame containing PCA results with columns 'pc1' and 'pc2'.
-        fig_size (tuple): Size of the figure (width, height). Default is (8, 6).
-        color (str): Column name in pca_df to use for coloring the lines. Default is 'model_id'.
-        size (int): Size of the markers. Default is 10.
-        Returns:
-        None: Displays a line plot of the PCA trajectories.
-        """
+    ##### In this part of the script, we calculate the distance matrix, based on either endpoint simulation or whole trajectory ######
+    def calculate_distancematrix(self, 
+                                 mode = ['endpoint', 'trajectory'], 
+                                 timepoint = None):
+        
+        # Extract the simulation DataFrame
+        simulation_df = self.simulation_df
+
+        # Check if the mode is valid
+        if mode not in ['endpoint', 'trajectory']:
+            raise ValueError("Mode must be either 'endpoint' or 'trajectory'.")
+        
+        # Calculate the distance matrix using endpoint
+        if mode == 'endpoint':
+            print("Calculating distance matrix for endpoint simulation...")
+            # If mode is 'endpoint', we only consider the last timepoint
+            if timepoint is None:
+                timepoint = simulation_df['timepoint'].max()
+            simulation_df = simulation_df.loc[simulation_df['timepoint'] == timepoint].set_index('model_id')
+            model_name = simulation_df.index
+            simulation_df = simulation_df.drop(columns=['timepoint'])
+            simulation_array = simulation_df.to_numpy()
+            distance_matrix = squareform(pdist(simulation_array, metric='euclidean'))
+            distance_matrix = pd.DataFrame(distance_matrix, columns=model_name, index=model_name)
+
+        # Calculate the distance matrix using whole trajectory
+        elif mode == 'trajectory':
+            print("Calculating distance matrix for whole trajectory...")
+            # Preparing the calculating distance
+            simulation_df.model_id = simulation_df.model_id.astype('category')
+            node_list = simulation_df.columns.drop(['timepoint','model_id'])
+            model_name = simulation_df.model_id.unique()
+            model_original_all = {}
+            
+            # Loop through each model and extract the trajectory data
+            for i in model_name:
+                model_original = simulation_df.loc[simulation_df.model_id == i, node_list].values
+                model_original_all[i] = np.array(model_original)
+            pca_all_trajectory = np.array(list(model_original_all.values()))
+            
+            # Calculate the distance matrix using DTW
+            num_trajectories = len(pca_all_trajectory)
+            distance_matrix = np.zeros((num_trajectories, num_trajectories))
+            for i in tqdm(range(num_trajectories)):
+                for j in range(num_trajectories):
+                    distance_matrix[i, j] = dtw(pca_all_trajectory[i], pca_all_trajectory[j])
+            
+            # Convert the distance matrix to a DataFrame
+            distance_matrix = pd.DataFrame(distance_matrix, index=model_name, columns=model_name)
+        
+        # Return the distance matrix
+        print("Distance matrix calculated successfully.")
+        self.distance_matrix = distance_matrix
+        
+    # This script needs to be optimized more....    
+    # def optimize_cluster(self,data = 'pca', n_cluster = 15, method = 'euclidean'):
+    #     # Setup the variables
+    #     pca_df = self.pca_df
+    #     pca_df.model_id = pca_df.model_id.astype('category')
+    #     model_name = pca_df.model_id.cat.categories
+
+    #     simulation_df = self.simulation_df
+    #     simulation_df.model_id = simulation_df.model_id.astype('category')
+        
+    #     model_name = pca_df.model_id.cat.categories
+    #     model_pca_all = {}
+
+    #     node_list = self.node_list
+
+    #     if data == 'pca':
+    #         model_pca_all = {}
+    #         for i in model_name:
+    #             model_pca = pca_df.loc[pca_df.model_id == i,['pc1','pc2']].values
+    #             model_pca_all[i] = np.array(model_pca)
+    #         pca_all_trajectory = np.array(list(model_pca_all.values()))
+
+    #     elif data == 'original':
+    #         model_original_all = {}
+    #         for i in model_name:
+    #             model_original = simulation_df.loc[simulation_df.model_id == i,node_list].values
+    #             model_original_all[i] = np.array(model_original)
+    #         pca_all_trajectory = np.array(list(model_original_all.values()))   
+
+    #     # Calculate the optimal number of clusters
+    #     distortions = []
+    #     K = range(1, n_cluster)
+
+    #     # For loop to calculate inertia for each k
+    #     for k in tqdm(K):
+    #         tsmodel = TimeSeriesKMeans(n_clusters=k, metric= method, random_state=0, verbose = False)
+    #         tsmodel.fit(pca_all_trajectory)
+    #         distortions.append(tsmodel.inertia_)
+
+    #     plt.plot(K, distortions, 'bx-')
+    #     plt.xlabel('k')
+    #     plt.ylabel('Inertia')
+    #     plt.title('Elbow Method For Optimal k')
+    #     plt.show()
+    
+    def calculate_kmean_cluster(self, 
+                                n_cluster, 
+                                random_state = 12345):
+
+        # Get the distance matrix
+        distance_matrix = self.distance_matrix
+
+        # Euclidean k-means
+        kmeans = KMeans(n_clusters= n_cluster, random_state=random_state)
+        kmeans.fit(distance_matrix)
+        clusters = kmeans.labels_
+        cluster_dict = dict(zip(list(distance_matrix.index),list(clusters)))
+
+        # Store the updated DataFrame and cluster dictionary
+        self.cluster_dict = cluster_dict
+
+        print(f"Calculated k-means clustering with {n_cluster} clusters.")
+    
+    def calculate_MDS(self, random_state = 12345):
+        
+        # Calculate the MDS coordinates
+        distance_matrix = self.distance_matrix
+        mds = MDS(dissimilarity='precomputed', random_state=random_state)
+        coords = mds.fit_transform(distance_matrix)
+
+        # Store the MDS coordinates in a DataFrame
+        coords_vis = pd.DataFrame(coords, columns = ['x', 'y'], index = distance_matrix.index)
+        self.mds_coords = coords_vis
+
+    # All the plotting functions are here 
+    def plot_pca_trajectory(self, fig_size=(8,6), 
+                    color='model_id', size=10,
+                    plot_cluster = False):
         pca_df = self.pca_df
         
         # Adjust figure size
@@ -86,205 +212,38 @@ class trajectory:
         # Line plot using seaborn
         plot = sns.lineplot(data = pca_df, 
                     x = 'pc1',y='pc2',
-                    units = 'model_id', estimator = None, lw=2, alpha = .5,
-                    sort = False)
-        
-        # Line plot using seaborn
-        plot = sns.lineplot(data = pca_df,
+                    units = 'model_id', estimator = None, lw=2, alpha = .3,
+                    sort = False, legend = False)
+
+        if plot_cluster == False:
+            # Line plot using seaborn
+            plot2 = sns.lineplot(data = pca_df,
                             x = 'pc1', y = 'pc2',
                             units = 'model_id', estimator = None, 
                             hue = color, sort = False,
                             marker = 'o', markersize = size, 
                             linewidth = 2,
-                            alpha = .5 
+                            alpha = .5, legend = False 
                             )
-        # Show legend
-        if show_legend == False:
-            plot.get_legend().remove()
-
+        else:
+            # Check if kmean_cluster is already calculated
+            if not hasattr(self, 'cluster_dict'):
+                print("k-mean cluster not calculated")
+                return
+            pca_df['kmean_cluster'] = pca_df['model_id'].map(self.cluster_dict)
+            kmean_cluster = pca_df.groupby(['timepoint','kmean_cluster'])[['pc1','pc2']].mean()
+            plot2 = sns.lineplot(data = kmean_cluster, 
+                            x = 'pc1',y='pc2',
+                            hue = 'kmean_cluster',
+                            sort = False, marker = 'o', linewidth = 5, markersize = 10)
+            
         # Show the plot
         plot.grid(True)
         plt.show()
 
-    #### Will have to apply this method for another tool! ####
-    def optimize_cluster(self,data = 'pca', n_cluster = 15, method = 'euclidean'):
-        # Setup the variables
-        pca_df = self.pca_df
-        pca_df.model_id = pca_df.model_id.astype('category')
-        model_name = pca_df.model_id.cat.categories
-
-        simulation_df = self.simulation_df
-        simulation_df.model_id = simulation_df.model_id.astype('category')
+    def plot_model_distance_space(self):
+        distance_matrix = self.distance_matrix
         
-        model_name = pca_df.model_id.cat.categories
-        model_pca_all = {}
-
-        node_list = self.node_list
-
-        if data == 'pca':
-            model_pca_all = {}
-            for i in model_name:
-                model_pca = pca_df.loc[pca_df.model_id == i,['pc1','pc2']].values
-                model_pca_all[i] = np.array(model_pca)
-            pca_all_trajectory = np.array(list(model_pca_all.values()))
-
-        elif data == 'original':
-            model_original_all = {}
-            for i in model_name:
-                model_original = simulation_df.loc[simulation_df.model_id == i,node_list].values
-                model_original_all[i] = np.array(model_original)
-            pca_all_trajectory = np.array(list(model_original_all.values()))   
-
-        # Calculate the optimal number of clusters
-        distortions = []
-        K = range(1, n_cluster)
-
-        # For loop to calculate inertia for each k
-        for k in tqdm(K):
-            tsmodel = TimeSeriesKMeans(n_clusters=k, metric= method, random_state=0, verbose = False)
-            tsmodel.fit(pca_all_trajectory)
-            distortions.append(tsmodel.inertia_)
-
-        plt.plot(K, distortions, 'bx-')
-        plt.xlabel('k')
-        plt.ylabel('Inertia')
-        plt.title('Elbow Method For Optimal k')
-        plt.show()
-    
-    # Calculate k-means clusters for PCA-transformed data
-    def calculate_kmean_cluster(self, n_cluster, data='pca', metric='euclidean'):
-        """
-        Perform k-means clustering on PCA-transformed data using specified metric.
-
-        Parameters:
-        -----------
-        n_cluster : int
-            The number of clusters to form.
-        data : str, optional
-            The type of data to use for clustering. Default is 'pca'.
-        metric : str, optional
-            The distance metric to use for clustering. Options are 'euclidean', 'dtw', and 'softdtw'. Default is 'euclidean'.
-
-        Returns:
-        --------
-        None
-            The function updates the `pca_df` DataFrame with cluster labels and stores the cluster dictionary in `self.cluster_dict`.
-
-        Notes:
-        ------
-        - The function assumes that `self.pca_df` is a DataFrame containing PCA-transformed data with a 'model_id' column.
-        - The function supports three types of k-means clustering based on the specified metric: Euclidean, DTW, and Soft-DTW.
-        - The clustering results are stored in the 'kmean_cluster' column of `self.pca_df`.
-        """
-        # Setup the 
-        pca_df = self.pca_df
-        pca_df.model_id = pca_df.model_id.astype('category')
-        model_name = pca_df.model_id.cat.categories
-
-        simulation_df = self.simulation_df
-        simulation_df.model_id = simulation_df.model_id.astype('category')
-
-        node_list = self.node_list
-        # Create timeseries array
-        if data == 'pca':
-            model_pca_all = {}
-            for i in model_name:
-                model_pca = pca_df.loc[pca_df.model_id == i,['pc1','pc2']].values
-                model_pca_all[i] = np.array(model_pca)
-            pca_all_trajectory = np.array(list(model_pca_all.values()))
-
-        elif data == 'original':
-            model_original_all = {}
-            for i in model_name:
-                model_original = simulation_df.loc[simulation_df.model_id == i,node_list].values
-                model_original_all[i] = np.array(model_original)
-            pca_all_trajectory = np.array(list(model_original_all.values()))
-
-        # Perform clustering based on the metric
-        if metric == 'euclidean':
-            # Euclidean k-means
-            print("Euclidean k-means")
-            km = TimeSeriesKMeans(n_clusters=n_cluster, metric = 'euclidean', verbose=True, random_state=seed)
-            y_pred = km.fit_predict(pca_all_trajectory)
-        elif metric == 'dtw':
-            # DTW k-means
-            print("DTW k-means")
-            km = TimeSeriesKMeans(n_clusters=n_cluster, metric="dtw", verbose=True, random_state=seed)
-            y_pred = km.fit_predict(pca_all_trajectory)
-        elif metric == 'softdtw':
-            # Soft-DTW k-means
-            print("Soft-DTW k-means")
-            km = TimeSeriesKMeans(n_clusters=n_cluster, metric="softdtw", verbose=True, random_state=seed)
-            y_pred = km.fit_predict(pca_all_trajectory)
-        # Attach cluster information
-        cluster_dict = dict(zip(list(model_name),list(y_pred)))
-        pca_df['kmean_cluster'] = pca_df['model_id']
-        pca_df['kmean_cluster'] = pca_df['kmean_cluster'].replace(cluster_dict)
-
-        # Store the updated DataFrame and cluster dictionary
-        self.pca_df = pca_df
-        self.cluster_dict = cluster_dict
-
-    def plot_trajectory_cluster(self, 
-                                fig_size = (8,6)):
-        """
-        Plot the calculated clusters onto the trajectory
-        """
-        pca_df = self.pca_df
-
-        ## Calculate the mean position
-        kmean_cluster = pca_df.groupby(['timepoint','kmean_cluster'])[['pc1','pc2']].mean()
-
-        # Adjust figure size
-        plt.figure(figsize = fig_size)
-
-        ## Plot with Seaborn
-        plot = sns.lineplot(data = pca_df, 
-                    x = 'pc1', y='pc2',
-                    hue = 'kmean_cluster', units = 'model_id', estimator = None, lw=2, alpha = .1,
-                    sort = False, legend=False)
-        plot2 = sns.lineplot(data = kmean_cluster, 
-                            x = 'pc1',y='pc2',
-                            hue = 'kmean_cluster',
-                            sort = False, marker = 'o', linewidth = 5, markersize = 10)
-        plt.show()
-
-#### I'm not sure if this function is necessary
-    def calculate_model_distance(self):
-        """
-        Calculate and plot the Euclidean distance between clusters of PCA-transformed data.
-
-        This function takes a DataFrame containing PCA-transformed data with model IDs and timepoints,
-        calculates the mean PCA values for each model and timepoint, computes the Euclidean distances
-        between these clusters, and then plots the distance matrix using a clustermap.
-
-        Parameters:
-        pca_df (pd.DataFrame): A DataFrame containing the PCA-transformed data with columns 'model_id',
-                            'timepoint', 'pca1', and 'pca2'.
-
-        Returns:
-        None
-        """
-        pca_df = self.pca_df
-        # Get model_id
-        model_id = list(pca_df['model_id'])
-
-        # Compact data into the right format
-        kmean_cluster = pca_df.groupby(['model_id','timepoint'])[['pc1','pc2']].mean()
-
-        # Calculate Euclidean distances between clusters
-        distance_matrix = pd.DataFrame()
-        for i in model_id:
-            time_series1 = np.array(kmean_cluster.loc[i])
-            distance_cluster = []
-            for j in model_id:
-                time_series2 = np.array(kmean_cluster.loc[j])
-                distance = np.sqrt(np.sum((time_series1 - time_series2)**2))
-                distance_cluster.append(distance)
-            distance_matrix = pd.concat([distance_matrix,pd.DataFrame(distance_cluster)],axis = 1)
-        distance_matrix.columns = model_id
-        distance_matrix.index = model_id
-
         # Plot Euclidean distance using clustermap
         g = sns.clustermap(distance_matrix, figsize = (20,20))
 
@@ -293,104 +252,95 @@ class trajectory:
 
         # Hiding the column dendrogram
         g.ax_col_dendrogram.set_visible(False)
+        plt.show()
+    
+    def plot_MDS(self, plot_cluster = False,
+                 fig_size=(8, 6), alpha=0.5, s=50):
 
+        coords = self.mds_coords
+        plt.figure(figsize=fig_size)
+        if plot_cluster:
+            # Add the cluster labels to the coordinates
+            coords['kmean_cluster'] = coords.index.map(self.cluster_dict)
+            sns.scatterplot(x=coords['x'], y=coords['y'],
+                            hue=coords['kmean_cluster'],
+                            palette='tab10',
+                            alpha=alpha, s=s)
+            plt.legend(title="Clusters")
+        else:
+            # Plot without cluster labels
+            sns.scatterplot(x=coords['x'], y=coords['y'],
+                            alpha=alpha, s=s)
+       
+        plt.grid(False)
         plt.show()
 
-    def plot_model_distance_space(self):
-        """
-        Plots the distance space of models in a 2D PCA-transformed space using Euclidean k-means clustering.
+    def plot_trajectory_variance(self, fig_size=(15, 7)):
+        # Assuming `model_mtx` is your DataFrame with genes as columns and 'timepoint' as one of the columns
+        model_mtx = self.simulation_df
 
-        This method performs the following steps:
-        1. Extracts the PCA-transformed coordinates (pc1, pc2) for each model.
-        2. Aggregates the PCA coordinates for all models.
-        3. Applies Euclidean k-means clustering to the aggregated PCA coordinates.
-        4. Transforms the PCA coordinates into a distance space using the k-means model.
-        5. Plots a clustermap of the distance space for each model.
-
-        The clustermap visualizes the distance of each model to each cluster centroid.
-
-        Attributes:
-        -----------
-        pca_df : pandas.DataFrame
-            DataFrame containing PCA-transformed coordinates and model identifiers.
-        
-        model_pca_all : dict
-            Dictionary storing PCA coordinates for each model.
-        
-        pca_all_trajectory : numpy.ndarray
-            Array of PCA coordinates for all models.
-        
-        distance_space : pandas.DataFrame
-            DataFrame containing the distance space of each model to each cluster centroid.
-        
-        km : TimeSeriesKMeans
-            K-means clustering model from the `tslearn` library.
-        
-        seed : int
-            Random seed for reproducibility.
-        
-        Returns:
-        --------
-        None
-        """
-        pca_df = self.pca_df
-        model_pca_all = {}
-        model_name = pca_df.model_id.cat.categories
-        for i in model_name:
-            model_pca = pca_df.loc[pca_df.model_id == i,['pc1','pc2']].values
-            model_pca_all[i] = np.array(model_pca)
-
-        pca_all_trajectory = np.array(list(model_pca_all.values()))
-
-        # Euclidean k-mean distance
-        km = TimeSeriesKMeans(n_clusters=6, verbose=True, random_state=seed)
-
-        # Obtain the distance space from `tslearn`
-        distance_space = km.transform(pca_all_trajectory)
-        distance_space = pd.DataFrame(distance_space)
-        distance_space.index = list(model_pca_all.keys())
-
-        # Plot the distance space to each cluster for each model
-        sns.clustermap(distance_space.transpose(), figsize = (15,4), xticklabels=False)
+        # Group by 'timepoint' and calculate variance for each gene
+        variance_results = model_mtx.groupby('timepoint')[model_mtx.columns[:-2]].var()
+        variance_results['avg'] = variance_results.mean(axis = 1)
+        sns.clustermap(variance_results.drop(columns = ['avg']), 
+                       row_cluster=False, cmap = 'viridis', 
+                       figsize = fig_size)
         plt.show()
-
-
-    def plot_cluster_distance_space(self, fig_size = (8,8)):
-        """
-        Plots the cluster distance space using PCA-transformed data and k-means clustering.
-        Parameters:
-        fig_size (tuple): A tuple specifying the size of the figure (default is (8,8)).
-        This function performs the following steps:
-        1. Extracts PCA-transformed data for each model.
-        2. Computes the Euclidean k-means distance using TimeSeriesKMeans.
-        3. Transforms the PCA data into a distance space.
-        4. Attaches cluster information to the distance space.
-        5. Groups the distance space by cluster and computes the mean.
-        6. Plots a clustered heatmap of the distance space by group.
-        The resulting plot shows the mean distance space for each cluster, with annotations.
-        """
+    
+    def plot_node_trajectory(self, 
+                             node, 
+                             fig_size=(8, 6),
+                             n_timesteps = 20):
         
-        pca_df = self.pca_df
-        model_pca_all = {}
-        model_name = pca_df.model_id.cat.categories
-        for i in model_name:
-            model_pca = pca_df.loc[pca_df.model_id == i,['pc1','pc2']].values
-            model_pca_all[i] = np.array(model_pca)
-        pca_all_trajectory = np.array(list(model_pca_all.values()))
+        model_mtx = self.simulation_df
+        # Setup the gene list
+        selected_genes = node
+        num_timesteps = n_timesteps
+        # Check if the cluster_dict exists
+        if not hasattr(self, 'cluster_dict'):
+            print("Error: cluster_dict not found. Please run calculate_kmean_cluster() first.")
+            return
+        model_mtx['type'] = model_mtx['model_id'].map(self.cluster_dict)
+        cluster_type = list(model_mtx.type.unique())
 
-        # Euclidean k-mean distance
-        km = TimeSeriesKMeans(n_clusters=6, verbose=True, random_state=seed)
-        
-        # Obtain the distance space from `tslearn`
-        distance_space = km.transform(pca_all_trajectory)
-        distance_space = pd.DataFrame(distance_space)
-        distance_space.index = list(model_pca_all.keys())
+        # Function to create matrix for each condition
+        def create_vis_matrix(cluster_type):
+            vis = model_mtx.loc[model_mtx['type'] == cluster_type]
+            vis = vis[selected_genes + ['timepoint', 'model_id']]
+            vis = vis[vis.timepoint.isin(range(0, num_timesteps))]
+            vis['model_id'] = vis['model_id'].astype('str')
+            vis['type'] = cluster_type
+            return vis
 
-        # Attach cluster information
-        distance_space['kmean_cluster'] = list(distance_space.index)
-        distance_space['kmean_cluster'] = distance_space['kmean_cluster'].replace(self.cluster_dict)
-        distance_space_group = distance_space.groupby(['kmean_cluster']).mean()
+        # Create matrices for each condition
+        vis_matrices = [create_vis_matrix(i) for i in cluster_type]
 
-        # Plot the distance space by group
-        sns.clustermap(distance_space_group, figsize = fig_size, annot = True)
+        # Plot with Seaborn
+        plt.figure(figsize=(len(cluster_type) * 5, len(selected_genes) * 4))
+        n_genes = len(selected_genes)
+
+        for i, gene in enumerate(selected_genes):
+            for j, vis in enumerate(vis_matrices):
+                plt.subplot(n_genes, len(cluster_type), len(cluster_type) * i + j + 1)
+                plot = sns.lineplot(data=vis, x='timepoint', y=gene, lw=2, 
+                                    units = 'model_id', estimator = None, alpha = 0.4)
+                plot.set_ylim(0, 1.1)
+                plot.set_ylabel(gene)
+                plot.set_xlabel(None)
+                plot.grid(True)
+                if i == 0:
+                    plot.set_title(f'Cluster_{cluster_type[j]}')
+                    
+        for i, gene in enumerate(selected_genes):
+            for j, vis in enumerate(vis_matrices):
+                plt.subplot(n_genes, len(cluster_type), len(cluster_type) * i + j + 1)
+                plot = sns.lineplot(data=vis, x='timepoint', y=gene, lw=2, hue = 'type',palette='Set1')
+                plot.set_ylim(0, 1.1)
+                plot.set_ylabel(gene)
+                plot.grid(True)
+                plot.set_xlabel(None)
+                plot.legend().remove()
+
+        plt.tight_layout()
         plt.show()
+        plt.close()

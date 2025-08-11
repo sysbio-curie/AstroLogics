@@ -5,13 +5,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
+
 # General logic package
 import mpbn
+
 # Packages for processing logical rules
 from sklearn.preprocessing import OrdinalEncoder
-from statsmodels.stats.proportion import proportions_ztest
-from sklearn.decomposition import PCA
-from sklearn.cluster import KMeans
+from scipy.stats import chi2_contingency
+from scipy.cluster.hierarchy import linkage, leaves_list
+
 # Model collections
 from collections import Counter
 # multiprocessing
@@ -278,137 +280,230 @@ class logic:
         self.logic_clause_flattend = logic_clause_flattend
         print('Flattend logic clause created')
 
-    def calculate_logic_pca(self, num_components = 10):
-        """
-        Perform Principal Component Analysis (PCA) on the provided logical clause data.
+    def map_model_clusters(self, cluster):
 
-        Parameters:
-        logic_clause_flattend (pd.DataFrame): A DataFrame containing the flattened logical clauses.
-        num_components (int, optional): The number of principal components to compute. Default is 10.
+        # Map model names to their clusters
+        self.cluster_dict = cluster
+        model_cluster = pd.Series(cluster, name='cluster')
+        model_logic = self.model_logic
+
+        # Create a DataFrame to store the logic length for each cluster
+        var_logic_clust = pd.DataFrame()
+        for i in list(model_cluster.unique()):
+            model_logic_sub = model_logic.transpose().loc[list(model_cluster.index[model_cluster == i])]
+            #model_logic_sub = model_logic_sub.drop(['logic_cluster'], axis = 1)
+            var_logic_length = []
+            for j in model_logic_sub.columns:
+                num_logic = model_logic_sub[j].value_counts().size
+                var_logic_length.append(num_logic)
+            var_logic_length = pd.DataFrame(var_logic_length, columns = ['logic_length'], index = model_logic_sub.columns)
+            var_logic_clust = pd.concat([var_logic_clust, var_logic_length], axis = 1, ignore_index = False)
+        var_logic_clust.columns = list(model_cluster.unique())
+
+        # Ordinal encoding
+        encoder = OrdinalEncoder()
+        model_logic_t= model_logic.transpose()
+        encoded_data = encoder.fit_transform(model_logic_t)
+        encoded_df = pd.DataFrame(encoded_data, columns=model_logic_t.columns)
+
+        # Sort the index based on the maximum value in each column
+        self.encoded_df = encoded_df
+        self.sort_index = encoded_df.max().sort_values().index
+        self.var_logic_clust = var_logic_clust.loc[self.sort_index]
+
+        print('Model clusters mapped to logic clauses')
+
+    def calculate_logic_statistic(self, pval_threshold = 0.0001):
+        """
+        Calculates the statistics of logical clauses in the model logic matrix.
+
+        This function processes the logical clauses in the model logic matrix, performs a chi-square test
+        to identify marker and varied features, and creates a DataFrame summarizing the results.
 
         Returns:
-        pd.DataFrame: A DataFrame containing the principal components, with each column representing a principal component.
+            pd.DataFrame: A DataFrame containing the chi-square test results, feature groups, and additional
+                        information about each feature.
         """
+        logic_df = self.logic_clause_flattend.transpose()
+        model_cluster = logic_df.index.map(self.cluster_dict)
 
-        logic_clause_flattend = self.logic_clause_flattend
+        # Step 1: Identify constant features.
+        constant_features = [col for col in logic_df.columns if logic_df[col].nunique() == 1 and col != 'group']
 
-        # Initialize PCA (let's reduce to 2 principal components for this example)
-        pca = PCA(n_components=num_components)
+        # Step 2 & 3: For non-constant features, perform chi-square test.
+        marker_features = []
+        varied_features = []
+        chi2_results = []
 
-        # Fit and transform the data
-        df_transposed = logic_clause_flattend.transpose()
-        pca_result = pca.fit_transform(df_transposed)
+        for col in logic_df.columns:
+            if col in constant_features or col == 'group':
+                continue
+            contingency_table = pd.crosstab(logic_df[col], model_cluster)
+            chi2, p, _, _ = chi2_contingency(contingency_table)
+            chi2_results.append({'Feature': col, 'chi2': chi2, 'p_value': p})
+            if p < pval_threshold:
+                marker_features.append(col)
+            else:
+                varied_features.append(col)
+        chi2_df = pd.DataFrame(chi2_results).set_index('Feature')
 
-        # Convert the result back to a DataFrame for easier interpretation
-        pca_df = pd.DataFrame(data=pca_result, index=df_transposed.index)
+        # Create a dictionary to store features and their groups
+        feature_groups = {
+            'Feature': constant_features + varied_features + marker_features,
+            'Group': (['Constant'] * len(constant_features)) +
+                    (['Varied'] * len(varied_features)) +
+                    (['Marker'] * len(marker_features))
+        }
+        features_df = pd.DataFrame(feature_groups).set_index('Feature')
 
-        # number pca column
-        number_list = list(range(pca_result.shape[1]))
-        str_list = [str(i+1) for i in number_list]
-        pca_df.columns = ['pc' + s for s in str_list]
+        # Combine two DataFrames
+        stat_logic_df = pd.concat([chi2_df, features_df], axis=1, ignore_index=False)
+        stat_logic_df['chi2'] = stat_logic_df['chi2'].replace({np.nan: 0})
+        stat_logic_df['p_value'] = stat_logic_df['p_value'].replace({np.nan: 1})
 
-        # Attach the PCA DataFrame to the class
-        self.pca_df = pca_df
-        print('PCA calculated')
+        # Extract Node and Regulation from the index
+        stat_logic_df['Node'] = [col.split('_')[0] if '_' in col else col for col in stat_logic_df.index]
+        stat_logic_df['Regulation'] = [col.split('_')[1] if '_' in col else col for col in stat_logic_df.index]
 
-    def elbow_plot(self, num_components = 10):
-        """
-        Generates an elbow plot to visualize the explained variance ratio for a given number of principal components.
+        # Add back to the model.logic object
+        self.stat_logic_df = stat_logic_df
+        self.pval_threshold = pval_threshold
 
-        Parameters:
-        num_components (int): The number of principal components to consider for PCA.
+    def plot_manhattan(self, fig_size=(10, 5)):
 
-        Returns:
-        None: This function displays a plot and does not return any value.
-        """
-        # Define PCA
-        pca = PCA(n_components=num_components)
-        explained_variance_ratio = pca.explained_variance_ratio_
+        plt.figure(figsize=fig_size)
+        stat_logic_df = self.stat_logic_df
+        stat_logic_df['-log10_p'] = -np.log10(self.stat_logic_df['p_value'])
 
-        # Create an array with the number of components (1, 2, ..., n)
-        components = np.arange(1, len(explained_variance_ratio) + 1)
+        # Add jitter to x positions
+        nodes = stat_logic_df['Node'].astype('category')
+        x = nodes.cat.codes + np.random.uniform(-0.2, 0.2, size=len(stat_logic_df))
 
-        # Plot the explained variance ratio
-        plt.figure(figsize=(8, 6))
-        plt.plot(components, explained_variance_ratio, marker='o', linestyle='--')
+        group_palette = {'Constant': '#bdbdbd', 'Varied': '#1f77b4', 'Marker': '#d62728'}
+        colors = stat_logic_df['Group'].map(group_palette)
+        ax = plt.scatter(x, stat_logic_df['-log10_p'], 
+                        s=200, alpha=0.7, 
+                        linewidths=1, edgecolor='black', c=colors)
 
-        # Add titles and labels
-        plt.title('Elbow Plot of Explained Variance')
-        plt.xlabel('Number of Principal Components')
-        plt.ylabel('Explained Variance Ratio')
+        # Annotate points with Regulation if p-value < self.pval_threshold
+        for i, row in stat_logic_df.iterrows():
+            if row['p_value'] < self.pval_threshold:
+                plt.annotate(row['Regulation'], (x[i], row['-log10_p']),
+                            textcoords="offset points", xytext=(0,5), ha='center', fontsize=9, color='black')
 
-        # Add a grid
-        plt.grid(True)
-
-        # Display the plot
+        plt.axhline(-np.log10(self.pval_threshold), color='red', linestyle='--', label=f'p={self.pval_threshold}')
+        plt.ylabel('-log10(p-value)')
+        plt.xlabel('Node')
+        plt.title('Manhattan Plot of Chi-square p-values by Node')
+        plt.xticks(ticks=range(len(nodes.cat.categories)), labels=nodes.cat.categories, rotation=90)
+        plt.legend()
+        plt.tight_layout()
         plt.show()
 
-    def plot_logic_pca(self, pca_dim=['pc1', 'pc2'], fig_size=(8, 6), color='cluster'):
-        """
-        Plots a PCA scatter plot using the provided DataFrame.
-        Parameters:
-        pca_df (pd.DataFrame): DataFrame containing the PCA results.
-        pca_dim (list of str, optional): List containing the names of the principal components to plot. Defaults to ['pc1', 'pc2'].
-        fig_size (tuple, optional): Size of the figure. Defaults to (8, 6).
-        color (str, optional): Column name in pca_df to use for coloring the points. Defaults to 'cluster'.
-        Returns:
-        None
-        """
-        pca_df = self.pca_df
-        
-        #Define figure_size
-        plt.figure(figsize=(8, 6))
-        
-        # Scatter plot using Seaborn
-        sns.scatterplot(x=pca_dim[0], y=pca_dim[1], 
-                        data=pca_df, s=50, hue = color)
+    def plot_logicstat_summary(self, fig_size=(12, 7)):
 
-        # Add title and labels
-        plt.title('PCA Scatter Plot')
-        plt.xlabel('Principal Component 1 (PC1)')
-        plt.ylabel('Principal Component 2 (PC2)')
+        encoded_df = self.encoded_df
+        sorted_var_logic_length = encoded_df.max().sort_values() + 1
+        # Create a figure with two subplots sharing the x-axis
+        fig, axes = plt.subplots(2, 1, figsize=fig_size, sharex=True, gridspec_kw={'height_ratios': [2, 1]})
 
-        # Display the plot
-        plt.grid(True)
+        # Plot 1
+        ## Plot the first barplot
+        sns.barplot(
+            x=sorted_var_logic_length.index, 
+            y=sorted_var_logic_length.values, 
+            palette=sns.color_palette("viridis", as_cmap=True)(sorted_var_logic_length.values / sorted_var_logic_length.max()), 
+            edgecolor='black', linewidth=0.8, ax=axes[0], width=0.8
+        )
+        ## Annotate the total number of logics
+        for index, value in enumerate(sorted_var_logic_length.astype('int')):
+            axes[0].text(index, value + 0.1, str(value), ha='center', va='bottom', fontsize=15)
+        ## Customize the first plot
+        axes[0].axhline(0, color="k", clip_on=False)
+        axes[0].set_ylabel('Number of Logics', fontsize=15)
+        axes[0].set_title('Number of Possible Logics and Clauses', fontsize=16)
+        axes[0].tick_params(axis='x', rotation=90, labelsize=15)
+        axes[0].tick_params(axis='y', labelsize=15)
+        axes[0].set_ylim(0, sorted_var_logic_length.max() + 1)
+        axes[0].grid(linestyle='--', linewidth=0.5)
+        axes[0].set_axisbelow(True)
+
+        # Plot 2
+        ## Plot the second stacked barplot
+        features_df_grouped = self.stat_logic_df.groupby(['Node', 'Group']).size().unstack(fill_value=0)
+        features_df_grouped = features_df_grouped.loc[sorted_var_logic_length.index]
+        features_df_grouped.plot(
+            kind='bar', stacked=True, colormap='tab10', ax=axes[1], edgecolor='black', linewidth=0.8, width=0.8
+        )
+        ## Annotate the total number of clauses
+        total_clauses = features_df_grouped.sum(axis=1)
+        for index, value in enumerate(total_clauses.astype('int')):
+            axes[1].text(index, value + 0.1, str(value), ha='center', va='bottom', fontsize=15)
+        ## Customize the second plot
+        axes[1].set_ylabel('Number of Clauses', fontsize=15)
+        axes[1].set_xlabel(None)
+        axes[1].legend(title='Group', bbox_to_anchor=(1.0, 1), loc='upper left', fontsize=15, title_fontsize=15)
+        axes[1].tick_params(axis='x', rotation=90, labelsize=15)
+        axes[1].tick_params(axis='y', labelsize=15)
+        axes[1].set_ylim(0, features_df_grouped.values.max() + 1)
+        axes[1].grid(linestyle='--', linewidth=0.5)
+        axes[1].set_axisbelow(True)
+
+        # Ensure both subplots have the same x-ticks and labels
+        xticks = range(len(sorted_var_logic_length.index))
+        axes[1].set_xticks(xticks)
+        axes[1].set_xticklabels(sorted_var_logic_length.index, rotation=90, fontsize=15)
+        axes[0].set_xticks(xticks)
+        axes[0].set_xticklabels(sorted_var_logic_length.index, rotation=90, fontsize=15)
+
+        plt.tight_layout()
         plt.show()
+        plt.close()
 
-    def calculate_kmean_cluster(self, num_cluster, plot = True):
-        """
-        Perform K-Means clustering on a PCA-transformed DataFrame and optionally plot the results.
+    def plot_node_logic_heatmap(self, 
+                                node, 
+                                fig_size=(10, 8)):       
+        
+        # Load the logic statistics DataFrame 
+        stat_logic_df = self.stat_logic_df
+        selected_features = stat_logic_df.loc[(stat_logic_df['Node'].isin(node))].index
 
-        Parameters:
-        pca_df (pd.DataFrame): DataFrame containing PCA-transformed data with at least two principal components.
-        num_cluster (int): Number of clusters to form.
-        plot (bool, optional): If True, generate a scatter plot of the clusters. Default is True.
+        # Create a color palette for the groups
+        test = self.logic_clause_flattend
+        test = test.transpose()
+        test['group'] = test.index.map(self.cluster_dict)
 
-        Returns:
-        None: The function modifies the input DataFrame by adding a 'Kmean_Cluster' column with cluster labels.
+        unique_groups = test['group'].unique()
+        palette = sns.color_palette("tab10", n_colors=len(unique_groups))
+        group_colors = test['group'].map(dict(zip(unique_groups, palette)))
 
-        Notes:
-        - The function assumes that the PCA DataFrame has columns named 'pc1' and 'pc2' for plotting purposes.
-        - The plot will display the clusters with different colors and mark the cluster centers with red 'X' markers.
-        """
-        # Assume k=2 (you can choose a different number based on the Elbow Method)
-        pca_df = self.pca_df
-        kmeans = KMeans(n_clusters=num_cluster)
+        # Create the clustermap with row colors and separated cluster groups
+        # First, sort the DataFrame by cluster group to visually separate them
+        sorted_idx = test.sort_values('group').index
 
-        # Fit the k-means model and predict cluster labels
-        clusters = kmeans.fit_predict(pca_df)
+        # Get the split point between the two clusters
+        split_point = (test.loc[sorted_idx, 'group'] == unique_groups[1]).idxmax()
 
-        # Add the cluster labels to the PCA DataFrame
-        pca_df['Kmean_Cluster'] = clusters
+        # Perform row clustering only within each cluster group
+        for i in range(len(unique_groups)):
+            group_idx = test.loc[sorted_idx, 'group'] == unique_groups[i]
+            linkage_matrix = linkage(test.loc[sorted_idx[group_idx], selected_features], method='average', metric='euclidean')
+            leaves = sorted_idx[group_idx][leaves_list(linkage_matrix)]
+            if i == 0:
+                clustered_idx = leaves
+            else:
+                clustered_idx = clustered_idx.append(leaves)
 
-        if plot == True :
-            plt.figure(figsize=(8, 6))
-            # Scatter plot colored by cluster
-            sns.scatterplot(x='pc1', y='pc2', hue='Kmean_Cluster', data=pca_df, palette='viridis', s=100)
-            # Add cluster centers to the plot
-            centers = kmeans.cluster_centers_
-            plt.scatter(centers[:, 0], centers[:, 1], c='red', s=200, alpha=0.75, marker='X')
-            # Add title and labels
-            plt.title('K-Means Clustering based on PCA')
-            plt.xlabel('Principal Component 1 (PC1)')
-            plt.ylabel('Principal Component 2 (PC2)')
-            # Display the plot
-            plt.grid(True)
-            plt.show()
+        # Create the clustermap
+        plt.figure(figsize=fig_size)
+        sns.clustermap(
+            test.loc[clustered_idx, selected_features].transpose(),
+            col_cluster=False,
+            row_cluster=False,
+            cmap='viridis',
+            figsize=(10, 5),
+            col_colors=group_colors.loc[clustered_idx]
+        )
+
+        plt.show()
+        plt.close()
