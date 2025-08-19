@@ -24,15 +24,20 @@ np.random.seed(seed)
 
 class trajectory:
 
-    def __init__(self, simulation_df):        
+    def __init__(self, simulation_df, states_df=None):        
         """
         Initializes the TrajectoryClustering object.
 
         Parameters:
         simulation_df (pd.DataFrame): DataFrame containing the simulation data.
+        states_df (pd.DataFrame, optional): DataFrame containing the states data. Default is None.
         """
         self.simulation_df = simulation_df
         self.node_list = list(simulation_df.columns.drop(['model_id','timepoint']))
+
+        # Only assign states_df if it is not None
+        if states_df is not None:
+            self.states_df = states_df
 
     ##### In this part of the script, we focus on visualizing the whole simulation trajectory by performing PCA on the simulation data. ######
     def pca_trajectory(self, n_components = 10):
@@ -74,7 +79,7 @@ class trajectory:
 
     ##### In this part of the script, we calculate the distance matrix, based on either endpoint simulation or whole trajectory ######
     def calculate_distancematrix(self, 
-                                 mode = ['endpoint', 'trajectory'], 
+                                 mode = ['endpoint', 'trajectory'],
                                  timepoint = None):
         
         # Extract the simulation DataFrame
@@ -123,8 +128,8 @@ class trajectory:
             distance_matrix = pd.DataFrame(distance_matrix, index=model_name, columns=model_name)
         
         # Return the distance matrix
-        print("Distance matrix calculated successfully.")
         self.distance_matrix = distance_matrix
+        print("Distance matrix calculated successfully.")
         
     # This script needs to be optimized more....    
     # def optimize_cluster(self,data = 'pca', n_cluster = 15, method = 'euclidean'):
