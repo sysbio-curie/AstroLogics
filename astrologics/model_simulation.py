@@ -247,5 +247,5 @@ class simulation:
         states_df.fillna(0, inplace=True
                          )
         # Save the simulation to the object
-        self.simulation_df = states_df
-        print('Simulation completed')
+        self.states_df = states_df
+        print('Simulation completed : object states_df has been created')
