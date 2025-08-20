@@ -130,7 +130,7 @@ def process_model_file(file):
     model = mpbn.load(file)
     model = model.as_dnf()
     model = dataframe_model_dnf(model)
-    model.name = file.split('.')[0]
+    model.name = os.path.splitext(os.path.basename(file))[0]
     return model
 
 # Define function to process each model's clauses
@@ -165,8 +165,8 @@ class logic:
         4. Attaches the model logic DataFrame to the class.
         """
         # Define models path
-        os.chdir(path)
-        model_files = os.listdir(path)
+        # os.chdir(path)
+        model_files = [os.path.join(path, model_file) for model_file in os.listdir(path)]
         model_logic = pd.DataFrame()
 
         print('Loading models logics')

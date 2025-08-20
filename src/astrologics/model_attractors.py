@@ -61,8 +61,8 @@ class attractors:
         """
         Improved multiprocessing version with better memory management.
         """
-        os.chdir(self.path)
-        model_files = [f for f in os.listdir(self.path) if f.endswith('.bnet')]
+        # os.chdir(self.path)
+        model_files = [os.path.join(self.path, f) for f in os.listdir(self.path) if f.endswith('.bnet')]
         model_logic = pd.DataFrame()
         
         # Use imap with chunking for better memory efficiency
