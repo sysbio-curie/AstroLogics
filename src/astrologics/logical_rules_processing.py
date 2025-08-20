@@ -109,13 +109,12 @@ def logic_clause_frequency(model_logic_mtx):
     logic_clause = pd.DataFrame()
     for i in model_logic_mtx.index:
         df = split_gene_clauses(model_logic_mtx, i)
-        df = df.fillna(0)
+        df = df.fillna("0")
 
         from collections import Counter
         # Function to count strings in a row
         def count_strings_in_row(row):
             return Counter(row)
-
         # Apply the function to each row and convert the result to a DataFrame
         row_counts = df.apply(lambda row: pd.Series(Counter(row)), 
                                     axis=1).fillna(0)
