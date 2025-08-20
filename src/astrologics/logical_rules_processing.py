@@ -369,7 +369,7 @@ class logic:
         self.stat_logic_df = stat_logic_df
         self.pval_threshold = pval_threshold
 
-    def plot_manhattan(self, fig_size=(10, 5)):
+    def plot_manhattan(self, fig_size=(10, 5), show_label = False):
 
         plt.figure(figsize=fig_size)
         stat_logic_df = self.stat_logic_df
@@ -385,12 +385,12 @@ class logic:
                         s=200, alpha=0.7, 
                         linewidths=1, edgecolor='black', c=colors)
 
-        # Annotate points with Regulation if p-value < self.pval_threshold
-        for i, row in stat_logic_df.iterrows():
-            if row['p_value'] < self.pval_threshold:
-                plt.annotate(row['Regulation'], (x[i], row['-log10_p']),
+        if show_label == True:
+            # Annotate points with feature names
+            for i, row in stat_logic_df.iterrows():
+                plt.annotate(row.name, (x[i], row['-log10_p']),
                             textcoords="offset points", xytext=(0,5), ha='center', fontsize=9, color='black')
-
+        
         plt.axhline(-np.log10(self.pval_threshold), color='red', linestyle='--', label=f'p={self.pval_threshold}')
         plt.ylabel('-log10(p-value)')
         plt.xlabel('Node')
@@ -445,7 +445,7 @@ class logic:
         axes[1].legend(title='Group', bbox_to_anchor=(1.0, 1), loc='upper left', fontsize=15, title_fontsize=15)
         axes[1].tick_params(axis='x', rotation=90, labelsize=15)
         axes[1].tick_params(axis='y', labelsize=15)
-        axes[1].set_ylim(0, features_df_grouped.values.max() + 1)
+        axes[1].set_ylim(0, total_clauses.values.max() + 1)
         axes[1].grid(linestyle='--', linewidth=0.5)
         axes[1].set_axisbelow(True)
 

@@ -1,0 +1,20 @@
+project name,Nodes,Interactions,num model,num attractors groups,Max ARI (endpoint)
+Body Segmentation in Drosophila 2013_23520449,14,12,1000,86,1
+Death Receptor Signaling_20221256,25,45,1000,16,1
+FGF pathway of Drosophila Signaling Pathways_23868318,14,24,1000,570,1
+HH Pathway of Drosophila Signaling Pathways_23868318,11,30,1000,1000,1
+Mammalian Cell Cycle_19118495,19,44,1000,7,1
+Processing of Spz Network from the Drosophila Signaling Pathway_23868318,18,20,1000,152,1
+Toll Pathway of Drosophila Signaling Pathway_23868318,9,11,16,6,1
+VEGF Pathway of Drosophila Signaling Pathway_23868318,10,18,1000,390,1
+Regulation of the L-arabinose operon of Escherichia coli_28639170,9,16,1000,130,0.990976
+SKBR3 Breast Cell Line Long-term ErbB Network_24970389,21,52,1000,41,0.977437
+Cardiac development_23056457,14,24,1000,6,0.977327
+HCC1954 Breast Cell Line Short-term ErbB Network_24970389,11,33,1000,304,0.962528
+Lac Operon_21563979,10,22,1000,61,0.961812
+SKBR3 Breast Cell Line Short-term ErbB Network_24970389,11,29,1000,268,0.931461
+B cell differentiation_26751566,17,38,1000,287,0.907193
+BT474 Breast Cell Line Long-term ErbB Network_24970389,21,41,1000,249,0.887925
+Human Gonadal Sex Determination_26573569,19,76,1000,6,0.442307
+HCC1954 Breast Cell Line Long-term ErbB Network_24970389,21,42,1000,542,0.362385
+Cortical Area Development_20862356,5,11,1000,5,0.138381

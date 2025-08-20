@@ -183,3 +183,69 @@ class simulation:
         # Save the simulation to the object
         self.simulation_df = simulation_df
         print('Simulation completed')
+
+    def run_states_simulation(self, output_nodes = None, initial_state = None, mutation = None):
+        # Simulation results object
+        ensemble_results = {}
+        path = self.path
+        model_list = os.listdir(path)
+        print('Start simulation')
+        
+        # For loop to run the simulation
+        for model in tqdm(model_list):
+            # Load model
+            simulations = maboss.loadBNet(path + model)
+            
+            # Setup the model initial condition
+            simulations.param = self.param
+
+            # Set the initial condition
+            if initial_state is not None:
+                node_names = simulations.network.names
+                assigned_node = list(initial_state.keys())
+                unassigned_node = list(set(node_names) - set(assigned_node))
+
+                # Set the initial condition - assigned node
+                for i in assigned_node:
+                    simulations.network.set_istate(i, [1 - initial_state[i], initial_state[i]])
+
+                # Set the initial condition - unassigned node
+                for i in unassigned_node:
+                    simulations.network.set_istate(i, [0.5, 0.5])
+            
+            # Set the mutation condition
+            if mutation is not None:
+                condition = self.mutations[mutation]
+                # Set the condition
+                simulations.mutate(condition[0],condition[1])
+
+            # Set the output of the simulation
+            if output_nodes is not None:
+                simulations.network.set_output(output_nodes)
+            else:
+                simulations.network.set_output(simulations.network.names)
+
+            # Perform simulations
+            result = simulations.run()
+            # Get matrix
+            model_mtx = result.get_last_states_probtraj().copy()
+
+            # Setup cell matrix
+            ## Cells
+            model_mtx['model_id'] = model.replace('.bnet','')
+            ## Timepoint
+            model_mtx['timepoint'] = model_mtx.index
+            ## Change index
+            model_mtx.index = model_mtx.index.map(str)
+            model_mtx.index = model + '_' + model_mtx.index
+
+            # Concatenate model results in dictionary
+            ensemble_results[model] = model_mtx
+
+        # Save the simulation to /tmp folder
+        states_df = pd.concat(ensemble_results.values(), ignore_index = True)
+        states_df.fillna(0, inplace=True
+                         )
+        # Save the simulation to the object
+        self.states_df = states_df
+        print('Simulation completed : object states_df has been created')
