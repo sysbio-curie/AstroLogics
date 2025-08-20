@@ -198,7 +198,7 @@ class trajectory:
         
         # Calculate the MDS coordinates
         distance_matrix = self.distance_matrix
-        mds = MDS(dissimilarity='precomputed', random_state=random_state)
+        mds = MDS(dissimilarity='precomputed', random_state=random_state, n_init=4)
         coords = mds.fit_transform(distance_matrix)
 
         # Store the MDS coordinates in a DataFrame
