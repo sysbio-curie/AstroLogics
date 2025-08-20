@@ -411,7 +411,8 @@ class logic:
         sns.barplot(
             x=sorted_var_logic_length.index, 
             y=sorted_var_logic_length.values, 
-            palette=sns.color_palette("viridis", as_cmap=True)(sorted_var_logic_length.values / sorted_var_logic_length.max()), 
+            hue=sorted_var_logic_length.values,
+            palette=sns.color_palette("viridis", as_cmap=True), 
             edgecolor='black', linewidth=0.8, ax=axes[0], width=0.8
         )
         ## Annotate the total number of logics
