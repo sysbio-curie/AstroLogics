@@ -297,7 +297,6 @@ class trajectory:
                              fig_size=(8, 6),
                              n_timesteps = 20):
         
-        model_mtx = self.simulation_df
         # Setup the gene list
         selected_genes = node
         num_timesteps = n_timesteps
@@ -305,7 +304,7 @@ class trajectory:
         if not hasattr(self, 'cluster_dict'):
             print("Error: cluster_dict not found. Please run calculate_kmean_cluster() first.")
             return
-        model_mtx['type'] = model_mtx['model_id'].map(self.cluster_dict)
+        model_mtx = self.simulation_df.assign(type=self.simulation_df['model_id'].map(self.cluster_dict))
         cluster_type = list(model_mtx.type.unique())
 
         # Function to create matrix for each condition
