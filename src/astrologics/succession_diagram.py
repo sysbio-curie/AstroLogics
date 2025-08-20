@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-from tqdm import tqdm
+from tqdm.auto import tqdm
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns

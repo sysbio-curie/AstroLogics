@@ -1,5 +1,5 @@
 import maboss
-from tqdm import tqdm
+from tqdm.auto import tqdm
 import collections
 import os
 import pandas as pd

@@ -4,7 +4,7 @@ from colomoto_jupyter import tabulate # for display
 import os
 import pandas as pd
 from multiprocessing import Pool
-from tqdm import tqdm
+from tqdm.auto import tqdm
 import gc
 
 """

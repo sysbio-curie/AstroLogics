@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
 class logic_analysis:
     def __init__(self, logic_clause_flattend, ):
