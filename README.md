@@ -77,7 +77,7 @@ docker run -p 8888:8888 -d sysbiocurie/astrologics
 ### Run locally with Conda
 Creating the conda environment
 ```
-conda env create--file=environment.yml
+conda env create --file environment.yml
 ```
 
 To activate it : 
@@ -85,9 +85,15 @@ To activate it :
 conda activate astrologics
 ```
 
+Install AstroLogics: 
+```
+pip install .
+```
+
+
 To run the notebook: 
 ```
-jupyter notebook
+jupyter-lab
 ```
 
 ## Documentation

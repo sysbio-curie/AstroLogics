@@ -3,13 +3,22 @@ channels:
   - conda-forge
   - colomoto
 dependencies:
+  - python=3.12
   - pandas
-  - numpy
+  - h5py
+  - numpy<=2.2
   - scipy
   - scikit-learn
+  - tslearn
+  - fastcluster
+  - seaborn
+  - jupyterlab
+  - ipylab
   - pymaboss
   - boolsim-python 
+  - pystablemotifs
+  - pyboolnet
   - mpbn
   - pip
   - pip:
-    - git+https://github.com/saran-pankaew/AstroLogics
+    - netrd
