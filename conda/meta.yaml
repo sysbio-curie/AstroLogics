@@ -1,0 +1,46 @@
+{% set name = "AstroLogics" %}
+{% set version = "0.3.0" %}
+package:
+  name: '{{ name|lower }}'
+  version: '{{ version }}'
+
+source:
+  path: ..
+
+build:
+  noarch: python
+
+requirements:
+  build:
+    - python >3.8,<=3.12
+    - setuptools
+
+  run:
+    - python >3.8,<=3.12
+    - pandas
+    - h5py
+    - numpy<=2.2
+    - scipy
+    - scikit-learn
+    - tslearn
+    - fastcluster
+    - seaborn
+    - jupyterlab
+    - ipylab
+    - pymaboss
+    - boolsim-python 
+    - pystablemotifs
+    - pyboolnet
+    - mpbn
+    - tqdm
+    - pip
+
+test:
+  imports:
+    - astrologics
+  
+  
+about:
+  home: https://github.com/sysbio-curie/AstroLogics
+  summary: 'An analysis framework for monotonous Boolean model ensembles'
+
