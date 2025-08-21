@@ -4,7 +4,6 @@ from tqdm.auto import tqdm
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from netrd.distance import DeltaCon
 from scipy.cluster.hierarchy import linkage, fcluster
 from sklearn.manifold import MDS
 
@@ -176,24 +175,31 @@ class SuccessionDiagram:
         print('SD networks created')
 
     def calculate_sdnet_distance(self):
-        networks = self.networks
-        model_list = list(self.models_net.keys())
         
-        # Compute DeltaCon distance matrix
-        N = len(networks)
-        distance_matrix = np.zeros((N, N))
-        deltacon = DeltaCon()
+        try:
+            from netrd.distance import DeltaCon
+            
+            networks = self.networks
+            model_list = list(self.models_net.keys())
+            
+            # Compute DeltaCon distance matrix
+            N = len(networks)
+            distance_matrix = np.zeros((N, N))
+            deltacon = DeltaCon()
 
-        for i in tqdm(range(N)):
-            for j in range(i+1, N):
-                dist = deltacon.dist(networks[i], networks[j])
-                distance_matrix[i, j] = dist
-                distance_matrix[j, i] = dist
-        distance_matrix = pd.DataFrame(distance_matrix, index=model_list, columns=model_list)
+            for i in tqdm(range(N)):
+                for j in range(i+1, N):
+                    dist = deltacon.dist(networks[i], networks[j])
+                    distance_matrix[i, j] = dist
+                    distance_matrix[j, i] = dist
+            distance_matrix = pd.DataFrame(distance_matrix, index=model_list, columns=model_list)
 
-        # Save the distance matrix
-        self.distance_matrix = distance_matrix
-        print('SD networks distance calculated')
+            # Save the distance matrix
+            self.distance_matrix = distance_matrix
+            print('SD networks distance calculated')
+        except ImportError:
+            print("netrd library is not installed. Please install it to calculate the distance matrix.")
+            self.distance_matrix = None
 
     def cluster_sdnet(self, n_cluster):
         distance_matrix = self.distance_matrix
