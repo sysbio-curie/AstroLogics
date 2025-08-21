@@ -1,0 +1,123 @@
+name: Build and Publish Docker Image
+
+on:
+  push:
+    tags:
+      - 'v*'
+    branches:
+      - main
+      - master
+  release:
+    types: [published]
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    
+    - name: Log in to Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=semver,pattern={{major}}
+          type=raw,value=latest,enable={{is_default_branch}}
+    
+    - name: Create Dockerfile if not exists
+      run: |
+        if [ ! -f Dockerfile ]; then
+          cat > Dockerfile << 'EOF'
+        FROM python:3.11-slim
+
+        WORKDIR /app
+
+        # Install system dependencies
+        RUN apt-get update && apt-get install -y \
+            git \
+            && rm -rf /var/lib/apt/lists/*
+
+        # Copy requirements and install Python dependencies
+        COPY pyproject.toml README.md ./
+        COPY src/ ./src/
+
+        # Install the package
+        RUN pip install --no-cache-dir -e .
+
+        # Create non-root user
+        RUN useradd -m -u 1000 astrologics && \
+            chown -R astrologics:astrologics /app
+        USER astrologics
+
+        # Set up Jupyter environment
+        EXPOSE 8888
+
+        CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
+        EOF
+        fi
+    
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        platforms: linux/amd64,linux/arm64
+        push: false
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+    
+    - name: Update Docker Hub description
+      if: github.event_name == 'release'
+      uses: peter-evans/dockerhub-description@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        repository: ${{ github.repository }}
+        readme-filepath: ./README.md
+
+#   test-docker:
+#     needs: build-and-push
+#     runs-on: ubuntu-latest
+    
+#     steps:
+#     - name: Test Docker image
+#       run: |
+#         # Get the image name from the previous job
+#         IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
+        
+#         # Pull and test the image
+#         docker pull "$IMAGE"
+        
+#         # Test that the package can be imported
+#         docker run --rm "$IMAGE" python -c "import astrologics; print('AstroLogics import successful')"
+        
+#         # Test that Jupyter starts (run for 10 seconds then stop)
+#         timeout 10 docker run --rm -p 8888:8888 "$IMAGE" || true
+        
+#         echo "Docker image test completed successfully"
