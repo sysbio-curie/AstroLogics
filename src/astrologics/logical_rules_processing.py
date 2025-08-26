@@ -368,7 +368,7 @@ class logic:
         self.stat_logic_df = stat_logic_df
         self.pval_threshold = pval_threshold
 
-    def plot_manhattan(self, fig_size=(10, 5), show_label = False):
+    def plot_manhattan(self, fig_size=(10, 5), show_label = False, save_fig = False):
 
         plt.figure(figsize=fig_size)
         stat_logic_df = self.stat_logic_df
@@ -397,9 +397,13 @@ class logic:
         plt.xticks(ticks=range(len(nodes.cat.categories)), labels=nodes.cat.categories, rotation=90)
         plt.legend()
         plt.tight_layout()
+        if save_fig == True:
+            plt.savefig('manhattan_plot.png', dpi=600, bbox_inches='tight')
+            plt.savefig('manhattan_plot.pdf', bbox_inches='tight')
         plt.show()
+        plt.close()
 
-    def plot_logicstat_summary(self, fig_size=(12, 7)):
+    def plot_logicstat_summary(self, fig_size=(12, 7), save_fig = False):
 
         encoded_df = self.encoded_df
         sorted_var_logic_length = encoded_df.max().sort_values() + 1
@@ -457,12 +461,15 @@ class logic:
         axes[0].set_xticklabels(sorted_var_logic_length.index, rotation=90, fontsize=15)
 
         plt.tight_layout()
+        if save_fig == True:
+            plt.savefig('logicstat_summary.png', dpi=600, bbox_inches='tight')
+            plt.savefig('logicstat_summary.pdf', bbox_inches='tight')
         plt.show()
         plt.close()
 
     def plot_node_logic_heatmap(self, 
                                 node, 
-                                fig_size=(10, 8)):       
+                                fig_size=(10, 8), save_fig = False):       
         
         # Load the logic statistics DataFrame 
         stat_logic_df = self.stat_logic_df
@@ -504,6 +511,10 @@ class logic:
             figsize=(10, 5),
             col_colors=group_colors.loc[clustered_idx]
         )
+
+        if save_fig == True:
+            plt.savefig('node_logic_heatmap.png', dpi=600, bbox_inches='tight')
+            plt.savefig('node_logic_heatmap.pdf', bbox_inches='tight')
 
         plt.show()
         plt.close()

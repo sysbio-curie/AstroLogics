@@ -208,7 +208,7 @@ class trajectory:
     # All the plotting functions are here 
     def plot_pca_trajectory(self, fig_size=(8,6), 
                     color='model_id', size=10,
-                    plot_cluster = False):
+                    plot_cluster = False, save_fig = False):
         pca_df = self.pca_df
         
         # Adjust figure size
@@ -244,9 +244,13 @@ class trajectory:
             
         # Show the plot
         plot.grid(True)
+        if save_fig == True:
+            plt.savefig('pca_trajectory.png', dpi=600, bbox_inches='tight')
+            plt.savefig('pca_trajectory.pdf', bbox_inches='tight')
         plt.show()
+        plt.close()
 
-    def plot_model_distance_space(self):
+    def plot_model_distance_space(self, save_fig = False):
         distance_matrix = self.distance_matrix
         
         # Plot Euclidean distance using clustermap
@@ -257,10 +261,15 @@ class trajectory:
 
         # Hiding the column dendrogram
         g.ax_col_dendrogram.set_visible(False)
+        if save_fig == True:
+            plt.savefig('distance_matrix.png', dpi=600, bbox_inches='tight')
+            plt.savefig('distance_matrix.pdf', bbox_inches='tight')
         plt.show()
+        plt.close()
     
     def plot_MDS(self, plot_cluster = False,
-                 fig_size=(8, 6), alpha=0.5, s=50):
+                 fig_size=(8, 6), alpha=0.5, s=50,
+                 save_fig = False):
 
         coords = self.mds_coords
         plt.figure(figsize=fig_size)
@@ -276,11 +285,13 @@ class trajectory:
             # Plot without cluster labels
             sns.scatterplot(x=coords['x'], y=coords['y'],
                             alpha=alpha, s=s)
-       
+        if save_fig == True:
+            plt.savefig('mds_projection.png', dpi=600, bbox_inches='tight')
+            plt.savefig('mds_projection.pdf', bbox_inches='tight')
         plt.grid(False)
         plt.show()
 
-    def plot_trajectory_variance(self, fig_size=(15, 7)):
+    def plot_trajectory_variance(self, fig_size=(15, 7), save_fig = False):
         # Assuming `model_mtx` is your DataFrame with genes as columns and 'timepoint' as one of the columns
         model_mtx = self.simulation_df
 
@@ -290,12 +301,18 @@ class trajectory:
         sns.clustermap(variance_results.drop(columns = ['avg']), 
                        row_cluster=False, cmap = 'viridis', 
                        figsize = fig_size)
+        if save_fig == True:
+            plt.savefig('trajectory_variance.png', dpi=600, bbox_inches='tight')
+            plt.savefig('trajectory_variance.pdf', bbox_inches='tight')
         plt.show()
+        plt.close()
     
     def plot_node_trajectory(self, 
                              node, 
-                             fig_size=(8, 6),
-                             n_timesteps = 20):
+                             fig_width = 4,
+                             fig_height = 4,
+                             n_timesteps = 20,
+                             save_fig = False):
         
         # Setup the gene list
         selected_genes = node
@@ -320,7 +337,7 @@ class trajectory:
         vis_matrices = [create_vis_matrix(i) for i in cluster_type]
 
         # Plot with Seaborn
-        plt.figure(figsize=(len(cluster_type) * 5, len(selected_genes) * 4))
+        plt.figure(figsize=(len(cluster_type) * fig_width, len(selected_genes) * fig_height))
         n_genes = len(selected_genes)
 
         for i, gene in enumerate(selected_genes):
@@ -346,5 +363,8 @@ class trajectory:
                 plot.legend().remove()
 
         plt.tight_layout()
+        if save_fig == True:
+            plt.savefig('logic_trajectory.png', dpi=600, bbox_inches='tight')
+            plt.savefig('logic_trajectory.pdf', bbox_inches='tight')
         plt.show()
         plt.close()
