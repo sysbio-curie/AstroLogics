@@ -1,4 +1,0 @@
-{
-"path": "../Tutorial/Tutorial.ipynb"
-}
-

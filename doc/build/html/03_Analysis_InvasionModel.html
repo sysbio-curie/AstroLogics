@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>3. AstroLogics Tutorial, Boolean Network Analysis and Clustering : Invasion model &#8212; AstroLogics  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=12dfc556" />
+    <link rel="stylesheet" type="text/css" href="_static/nbsphinx-code-cells.css?v=2aa19091" />
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="2. AstroLogics Tutorial, Boolean Network Analysis and Clustering : Herault Hematopoiesis" href="02_Analysis_Herault_hematopoiesis.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="AstroLogics-Tutorial,-Boolean-Network-Analysis-and-Clustering-:-Invasion-model">
+<h1><span class="section-number">3. </span>AstroLogics Tutorial, Boolean Network Analysis and Clustering : Invasion model<a class="headerlink" href="#AstroLogics-Tutorial,-Boolean-Network-Analysis-and-Clustering-:-Invasion-model" title="Link to this heading">¶</a></h1>
+<p>This tutorial demonstrates the AstroLogics framework for analyzing and comparing Boolean network model ensembles. AstroLogics is designed for benchmarking Boolean models through three major evaluation criteria: network evaluation, logical function evaluation, and dynamic evaluation.</p>
+<section id="Overview-of-AstroLogics-Framework">
+<h2><span class="section-number">3.1. </span>Overview of AstroLogics Framework<a class="headerlink" href="#Overview-of-AstroLogics-Framework" title="Link to this heading">¶</a></h2>
+<p>AstroLogics addresses a critical gap in Boolean network modeling: while multiple methods exist for Boolean model synthesis (like Bonesis, BN-sketch), there hasn’t been a standardized way to evaluate and compare generated model ensembles. The framework focuses on:</p>
+<ul class="simple">
+<li><p><strong>Dynamic properties</strong>: Examining state transition graphs and model behaviors through simulation</p></li>
+<li><p><strong>Logical function evaluation</strong>: Analyzing and comparing logical rules that govern node behaviors</p></li>
+<li><p><strong>Model clustering</strong>: Identifying groups of models with similar dynamics and logical features</p></li>
+</ul>
+</section>
+<section id="Required-Libraries">
+<h2><span class="section-number">3.2. </span>Required Libraries<a class="headerlink" href="#Required-Libraries" title="Link to this heading">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;/home/spankaew/Git/astrologics/src/&#39;</span><span class="p">)</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">astrologics</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">le</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="s1">&#39;/home/spankaew/Git/astrologics/&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<script type="text/javascript" id="colomoto-setup-4943885" class="to-be-removed">
+        if (typeof Jupyter != 'undefined') {
+
+function detect_import(cell, module) {
+    var code = cell.get_text();
+    code = code.replace(/\\\n/g, "");
+    var lines = code.split("\n");
+    var r_simple = new RegExp("^("+module+")$");
+    var r_alias = new RegExp("^"+module+"\\s+as\\s+(\\w+)$");
+    for (var i = 0; i < lines.length; ++i) {
+        if (/^import\s/.test(lines[i])) {
+            code = lines[i].substr(7);
+            var parts = code.split(",")
+            for (var j = 0; j < parts.length; ++j) {
+                code = parts[j].trim();
+                var m = code.match(r_simple);
+                if (!m) {
+                    m = code.match(r_alias);
+                }
+                if (m) {
+                    return m[1];
+                }
+            }
+        }
+    }
+    return module;
+}
+
+function colomoto_replace_call(cell, orig, dest, args, comment=false) {
+    var call_regexp = new RegExp("\\."+orig.replace(".","\\.")+"\\(");
+    var call_replacer = new RegExp("\\."+orig.replace(".","\\.")
+                    + "\\(\\s*([^\\)]*)?\\)");
+    var code = cell.get_text();
+    var lines = code.split("\n");
+    if (args) {
+        var strargs = ", "+args.join(", ");
+    } else {
+        var strargs = "";
+    }
+    for (var i = 0; i < lines.length; ++i) {
+        if (call_regexp.test(lines[i])) {
+            var code = ""
+            if (comment) {
+                code += "#"+lines[i]+"\n";
+            }
+            code += lines[i].replace(call_replacer, "."+dest+"($1"+strargs+")")
+            lines[i] = code;
+        }
+    }
+    cell.set_text(code)
+}
+
+function colomoto_upload(Jupyter, ssid, input, py_callback_name, orig, dest) {
+
+    function callback(out_data) {
+        var cell_element = $("#"+ssid).parents('.cell');
+        var cell_idx = Jupyter.notebook.get_cell_elements().index(cell_element);
+        var cell = Jupyter.notebook.get_cell(cell_idx);
+
+        var filename = out_data.content.text;
+
+        var code = cell.get_text();
+        code = code.replace(new RegExp("\\b" + orig.replace('.', '\\.')
+                    + "\\(\\s*((\\w+)=[^\\)]*)?\\)"),
+                dest+"(\""+filename+"\",$1)");
+        code = code.replace('",)', '")')
+        cell.set_text(code);
+
+        Jupyter.notebook.select(cell_idx);
+        Jupyter.notebook.execute_cell_and_select_below();
+    }
+
+    if (! (window.File && window.FileReader && window.FileList && window.Blob)) {
+        alert("Interactive file upload is not supported by your browser.");
+        return;
+    }
+
+    input.disabled = true;
+    input.style.cursor = "wait";
+    input.parentElement.style.cursor = "wait";
+
+    var f = input.files[0];
+    var reader = new FileReader();
+    reader.onload = (function(f) {
+        return function (e) {
+            var obj = {
+                content: e.target.result,
+                name: f.name
+            };
+
+            //var pycb = py_callback_name+"("+JSON.stringify(obj)+")"
+            // hack/workaround:
+            // it seems that Jupyter does not like very long lines
+            // so we split the data in chunks
+            var chunk_length = 100;
+            var pycb = "__colomoto_upload_name = " + JSON.stringify(obj.name) + "\n";
+            pycb += "__colomoto_upload_content = \\\n";
+            for (var i = 0; i < obj.content.length; i += chunk_length) {
+                pycb += "\"" + obj.content.substr(i, chunk_length)+"\"\\\n"
+            }
+            pycb += "\n"
+            pycb += py_callback_name+"({'name':__colomoto_upload_name, 'content': __colomoto_upload_content})\n";
+            pycb += "del __colomoto_upload_name, __colomoto_upload_content"
+
+            IPython.notebook.kernel.execute(pycb, {iopub: {output: callback}});
+        };
+    })(f);
+    reader.readAsDataURL(f);
+}
+
+function resolve_function(tool_api, funcname) {
+    if (tool_api.hasOwnProperty(funcname)) {
+        return tool_api[funcname];
+    } else {
+        return window[funcname];
+    }
+}
+
+function colomoto_extension(Jupyter, ssid, name, menu, toolbar, tool_api) {
+
+    function insert_snippet_code(snippet) {
+        var cell = Jupyter.notebook.get_selected_cell();
+        Jupyter.notebook.edit_mode();
+        cell.code_mirror.replaceSelection(snippet, 'around');
+        //cell.focus_editor();
+    }
+
+    /**
+        from https://github.com/moble/jupyter_boilerplate/blob/master/main.js
+    */
+    function callback_insert_snippet (evt) {
+        // this (or event.currentTarget, see below) always refers to the DOM
+        // element the listener was attached to - see
+        // http://stackoverflow.com/questions/12077859
+        insert_snippet_code($(evt.currentTarget).data('snippet-code'));
+    }
+    function build_menu_element (menu_item_spec, direction) {
+        // Create the menu item html element
+        var element = $('<li/>');
+
+        if (typeof menu_item_spec == 'string') {
+            if (menu_item_spec != '---') {
+                return element.html(menu_item_spec)
+                        .addClass('ui-state-disabled')
+                        .attr({"style": "padding:2px .4em"})
+                       ;
+            }
+            return element.addClass('divider');
+        }
+
+        var a = $('<a/>')
+            .attr('href', '#')
+            .html(menu_item_spec.name)
+            .appendTo(element);
+        if (menu_item_spec.hasOwnProperty('snippet')) {
+            var snippet = menu_item_spec.snippet;
+            if (typeof snippet == 'string' || snippet instanceof String) {
+                snippet = [snippet];
+            }
+            a.attr({
+                'title' : "", // Do not remove this, even though it's empty!
+                'data-snippet-code' : snippet.join('\n'),
+            })
+            .on('click', callback_insert_snippet)
+            .addClass('snippet');
+        }
+        else if (menu_item_spec.hasOwnProperty('internal-link')) {
+            a.attr('href', menu_item_spec['internal-link']);
+        }
+        else if (menu_item_spec.hasOwnProperty('external-link')) {
+            a.empty();
+            a.attr('href', menu_item_spec['external-link']);
+            a.attr({
+                'target' : '_blank',
+                'title' : 'Opens in a new window',
+            });
+            $('<i class="fa fa-external-link menu-icon pull-right"/>').appendTo(a);
+            $('<span/>').html(menu_item_spec.name).appendTo(a);
+        }
+
+        if (menu_item_spec.hasOwnProperty('sub-menu')) {
+            element
+                .addClass('dropdown-submenu')
+                .toggleClass('dropdown-submenu-left', direction === 'left');
+            var sub_element = $('<ul class="dropdown-menu"/>')
+                .toggleClass('dropdown-menu-compact', menu_item_spec.overlay === true) // For space-saving menus
+                .appendTo(element);
+
+            var new_direction = (menu_item_spec['sub-menu-direction'] === 'left') ? 'left' : 'right';
+            for (var j=0; j<menu_item_spec['sub-menu'].length; ++j) {
+                var sub_menu_item_spec = build_menu_element(menu_item_spec['sub-menu'][j], new_direction);
+                if(sub_menu_item_spec !== null) {
+                    sub_menu_item_spec.appendTo(sub_element);
+                }
+            }
+        }
+
+        return element;
+    }
+
+    function menu_setup (menu_item_specs, sibling, insert_before_sibling) {
+        for (var i=0; i<menu_item_specs.length; ++i) {
+            var menu_item_spec;
+            if (insert_before_sibling) {
+                menu_item_spec = menu_item_specs[i];
+            } else {
+                menu_item_spec = menu_item_specs[menu_item_specs.length-1-i];
+            }
+            var direction = (menu_item_spec['menu-direction'] == 'left') ? 'left' : 'right';
+            var menu_element = build_menu_element(menu_item_spec, direction);
+            // We need special properties if this item is in the navbar
+            if ($(sibling).parent().is('ul.nav.navbar-nav')) {
+                menu_element
+                    .addClass('dropdown')
+                    .removeClass('dropdown-submenu dropdown-submenu-left');
+                menu_element.children('a')
+                    .addClass('dropdown-toggle')
+                    .attr({
+                        'id': name+'_menu',
+                        'data-toggle' : 'dropdown',
+                        'aria-expanded' : 'false'
+                    });
+            }
+
+            // Insert the menu element into DOM
+            menu_element[insert_before_sibling ? 'insertBefore': 'insertAfter'](sibling);
+        }
+    }
+    /** end from */
+
+
+    function self_cleanup() {
+        var cell_element = $("script[class='to-be-removed']").parents('.cell');
+        var cell_idx = Jupyter.notebook.get_cell_elements().index(cell_element);
+        var cell = Jupyter.notebook.get_cell(cell_idx);
+        var to_remove = -1;
+        for (var i = 0; i < cell.output_area.outputs.length; ++i) {
+            var oa = cell.output_area.outputs[i];
+            if (oa.output_type == "display_data"
+                && typeof oa.data["text/html"] != 'undefined'
+                && oa.data["text/html"].indexOf(' class="to-be-removed"') >= 0) {
+                to_remove = i;
+                break;
+            }
+        }
+        if (to_remove == -1) {
+            console.log("cannot find toberemoved");
+        } else {
+            cell.output_area.outputs.splice(to_remove, 1);
+        }
+    }
+
+    function toolbar_setup(actions) {
+        var buttons = [];
+        for (var i = 0; i < actions.length; ++i) {
+            var setup = actions[i].setup;
+            if (typeof setup.handler == 'string') {
+                setup.handler = resolve_function(tool_api, setup.handler);
+            }
+            buttons.push(Jupyter.actions.register(actions[i].setup,
+                actions[i].name, name));
+        }
+        $("#"+name+"-toolbar").remove();
+        Jupyter.toolbar.add_buttons_group(buttons, name+"-toolbar");
+    }
+
+    function replace_menu_snippets(menu_spec, orig, dest) {
+        if (menu_spec.hasOwnProperty("snippet")) {
+            var snippet = menu_spec.snippet;
+            if (typeof snippet == "string" || snippet instanceof String) {
+                menu_spec["snippet"] = snippet.replace(orig, dest);
+            } else {
+                for (var i = 0; i < snippet.length; ++i) {
+                    menu_spec["snippet"][i] = snippet[i].replace(orig, dest);
+                }
+            }
+        }
+        if (menu_spec.hasOwnProperty("sub-menu")) {
+            for (var i = 0; i < menu_spec["sub-menu"].length; ++i) {
+                replace_menu_snippets(menu_spec["sub-menu"][i], orig, dest);
+            }
+        }
+    }
+
+    function load_ipython_extension() {
+
+        var mycellelt = $("#"+ssid).parents('.cell');
+        var myidx = Jupyter.notebook.get_cell_elements().index(mycellelt);
+        var import_cell = Jupyter.notebook.get_cell(myidx);
+
+        var alias = detect_import(import_cell, name);
+        tool_api.module_alias = alias;
+        if (alias && alias != name) {
+            var orig = new RegExp("\\b"+name+"\\b", "g");
+            replace_menu_snippets(menu, orig, alias);
+        }
+
+        if (toolbar) {
+            toolbar_setup(toolbar);
+        }
+
+        $("#"+name+"_menu").parent().remove();
+        if (menu) {
+            menu_setup([menu], $("#help_menu").parent(), true);
+        }
+
+        if (tool_api.hasOwnProperty("post_install_callback")) {
+            tool_api.post_install_callback();
+        }
+
+        setTimeout(self_cleanup, 5000);
+    };
+
+    load_ipython_extension();
+}
+
+function resolve_toolbar_handlers(tool_api, toolbar_spec) {
+    for (var i = 0; i < toolbar_spec.length; ++i) {
+        func = resolve_function(tool_api, toolbar_spec[i]["setup"]["handler"]);
+        toolbar_spec[i]["setup"]["handler"] = func;
+    }
+    return toolbar_spec
+}
+
+
+    var minibn_jsapi = {  };
+    colomoto_extension(Jupyter, "colomoto-setup-4943885", "minibn", null, null, minibn_jsapi);
+     }</script></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<script type="text/javascript" id="colomoto-setup-7428165" class="to-be-removed">
+        if (typeof Jupyter != 'undefined') {
+
+    var mymodule_jsapi = {  };
+    colomoto_extension(Jupyter, "colomoto-setup-7428165", "mymodule", {"name": "MaBoSS", "sub-menu": [{"name": "Load MaBoSS file", "snippet": ["masim = maboss.load(\"filename.bnd\", \"filename.cfg\")"]}, {"name": "Network", "sub-menu": [{"name": "Set istate", "snippet": ["maboss.wg_set_istate(masim)"]}, {"name": "Get initial state", "snippet": ["masim.get_initial_state()"]}]}, {"name": "Simulation", "sub-menu": [{"name": "Create mutant", "snippet": ["maboss.wg_make_mutant(masim)"]}, {"name": "Run", "snippet": ["simres = masim.run()"]}, {"name": "Set initial states", "snippet": ["masim.network.set_istate([\"mygenelist\"],{})"]}, {"name": "Set output", "snippet": ["maboss.wg_set_output(masim)"]}]}, {"name": "Results", "sub-menu": [{"name": "Save results", "snippet": ["simres.save(\"filename\")"]}, {"name": "Plot piechart", "snippet": ["simres.plot_piechart()"]}, {"name": "Plot trajectory", "snippet": ["simres.plot_trajectory()"]}]}, {"name": "Conversion", "sub-menu": [{"name": "Convert to biolqm", "snippet": ["biolqm_model = maboss.to_biolqm(masim)"]}, {"name": "Convert to minibn", "snippet": ["minibn_model = maboss.to_minibn(masim)"]}]}, "---", {"name": "Documentation", "external-link": "http://pymaboss.readthedocs.io"}]}, null, mymodule_jsapi);
+     }</script><style type="text/css">
+    #mymodule_menu {
+        color: green;
+        background-color: white;
+    }
+    </style></div>
+</div>
+<section id="Dataset:-Cancer-Invasion-model">
+<h3><span class="section-number">3.2.1. </span>Dataset: Cancer Invasion model<a class="headerlink" href="#Dataset:-Cancer-Invasion-model" title="Link to this heading">¶</a></h3>
+<p>We’ll use the Cancer Invasion model, which is more complex than the CNS differentiation model. This model contains 32 nodes with extensive connectivity and demonstrates key regulatory mechanisms involved in cancer cell invasion and metastasis processes. The model incorporates signaling pathways related to EMT (Epithelial-Mesenchymal Transition), cell adhesion, and extracellular matrix degradation.</p>
+<p>This model has been used the demonstrate the capability of Bonesis and to introduce the concept of Boolean model ensemble, described <a class="reference external" href="https://doi.org/10.1007/978-3-030-60327-4_11">here</a></p>
+</section>
+</section>
+<section id="Step-1:-Load-Model-Ensemble">
+<h2><span class="section-number">3.3. </span>Step 1: Load Model Ensemble<a class="headerlink" href="#Step-1:-Load-Model-Ensemble" title="Link to this heading">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;models/Invasion/&#39;</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">le</span><span class="o">.</span><span class="n">LogicEnsemble</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">project_name</span> <span class="o">=</span> <span class="s1">&#39;Invasion&#39;</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">create_simulation</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Simulation object created
+</pre></div></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">LogicEnsemble</span></code> object is the core component of AstroLogics that handles:</p>
+<ul class="simple">
+<li><p>Loading multiple Boolean network models from a directory</p></li>
+<li><p>Managing simulation parameters and configurations</p></li>
+<li><p>Coordinating analysis across the model ensemble</p></li>
+</ul>
+</section>
+<section id="Step-2:-Simulate-the-model-ensemble">
+<h2><span class="section-number">3.4. </span>Step 2: Simulate the model ensemble<a class="headerlink" href="#Step-2:-Simulate-the-model-ensemble" title="Link to this heading">¶</a></h2>
+<p>In this part of the script we first simulate all the BN within the model ensemble. We utilize the MaBoSS engine as the main simulator.</p>
+<p>Also, the use of MaBoSS also allows us to determine different intial states of the simulation. We then first look at the initial states which has been described in Chevalier &amp; Noel et al., 2020.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read network structure and set initial conditions</span>
+<span class="n">test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">model_path</span> <span class="o">+</span> <span class="s1">&#39;Invasion_0.bnet&#39;</span><span class="p">,</span> <span class="n">sep</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">header</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
+<span class="n">test</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># Set all nodes to 0.5 probability initially</span>
+<span class="n">test_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">test</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">test</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<p>This creates an initial state where all nodes have equal probability (0.5) of being active. This represents a neutral starting condition that allows the system to evolve according to its inherent dynamics.</p>
+<p>We then start the simulation using MaBoSS.</p>
+<p><strong>MaBoSS</strong> (Markovian Boolean Stochastic Simulator) is crucial for the AstroLogics approach because:</p>
+<ul class="simple">
+<li><p>It converts Boolean network dynamics into continuous-time Markov processes</p></li>
+<li><p>Provides probabilistic approximation of complex state transition graphs</p></li>
+<li><p>Enables analysis of both transient and steady-state behaviors</p></li>
+<li><p>Scales computationally better than exhaustive state space exploration</p></li>
+</ul>
+<p>Simulation takes about 16 minutes (20-core 12th Gen Intel® Core™ i7-12700H × 20).</p>
+<p>We therefore, added the simulated files in the <code class="docutils literal notranslate"><span class="pre">tmp</span></code> (the file is called <code class="docutils literal notranslate"><span class="pre">Invasion_simulation_random.csv</span></code>), which can be load directly into the <code class="docutils literal notranslate"><span class="pre">model.simulation.simulation_df</span></code></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Configure simulation parameters</span>
+<span class="c1">#model.simulation.update_parameters(max_time = 20,thread_count = 15, sample_count = 2000)</span>
+<span class="c1">#model.simulation.run_simulation(initial_state=test_dict)</span>
+<span class="c1">#model.simulation.simulation_df.to_csv(&#39;tmp/Invasion_simulation_random.csv&#39;)</span>
+
+<span class="c1"># Load the simulation results</span>
+<span class="n">model</span><span class="o">.</span><span class="n">simulation</span><span class="o">.</span><span class="n">simulation_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;tmp/Invasion_simulation_random.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Step-3-:-Calculate-the-trajectory-and-visualize-the-distance-matrix-using-MDS">
+<h2><span class="section-number">3.5. </span>Step 3 : Calculate the trajectory and visualize the distance matrix using MDS<a class="headerlink" href="#Step-3-:-Calculate-the-trajectory-and-visualize-the-distance-matrix-using-MDS" title="Link to this heading">¶</a></h2>
+<p>In this part of the script, we compare the two method of calculating the distance between models.</p>
+<p>In this function <code class="docutils literal notranslate"><span class="pre">calculate_distancematrix</span></code>, users can select the two options of data used to calculate the distance.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">endpoint</span></code> : The endpoint utilize the node activation probability at the endpoint of MaBoSS simulation. User could also defines the <code class="docutils literal notranslate"><span class="pre">timepoint</span></code> to define a specific timepoint they want to use to define the distance</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">trajectory</span></code> : This options utilize the whole MaBoSS simulation trajectory and the <code class="docutils literal notranslate"><span class="pre">dtw</span></code> method to calculate the distances between models.</p></li>
+</ul>
+<p>In this part, we show different results that could be obtained from two different method.</p>
+<ul class="simple">
+<li><p>Using <code class="docutils literal notranslate"><span class="pre">endpoint</span></code> we showed no clear separation of the model, which coresspond to the single attractors that all the model could reach.</p></li>
+<li><p>On the other hand, when using <code class="docutils literal notranslate"><span class="pre">trajectory</span></code> we can observe two major cluster of models based on the different signaling path that two groups of BNs took.</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">create_trajectory</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Trajectory object created
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">calculate_distancematrix</span><span class="p">(</span><span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;trajectory&#39;</span><span class="p">)</span>
+<span class="c1"># Perform MDS (Multidimensional Scaling) for visualization</span>
+<span class="n">model</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">calculate_MDS</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">12345</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">plot_MDS</span><span class="p">(</span><span class="n">s</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">fig_size</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Calculating distance matrix for whole trajectory...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "29bd2f0402c24895a6c74cdba6bd1749", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Distance matrix calculated successfully.
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/03_Analysis_InvasionModel_16_3.png" src="_images/03_Analysis_InvasionModel_16_3.png" />
+</div>
+</div>
+</section>
+<section id="Step-4:-Model-Clustering">
+<h2><span class="section-number">3.6. </span>Step 4: Model Clustering<a class="headerlink" href="#Step-4:-Model-Clustering" title="Link to this heading">¶</a></h2>
+<p>Clustering reveals distinct groups within the model ensemble. In this example, we found 2 major clusters corresponding to different attractor groups, representing distinct cellular fate decisions.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">calculate_kmean_cluster</span><span class="p">(</span><span class="n">n_cluster</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">random_state</span> <span class="o">=</span> <span class="mi">12345</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Calculated k-means clustering with 5 clusters.
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">plot_MDS</span><span class="p">(</span><span class="n">s</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">fig_size</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">),</span><span class="n">plot_cluster</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">save_fig</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/03_Analysis_InvasionModel_19_0.png" src="_images/03_Analysis_InvasionModel_19_0.png" />
+</div>
+</div>
+</section>
+<section id="Step-5:-Logic-Function-Analysis">
+<h2><span class="section-number">3.7. </span>Step 5: Logic Function Analysis<a class="headerlink" href="#Step-5:-Logic-Function-Analysis" title="Link to this heading">¶</a></h2>
+<p>This step implements the <strong>logical function evaluation</strong> component of AstroLogics:</p>
+<ul class="simple">
+<li><p>Converts Boolean equations to Disjunctive Normal Form (DNF)</p></li>
+<li><p>Creates feature matrices comparing logical rules across models</p></li>
+<li><p>Identifies <strong>constant</strong>, <strong>varied</strong>, and <strong>marker</strong> clauses</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">create_logic</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">logic</span><span class="o">.</span><span class="n">model_logic</span>
+<span class="n">model</span><span class="o">.</span><span class="n">logic</span><span class="o">.</span><span class="n">create_flattend_logic_clause</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Loading models logics
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "e201d5780b564bb294c8bc759ad7c72e", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Concatenate results into matrix
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "3c66b136ee494b9a8f23f3d99f4f4d10", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Logic object created
+Flatten models logic clauses
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "25811c47e79a4ce4bfdbccc5b17dfd3c", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Concatenate results into matrix
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "ac6b40f9a32c4206a9e435d52ef57c96", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Flattend logic clause created
+</pre></div></div>
+</div>
+</section>
+<section id="Step-6-:-Calculate-statistic-of-Logic-features-(clauses)">
+<h2><span class="section-number">3.8. </span>Step 6 : Calculate statistic of Logic features (clauses)<a class="headerlink" href="#Step-6-:-Calculate-statistic-of-Logic-features-(clauses)" title="Link to this heading">¶</a></h2>
+<p>In this steps, we have already featurized the logical equations into model logics or clauses.</p>
+<p>We can then integrate the clusters obtained from the trajectory analysis into the <code class="docutils literal notranslate"><span class="pre">.logic</span></code> and perform chi-square statistical test to categorize logic features (clauses) into 3 major groups</p>
+<ul class="simple">
+<li><p>Constatnt : core regulatory features that appears across BNs in the model ensemble</p></li>
+<li><p>Varied : Features that may differ between individual BNs but show no statistical significant</p></li>
+<li><p>Marker : Key discriminatory features that statistically distinguish between different model clusters.</p></li>
+</ul>
+<p>We can define the p-value of the chi-square test using the function <code class="docutils literal notranslate"><span class="pre">pval_threshold</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">logic</span><span class="o">.</span><span class="n">map_model_clusters</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">cluster_dict</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">logic</span><span class="o">.</span><span class="n">calculate_logic_statistic</span><span class="p">(</span><span class="n">pval_threshold</span> <span class="o">=</span> <span class="mf">0.0001</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Model clusters mapped to logic clauses
+</pre></div></div>
+</div>
+<p>The results of the analysis can be visualized in the form of Manhattan Plot shown below.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">logic</span><span class="o">.</span><span class="n">plot_manhattan</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/03_Analysis_InvasionModel_26_0.png" src="_images/03_Analysis_InvasionModel_26_0.png" />
+</div>
+</div>
+<p>Or the results can be summarized into the barplot shown here</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">logic</span><span class="o">.</span><span class="n">plot_logicstat_summary</span><span class="p">(</span><span class="n">save_fig</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/03_Analysis_InvasionModel_28_0.png" src="_images/03_Analysis_InvasionModel_28_0.png" />
+</div>
+</div>
+<p>To have the overview of the process, we could plot the heatmap of the logical rules to see how different logical features in each model groups are.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">logic_feature</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">logic</span><span class="o">.</span><span class="n">logic_clause_flattend</span>
+<span class="n">cluster_dict</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">cluster_dict</span>
+
+<span class="c1"># Map the cluster labels to the columns of the logic_feature</span>
+<span class="n">column_clusters</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">cluster_dict</span><span class="p">)</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">logic_feature</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">column_clusters</span> <span class="o">=</span> <span class="n">column_clusters</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span>
+
+<span class="c1"># Create a color palette for the clusters</span>
+<span class="n">unique_clusters</span> <span class="o">=</span> <span class="n">column_clusters</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+<span class="n">palette</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">(</span><span class="s2">&quot;tab10&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">unique_clusters</span><span class="p">))</span>
+<span class="n">column_colors</span> <span class="o">=</span> <span class="n">column_clusters</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">unique_clusters</span><span class="p">,</span> <span class="n">palette</span><span class="p">)))</span>
+
+<span class="c1"># Create the clustermap</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">clustermap</span><span class="p">(</span><span class="n">logic_feature</span><span class="p">[</span><span class="n">column_clusters</span><span class="o">.</span><span class="n">index</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+               <span class="n">row_cluster</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">col_cluster</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">col_colors</span><span class="o">=</span><span class="n">column_colors</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;tmp/logic_heatmap.png&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;tmp/logic_heatmap.pdf&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/03_Analysis_InvasionModel_30_0.png" src="_images/03_Analysis_InvasionModel_30_0.png" />
+</div>
+</div>
+</section>
+<section id="Step-7-:-Subset-models">
+<h2><span class="section-number">3.9. </span>Step 7 : Subset models<a class="headerlink" href="#Step-7-:-Subset-models" title="Link to this heading">¶</a></h2>
+<p>In this part of the script, we found that the model can be clustered mainly into 2 main clusters; 0 and 2. We therefore, subset these models to perform the following logic analysis.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convert the cluster dictionary to a DataFrame</span>
+<span class="n">cluster_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">cluster_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Model_ID&#39;</span><span class="p">,</span> <span class="s1">&#39;Cluster&#39;</span><span class="p">])</span>
+<span class="n">selected_model</span> <span class="o">=</span> <span class="n">cluster_df</span><span class="p">[</span><span class="s1">&#39;Model_ID&#39;</span><span class="p">][</span><span class="n">cluster_df</span><span class="p">[</span><span class="s1">&#39;Cluster&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">])]</span>
+
+<span class="c1"># Subset the logic_feature DataFrame based on the selected models</span>
+<span class="n">model</span><span class="o">.</span><span class="n">logic</span><span class="o">.</span><span class="n">model_logic</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">logic</span><span class="o">.</span><span class="n">model_logic</span><span class="p">[</span><span class="n">selected_model</span><span class="p">]</span>
+<span class="n">model</span><span class="o">.</span><span class="n">logic</span><span class="o">.</span><span class="n">create_flattend_logic_clause</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Flatten models logic clauses
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "bbf6f87615bb41ce8fd79674cb4dbf13", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Concatenate results into matrix
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "19af01afd90c40d6bd16c480e6ed95c2", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Flattend logic clause created
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Subset the cluster dictionary based on the selected models</span>
+<span class="n">filtered_cluster_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">cluster_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">selected_model</span><span class="p">)}</span>
+
+<span class="c1"># Map the filtered cluster dictionary to the logic model</span>
+<span class="n">model</span><span class="o">.</span><span class="n">logic</span><span class="o">.</span><span class="n">map_model_clusters</span><span class="p">(</span><span class="n">filtered_cluster_dict</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">logic</span><span class="o">.</span><span class="n">calculate_logic_statistic</span><span class="p">(</span><span class="n">pval_threshold</span> <span class="o">=</span> <span class="mf">0.0001</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Model clusters mapped to logic clauses
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">logic</span><span class="o">.</span><span class="n">plot_logicstat_summary</span><span class="p">(</span><span class="n">save_fig</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/03_Analysis_InvasionModel_34_0.png" src="_images/03_Analysis_InvasionModel_34_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">logic</span><span class="o">.</span><span class="n">plot_manhattan</span><span class="p">(</span><span class="n">show_label</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/03_Analysis_InvasionModel_35_0.png" src="_images/03_Analysis_InvasionModel_35_0.png" />
+</div>
+</div>
+</section>
+<section id="Step-7:-Advanced-Trajectory-Analysis">
+<h2><span class="section-number">3.10. </span>Step 7: Advanced Trajectory Analysis<a class="headerlink" href="#Step-7:-Advanced-Trajectory-Analysis" title="Link to this heading">¶</a></h2>
+<p>These visualizations help identify:</p>
+<ul class="simple">
+<li><p><strong>Most variable nodes</strong>: Components showing greatest differences between models</p></li>
+<li><p><strong>Critical regulators</strong>: Nodes whose activity patterns distinguish model clusters</p></li>
+<li><p><strong>Temporal patterns</strong>: How specific nodes behave over simulation time</p></li>
+</ul>
+<p>In this first plot, we check what are the features that shows the highest variance in their dynamics accross simulation. We calculate the variance of node activation probabily of all BNs in the model ensemble across all timepoints and plotted using the heatmap.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">simulation_df</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">simulation_df</span><span class="p">[</span><span class="n">model</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">simulation_df</span><span class="o">.</span><span class="n">model_id</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">selected_model</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">plot_trajectory_variance</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/03_Analysis_InvasionModel_38_0.png" src="_images/03_Analysis_InvasionModel_38_0.png" />
+</div>
+</div>
+<p>We identify the key node of interest (CDK46CycD) which shows the highest variance along the timepoints. Finally, we could visualize the dynamics of this node between two identified clusters using the lineplot.</p>
+<p>From this, we found that the dynamics of this node differ during the early timepoint of the simulation, while finally converge to 0 at the later timepoint.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">plot_node_trajectory</span><span class="p">(</span><span class="n">node</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;GF&#39;</span><span class="p">,</span> <span class="s1">&#39;EMT&#39;</span><span class="p">,</span> <span class="s1">&#39;AKT2&#39;</span><span class="p">],</span>
+                                      <span class="n">fig_width</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">fig_height</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/03_Analysis_InvasionModel_40_0.png" src="_images/03_Analysis_InvasionModel_40_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">plot_node_trajectory</span><span class="p">(</span><span class="n">node</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;GF&#39;</span><span class="p">],</span> <span class="n">fig_width</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">fig_height</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">save_fig</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/03_Analysis_InvasionModel_41_0.png" src="_images/03_Analysis_InvasionModel_41_0.png" />
+</div>
+</div>
+</section>
+<section id="Step-8-:-Logic-Feature-Heatmap">
+<h2><span class="section-number">3.11. </span>Step 8 : Logic Feature Heatmap<a class="headerlink" href="#Step-8-:-Logic-Feature-Heatmap" title="Link to this heading">¶</a></h2>
+<p>This analysis typically reveals that <strong>Myt1L</strong> is the key distinguishing node between clusters:</p>
+<ul class="simple">
+<li><p><strong>Cluster 0</strong>: CDK46CycD is regulated by Bclaf1 &amp; Myc</p></li>
+<li><p><strong>Cluster 1</strong>: CDK46CycD is regulated by Bclaf1 | Myc</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">logic</span><span class="o">.</span><span class="n">plot_node_logic_heatmap</span><span class="p">(</span><span class="n">node</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;GF&#39;</span><span class="p">],</span>
+                                     <span class="n">fig_size</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">save_fig</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;Figure size 800x800 with 0 Axes&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/03_Analysis_InvasionModel_43_1.png" src="_images/03_Analysis_InvasionModel_43_1.png" />
+</div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">AstroLogics</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="tutorials.html">Tutorials</a><ul>
+      <li>Previous: <a href="02_Analysis_Herault_hematopoiesis.html" title="previous chapter"><span class="section-number">2. </span>AstroLogics Tutorial, Boolean Network Analysis and Clustering : Herault Hematopoiesis</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025 Institut Curie.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.3.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="_sources/03_Analysis_InvasionModel.nblink.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

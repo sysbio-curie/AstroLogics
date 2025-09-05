@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -8,52 +6,26 @@
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="210mm"
-   height="297mm"
-   viewBox="0 0 210 297"
-   version="1.1"
    id="svg8"
-   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
-   sodipodi:docname="Supplementary_analysis1.svg">
+   version="1.1"
+   viewBox="0 0 210 297"
+   height="297mm"
+   width="210mm">
   <defs
      id="defs2">
     <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath867">
+       id="clipPath867"
+       clipPathUnits="userSpaceOnUse">
       <rect
-         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.15875;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.95813952"
-         id="rect869"
-         width="63.500004"
-         height="22.489588"
-         x="141.55208"
+         clip-path="none"
          y="117.08333"
-         clip-path="none" />
+         x="141.55208"
+         height="22.489588"
+         width="63.500004"
+         id="rect869"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.15875;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.95813952" />
     </clipPath>
   </defs>
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="1.979899"
-     inkscape:cx="372.41033"
-     inkscape:cy="844.06037"
-     inkscape:document-units="mm"
-     inkscape:current-layer="layer1"
-     showgrid="true"
-     inkscape:window-width="2560"
-     inkscape:window-height="1374"
-     inkscape:window-x="0"
-     inkscape:window-y="269"
-     inkscape:window-maximized="1">
-    <inkscape:grid
-       type="xygrid"
-       id="grid815" />
-  </sodipodi:namedview>
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -67,13 +39,11 @@
     </rdf:RDF>
   </metadata>
   <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
      id="layer1">
     <image
-       y="14.486556"
-       x="12.475357"
-       id="image936"
+       width="185.96214"
+       height="45.711361"
+       preserveAspectRatio="none"
        xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABv4AAAG4CAIAAAACNweAAAAAA3NCSVQICAjb4U/gAAAgAElEQVR4
 nOzdd0ATZ/8A8OcyCSuAhCkCoggOQHHhAhUFF25xVNHWalVQ62hF+7NQ++qrto466KtVrIqKG+vG
 3YoD696i4AIZyh4JSe73x4PnmQBhXDgSvp8/lNxd7r53cN88ee4ZBEmSCAAAAAAAAAAAAAAAAPQL
@@ -1761,13 +1731,13 @@ TwAAAAAAAAAAAGiB0PQJAAAAAAAAAAAALRCaPgEAAAAAAAAAAKAFQtMnAAAAAAAAAAAAtEBo+gQA
 AAAAAAAAAIAWCE2fAAAAAAAAAAAA0AKh6RMAAAAAAAAAAABaIDR9AgAAAAAAAAAAQAuEpk8AAAAA
 AAAAAABogdD0CQAAAAAAAAAAAC0Qmj4BAAAAAAAAAACgBfp/zPbWH5KEoG8AAAAASUVORK5CYII=
 "
-       preserveAspectRatio="none"
-       height="45.711361"
-       width="185.96214" />
+       id="image936"
+       x="12.475357"
+       y="14.486556" />
     <image
-       y="69.987495"
-       x="12.73994"
-       id="image947"
+       width="185.96214"
+       height="61.294788"
+       preserveAspectRatio="none"
        xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABv4AAAJOCAIAAADwFOcZAAAAA3NCSVQICAjb4U/gAAAgAElEQVR4
 nOydZ0AUV9eA78x2WDpLVxAQwYoaUWzYQVGsEUsUTYxGxRJLIprPgObVoIm9JDaMiIpdY8ee2HuP
 AtIUpElfts/348pks1THYVn0PD+UuTO375y5c+bccwiKohAAAAAAAAAAAAAAAAAAAMDHBVnXDQAA
@@ -4044,16 +4014,16 @@ vmWz2Ww2m3/+/Dk2NqbT6davX79q1SoFOctX4QoM1CTxq0TH8zyQjkfHU0MgAAAAAFk8lYAlPX/+
 AAAAaBCjTwAAAAAAAAAaxOgTAAAAAAAAgAYx+gQAAAAAAACgQYw+AQAAAAAAAGgQo08AAAAAAAAA
 GsToEwAAAAAAAIAG/QsmWGclXUM4HwAAAABJRU5ErkJggg==
 "
-       preserveAspectRatio="none"
-       height="61.294788"
-       width="185.96214" />
+       id="image947"
+       x="12.73994"
+       y="69.987495" />
     <g
-       id="g994"
-       transform="translate(22.851683,-4.3308588)">
+       transform="translate(22.851683,-4.3308588)"
+       id="g994">
       <image
-         width="19.99535"
-         height="2.1987431"
-         preserveAspectRatio="none"
+         y="141.70503"
+         x="121.19463"
+         id="image958"
          xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAAAyCAIAAAD9fhrKAAAAA3NCSVQICAjb4U/gAAAB3klEQVR4
 nO3UQXIcIQwFUMGxcoYcOvdyGmUB9OAeT/aqem8FaknYLtdvv37/iYjWWkS03ntfh7vSdiUiemvz
 0Hr7PNIioh/XVXmbXYOt7Sdaf43M59a2u//eeczGXP5t8zHYe+zDrMR+Kx4b5qfe91/j7bpG+n6u
@@ -4065,42 +4035,39 @@ FlCGwALKEFhAGQILKENgAWUILKAMgQWUIbCAMgQWUIbAAsoQWEAZAgsoQ2ABZQgsoAyBBZQhsIAy
 BBZQhsACyhBYQBkCCyhDYAFlCCygDIEFlCGwgDIEFlCGwALKEFhAGQILKENgAWUILKAMgQWUIbCA
 MgQWUIbAAsoQWEAZAgso4x/XtFNPJT4HxAAAAABJRU5ErkJggg==
 "
-         id="image958"
-         x="121.19463"
-         y="141.70503" />
+         preserveAspectRatio="none"
+         height="2.1987431"
+         width="19.99535" />
       <text
-         id="text963"
-         y="146.32391"
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.82222223px;line-height:1.25;font-family:'TeX Gyre Heros';-inkscape-font-specification:'TeX Gyre Heros, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.13704543"
          x="140.12585"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.82222223px;line-height:1.25;font-family:'TeX Gyre Heros';-inkscape-font-specification:'TeX Gyre Heros, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.13704543"
-         xml:space="preserve"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.82222223px;font-family:'TeX Gyre Heros';-inkscape-font-specification:'TeX Gyre Heros, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.13704543"
-           y="146.32391"
-           x="140.12585"
+         y="146.32391"
+         id="text963"><tspan
            id="tspan961"
-           sodipodi:role="line">1</tspan></text>
+           x="140.12585"
+           y="146.32391"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.82222223px;font-family:'TeX Gyre Heros';-inkscape-font-specification:'TeX Gyre Heros, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.13704543">1</tspan></text>
       <text
-         id="text967"
-         y="146.29457"
-         x="121.0365"
+         xml:space="preserve"
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.82222223px;line-height:1.25;font-family:'TeX Gyre Heros';-inkscape-font-specification:'TeX Gyre Heros, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.13704543"
-         xml:space="preserve"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.82222223px;font-family:'TeX Gyre Heros';-inkscape-font-specification:'TeX Gyre Heros, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.13704543"
-           y="146.29457"
-           x="121.0365"
+         x="121.0365"
+         y="146.29457"
+         id="text967"><tspan
            id="tspan965"
-           sodipodi:role="line">0</tspan></text>
+           x="121.0365"
+           y="146.29457"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.82222223px;font-family:'TeX Gyre Heros';-inkscape-font-specification:'TeX Gyre Heros, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.13704543">0</tspan></text>
       <text
-         id="text967-1"
-         y="140.59521"
-         x="120.72453"
+         xml:space="preserve"
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.11666656px;line-height:1.25;font-family:'TeX Gyre Heros';-inkscape-font-specification:'TeX Gyre Heros, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.13704543"
-         xml:space="preserve"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.11666656px;font-family:'TeX Gyre Heros';-inkscape-font-specification:'TeX Gyre Heros, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.13704543"
-           y="140.59521"
-           x="120.72453"
+         x="120.72453"
+         y="140.59521"
+         id="text967-1"><tspan
            id="tspan965-9"
-           sodipodi:role="line">Activation probability</tspan></text>
+           x="120.72453"
+           y="140.59521"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.11666656px;font-family:'TeX Gyre Heros';-inkscape-font-specification:'TeX Gyre Heros, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.13704543">Activation probability</tspan></text>
     </g>
   </g>
 </svg>

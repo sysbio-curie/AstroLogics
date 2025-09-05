@@ -3,18 +3,20 @@
 <html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Tutorials &#8212; AstroLogics  documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=12dfc556" />
     <script src="_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Title" href="tutorial.html" />
+    <link rel="next" title="1. AstroLogics Tutorial, Boolean Network Analysis and Clustering : Bonesis Tutorial" href="01_Analysis_BonesisTutorial.html" />
     <link rel="prev" title="Installation" href="installation.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -36,8 +38,54 @@
   <section id="tutorials">
 <h1>Tutorials<a class="headerlink" href="#tutorials" title="Link to this heading">¶</a></h1>
 <div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Title</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01_Analysis_BonesisTutorial.html">1. AstroLogics Tutorial, Boolean Network Analysis and Clustering : Bonesis Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="01_Analysis_BonesisTutorial.html#Overview-of-AstroLogics-Framework">1.1. Overview of AstroLogics Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_Analysis_BonesisTutorial.html#Required-Libraries">1.2. Required Libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_Analysis_BonesisTutorial.html#Step-1:-Load-Model-Ensemble">1.3. Step 1: Load Model Ensemble</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_Analysis_BonesisTutorial.html#Step-2:-Simulate-the-model-ensemble">1.4. Step 2: Simulate the model ensemble</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_Analysis_BonesisTutorial.html#Step-3-(Optional)-:-Trajectory-visualization">1.5. Step 3 (Optional) : Trajectory visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_Analysis_BonesisTutorial.html#Step-4:-Calculate-Distance-Matrix">1.6. Step 4: Calculate Distance Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_Analysis_BonesisTutorial.html#Step-5:-Dimensionality-Reduction-and-Visualization">1.7. Step 5: Dimensionality Reduction and Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_Analysis_BonesisTutorial.html#Step-6:-Model-Clustering">1.8. Step 6: Model Clustering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_Analysis_BonesisTutorial.html#Step-7-(Optional)-:-Trajectory-Analysis">1.9. Step 7 (Optional) : Trajectory Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_Analysis_BonesisTutorial.html#Step-8:-Logic-Function-Analysis">1.10. Step 8: Logic Function Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_Analysis_BonesisTutorial.html#Step-9-:-Calculate-statistic-of-Logic-features-(clauses)">1.11. Step 9 : Calculate statistic of Logic features (clauses)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_Analysis_BonesisTutorial.html#Step-9:-Advanced-Trajectory-Analysis">1.12. Step 9: Advanced Trajectory Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_Analysis_BonesisTutorial.html#Step-10:-Logic-Feature-Heatmap">1.13. Step 10: Logic Feature Heatmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_Analysis_BonesisTutorial.html#Key-Findings-and-Biological-Interpretation">1.14. Key Findings and Biological Interpretation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_Analysis_BonesisTutorial.html#Applications-and-Extensions">1.15. Applications and Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_Analysis_BonesisTutorial.html#Conclusion">1.16. Conclusion</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="02_Analysis_Herault_hematopoiesis.html">2. AstroLogics Tutorial, Boolean Network Analysis and Clustering : Herault Hematopoiesis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="02_Analysis_Herault_hematopoiesis.html#Overview-of-AstroLogics-Framework">2.1. Overview of AstroLogics Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_Analysis_Herault_hematopoiesis.html#Required-Libraries">2.2. Required Libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_Analysis_Herault_hematopoiesis.html#Step-1:-Load-Model-Ensemble">2.3. Step 1: Load Model Ensemble</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_Analysis_Herault_hematopoiesis.html#Step-2:-Simulate-the-model-ensemble">2.4. Step 2: Simulate the model ensemble</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_Analysis_Herault_hematopoiesis.html#Step-3-:-Calculate-the-trajectory-and-visualize-the-distance-matrix-using-MDS">2.5. Step 3 : Calculate the trajectory and visualize the distance matrix using MDS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_Analysis_Herault_hematopoiesis.html#Step-4:-Model-Clustering">2.6. Step 4: Model Clustering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_Analysis_Herault_hematopoiesis.html#Step-5:-Logic-Function-Analysis">2.7. Step 5: Logic Function Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_Analysis_Herault_hematopoiesis.html#Step-6-:-Calculate-statistic-of-Logic-features-(clauses)">2.8. Step 6 : Calculate statistic of Logic features (clauses)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_Analysis_Herault_hematopoiesis.html#Step-7:-Advanced-Trajectory-Analysis">2.9. Step 7: Advanced Trajectory Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_Analysis_Herault_hematopoiesis.html#Step-8-:-Logic-Feature-Heatmap">2.10. Step 8 : Logic Feature Heatmap</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="03_Analysis_InvasionModel.html">3. AstroLogics Tutorial, Boolean Network Analysis and Clustering : Invasion model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="03_Analysis_InvasionModel.html#Overview-of-AstroLogics-Framework">3.1. Overview of AstroLogics Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_Analysis_InvasionModel.html#Required-Libraries">3.2. Required Libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_Analysis_InvasionModel.html#Step-1:-Load-Model-Ensemble">3.3. Step 1: Load Model Ensemble</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_Analysis_InvasionModel.html#Step-2:-Simulate-the-model-ensemble">3.4. Step 2: Simulate the model ensemble</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_Analysis_InvasionModel.html#Step-3-:-Calculate-the-trajectory-and-visualize-the-distance-matrix-using-MDS">3.5. Step 3 : Calculate the trajectory and visualize the distance matrix using MDS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_Analysis_InvasionModel.html#Step-4:-Model-Clustering">3.6. Step 4: Model Clustering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_Analysis_InvasionModel.html#Step-5:-Logic-Function-Analysis">3.7. Step 5: Logic Function Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_Analysis_InvasionModel.html#Step-6-:-Calculate-statistic-of-Logic-features-(clauses)">3.8. Step 6 : Calculate statistic of Logic features (clauses)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_Analysis_InvasionModel.html#Step-7-:-Subset-models">3.9. Step 7 : Subset models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_Analysis_InvasionModel.html#Step-7:-Advanced-Trajectory-Analysis">3.10. Step 7: Advanced Trajectory Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_Analysis_InvasionModel.html#Step-8-:-Logic-Feature-Heatmap">3.11. Step 8 : Logic Feature Heatmap</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </section>
@@ -47,7 +95,7 @@
           
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <h1 class="logo"><a href="index.html">AstroLogics</a></h1>
 
@@ -69,7 +117,7 @@
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="installation.html" title="previous chapter">Installation</a></li>
-      <li>Next: <a href="tutorial.html" title="next chapter">Title</a></li>
+      <li>Next: <a href="01_Analysis_BonesisTutorial.html" title="next chapter"><span class="section-number">1. </span>AstroLogics Tutorial, Boolean Network Analysis and Clustering : Bonesis Tutorial</a></li>
   </ul></li>
 </ul>
 </div>
@@ -99,7 +147,7 @@
       &#169;2025 Institut Curie.
       
       |
-      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.0</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.3.7</a>
       &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
       
       |
