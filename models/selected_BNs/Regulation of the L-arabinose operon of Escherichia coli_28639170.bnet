@@ -1,0 +1,9 @@
+C,	!(Ge)
+MS,	(Ara_plus) & C
+Ara_plus,	((Ara_minus) & (A | Am))
+L,	((Ara_minus) & !Ara_plus)
+T,	MT
+A,	Ae & T
+E,	MS
+Am,	(Ae | (Aem & T))
+MT,	((Ara_plus) & C)

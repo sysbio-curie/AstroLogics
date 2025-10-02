@@ -104,4 +104,4 @@ for model_file in model_list:
 total_index_score.columns = model_list
     
 # Save the results
-total_index_score.to_csv(path_to_results + "rand_index_alltrajclustering_v3.csv")
+total_index_score.to_csv(path_to_results + "rand_index_alltrajclustering.csv")

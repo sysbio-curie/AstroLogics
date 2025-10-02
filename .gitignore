@@ -1,7 +1,16 @@
-dev/
-models/dev/
+# Figures files
+figures/
+
+# Model files
 models/tmp/
-models/complex_attractor_model/
+models/model_not_used/
+
+# Scripts
+scripts/dev/
+
+# Inferred models and their archives
 inferred_model/
 inferred_model_archive/
+
+# Attractor data - too big for GitHub
 data/attractor_group/calculated_attractor/BT474 Breast Cell Line Long-term ErbB Network_24970389_attractors.csv
