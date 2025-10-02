@@ -1,9 +1,0 @@
-MBF,	CLN3
-HCM1,	( MBF & ( SBF ) )
-SWI5,	SFF
-YOX1,	( MBF & ( SBF ) )
-SFF,	( SBF & ( HCM1 ) )
-ACE2,	SFF
-YHP1,	MBF | SBF
-SBF,	( ( MBF & ! YHP1 ) & ! YOX1 ) | ( ( CLN3 & ! YHP1 ) & ! YOX1 )
-CLN3,	( ( ( SWI5 & ( ACE2 ) ) & ! YOX1 ) & ! YHP1 )
