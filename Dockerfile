@@ -6,10 +6,12 @@ RUN apt-get -qq update \
     && apt-get install -yq git \
     && apt clean -y \
     && rm -rf /var/lib/apt/lists/*
-
-#RUN pip install git+https://https://github.com/saran-pankaew/AstroLogics.git
+    
+RUN conda install -c colomoto -c vincent-noel astrologics
 RUN mkdir -p /notebook/AstroLogics/
-COPY Tutorial/* /notebook/AstroLogics/
+COPY Tutorial/ /notebook/AstroLogics/
+COPY models/ /notebook/models/
+COPY data/ /notebook/data/
 
 RUN chown -R user:user /notebook/AstroLogics
 
