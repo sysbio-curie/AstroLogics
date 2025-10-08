@@ -2,8 +2,6 @@ name: Build and Publish to PyPI
 
 on:
   push:
-    tags:
-      - 'v*'
   release:
     types: [published]
   workflow_dispatch:
@@ -67,24 +65,24 @@ jobs:
       run: |
         python -c "import astrologics; print('Import successful')"
 
-#   publish:
-#     needs: [build, test-install]
-#     runs-on: ubuntu-latest
-#     if: github.event_name == 'release' || (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v'))
-#     environment:
-#       name: pypi
-#       url: https://pypi.org/p/astrologics
-#     permissions:
-#       id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
+  publish:
+    needs: [build, test-install]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release' || (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v'))
+    environment:
+      name: pypi
+      url: https://pypi.org/p/astrologics
+    permissions:
+      id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
     
-#     steps:
-#     - name: Download build artifacts
-#       uses: actions/download-artifact@v3
-#       with:
-#         name: dist
-#         path: dist/
+    steps:
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: dist
+        path: dist/
     
-#     - name: Publish to PyPI
-#       uses: pypa/gh-action-pypi-publish@release/v1
-#       with:
-#         password: ${{ secrets.PYPI_API_TOKEN }}
+    - name: Publish to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        password: ${{ secrets.PYPI_TOKEN }}
