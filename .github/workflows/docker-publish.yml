@@ -10,7 +10,33 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build-and-push:
+  
+  publish_docker_hub:
+    name: Docker MaBoSS Server
+    runs-on: ubuntu-24.04
+    needs: [test_docker]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Cache Docker images.
+      uses: ScribeMD/docker-cache@0.5.0
+      with:
+        key: docker-${{ runner.os }}-${{ github.run_id }}
+
+    - name: Connect Docker Hub
+      run: |
+        echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+        
+    - name: Upload Docker Hub
+      run: | 
+          docker tag astrologics:latest astrologics:${{ github.event.release.tag_name }}
+          docker tag astrologics:latest sysbiocurie/astrologics:latest
+          docker tag astrologics:${{ github.event.release.tag_name }} sysbiocurie/astrologics:${{ github.event.release.tag_name }}
+          docker push sysbiocurie/astrologics:latest
+          docker push sysbiocurie/astrologics:${{ github.event.release.tag_name }}
+            
+  publish_docker_ghcr:
     runs-on: ubuntu-latest
     env:
         REGISTRY: ghcr.io
