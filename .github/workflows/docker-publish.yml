@@ -14,7 +14,6 @@ jobs:
   publish_docker_hub:
     name: Docker MaBoSS Server
     runs-on: ubuntu-24.04
-    needs: [test_docker]
     
     steps:
     - uses: actions/checkout@v4
