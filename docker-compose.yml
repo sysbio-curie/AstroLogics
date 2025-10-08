@@ -1,0 +1,15 @@
+#docker-compose.yml
+version: '3.3'
+services:
+
+  astrologics:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+
+    image: astrologics
+    container_name: astrologics
+    ports:
+      - "8888:8888"
+    restart: unless-stopped
+

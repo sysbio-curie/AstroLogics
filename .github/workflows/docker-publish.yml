@@ -12,17 +12,21 @@ env:
 jobs:
   
   publish_docker_hub:
-    name: Docker MaBoSS Server
+    name: Docker Astrologicss Server
     runs-on: ubuntu-24.04
     
     steps:
     - uses: actions/checkout@v4
     
-    - name: Cache Docker images.
-      uses: ScribeMD/docker-cache@0.5.0
-      with:
-        key: docker-${{ runner.os }}-${{ github.run_id }}
-
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install docker-compose
+    
+    - name: Build Astrologics docker 
+      run: |
+        docker-compose build astrologics
+    
     - name: Connect Docker Hub
       run: |
         echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
