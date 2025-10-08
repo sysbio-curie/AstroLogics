@@ -7,9 +7,14 @@ dependencies = [
     "numpy",
     "scipy",
     "scikit-learn",
+    "tslearn",
+    "fastcluster",
+    "tqdm",
     "maboss", 
     "boolsim", 
-    "mpbn"
+    "mpbn",
+    "seaborn",
+    "pystablemotifs"
 ]
 authors = [
   {name = "Saran Pankaew", email = "saran.pankeaw@curie.fr"},
