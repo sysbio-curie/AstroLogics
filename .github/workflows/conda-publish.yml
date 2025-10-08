@@ -102,6 +102,5 @@ jobs:
     - name: Upload to Anaconda Cloud
       shell: bash -l {0}
       run: |
-        anaconda login --token ${{ secrets.ANACONDA_TOKEN }}
-        anaconda upload conda-dist/noarch/*.conda --force
-        anaconda logout
+        anaconda upload -t ${{ secrets.ANACONDA_TOKEN }} -u colomoto conda-dist/noarch/*.conda --force
+        
