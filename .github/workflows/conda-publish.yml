@@ -63,7 +63,7 @@ jobs:
         path: conda-dist/
     
     - name: Debug with tmate
-      uses: mxschmitt/action-tmate@v3s
+      uses: mxschmitt/action-tmate@v3
           
     - name: Install and test package
       shell: bash -l {0}
