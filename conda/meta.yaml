@@ -12,11 +12,11 @@ build:
 
 requirements:
   build:
-    - python >3.8,<=3.12
+    - python
     - setuptools
 
   run:
-    - python >3.8,<=3.12
+    - python
     - pandas
     - h5py
     - numpy<=2.2
