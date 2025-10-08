@@ -1,4 +1,0 @@
-{
-    "path": "../Tutorial/02_Analysis_Herault_hematopoiesis.ipynb"
-}
-

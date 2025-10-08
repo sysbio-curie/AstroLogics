@@ -1,4 +1,0 @@
-{
-    "path": "../Tutorial/03_Analysis_InvasionModel.ipynb"
-}
-
