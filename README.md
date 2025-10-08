@@ -51,7 +51,7 @@ conda install -c colomoto astrologics
 #### From source
 First clone this directory:
 ```
-git clone https://https://github.com/saran-pankaew/AstroLogics
+git clone https://https://github.com/sysbio-curie/AstroLogics
 ```
 
 Then install AstroLogics with pip
@@ -66,7 +66,7 @@ Tutorials are available as Jupyter notebooks
 
 ### Run with Binder
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/saran-pankaew/AstroLogics/main?filepath=AstroLogics)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/sysbio-curie/AstroLogics/main?filepath=AstroLogics)
 
 
 ### Run locally with Docker
