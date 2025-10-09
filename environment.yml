@@ -3,7 +3,7 @@ channels:
   - conda-forge
   - colomoto
 dependencies:
-  - python=3.12
+  - python
   - astrologics
   - pandas
   - h5py
@@ -17,8 +17,6 @@ dependencies:
   - ipylab
   - pymaboss
   - boolsim-python 
-  - pystablemotifs
-  - pyboolnet
   - mpbn
   - pip
   - pip:
