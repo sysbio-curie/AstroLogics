@@ -1,4 +1,4 @@
-<img align="left" width="160" src="./doc/images/Logo_full.svg" />
+<img align="left" width="160" src="https://github.com/sysbio-curie/AstroLogics/raw/main/doc/images/Logo_full.svg" />
 
 # An analysis framework for monotonous Boolean model ensemble
 
@@ -15,7 +15,7 @@ Our framework includes two major processes
     - Features logical equation and identify key logical features between model clusters
 
 <p align="center">
-<img height="800" src="./doc/images/Figure2_Overview_framework.png" />
+<img height="800" src="https://github.com/sysbio-curie/AstroLogics/raw/main/doc/images/Figure2_Overview_framework.png" />
 <br>
 <em> Overview of the framework showing the two major processes in the framework. <strong>Dynamics</strong>: dynamical properties analysis. <strong>Logics</strong>: Logical function evaluation </em>
 </br>
@@ -84,11 +84,6 @@ conda env create --file environment.yml
 To activate it : 
 ```
 conda activate astrologics
-```
-
-Install AstroLogics: 
-```
-pip install .
 ```
 
 

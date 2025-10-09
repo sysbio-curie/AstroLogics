@@ -4,6 +4,7 @@ channels:
   - colomoto
 dependencies:
   - python=3.12
+  - astrologics
   - pandas
   - h5py
   - numpy<=2.2
