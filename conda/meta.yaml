@@ -12,11 +12,11 @@ build:
 
 requirements:
   build:
-    - python >3.8,<=3.12
+    - python >3.8
     - setuptools
 
   run:
-    - python >3.8,<=3.12
+    - python >3.8
     - pandas
     - h5py
     - numpy<=2.2
@@ -29,8 +29,6 @@ requirements:
     - ipylab
     - pymaboss
     - boolsim-python 
-    - pystablemotifs
-    - pyboolnet
     - mpbn
     - tqdm
     - pip

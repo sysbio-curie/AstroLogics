@@ -7,9 +7,6 @@ import seaborn as sns
 from scipy.cluster.hierarchy import linkage, fcluster
 from sklearn.manifold import MDS
 
-import pystablemotifs as sm
-from pyboolnet.file_exchange import bnet2primes
-import pystablemotifs.export as ex
 import networkx as nx
 
 class SuccessionDiagram:
@@ -27,26 +24,33 @@ class SuccessionDiagram:
         """
         Calculate the Succession Diagram of a Boolean network model from a given file.
         """
-        model_path = self.path
-        max_simulate_size = self.max_simulation_size
-        model_files = os.listdir(self.path)
-        
-        # Create a dictionary object to store models
-        models_net = {}
-        # Loop through the models
-        print('Calculating Succession Diagrams')
-        for i in tqdm(model_files): 
-            # Adjust model name
-            model_name = i.replace('.bnet','')
-            primes = bnet2primes(model_path + i)
-            ar = sm.AttractorRepertoire.from_primes(primes, max_simulate_size=max_simulate_size)
-            models_net[model_name]=ex.networkx_succession_diagram(ar,include_attractors_in_diagram=True)
-        
-        # Return the SD networks object
-        self.models_net = models_net
-        self.node_name = list(primes.keys())
-        print('Succession Diagrams calculated')
+        try:
+            from pyboolnet.file_exchange import bnet2primes
+            import pystablemotifs as sm
+            import pystablemotifs.export as ex
 
+            model_path = self.path
+            max_simulate_size = self.max_simulation_size
+            model_files = os.listdir(self.path)
+            
+            # Create a dictionary object to store models
+            models_net = {}
+            # Loop through the models
+            print('Calculating Succession Diagrams')
+            for i in tqdm(model_files): 
+                # Adjust model name
+                model_name = i.replace('.bnet','')
+                primes = bnet2primes(model_path + i)
+                ar = sm.AttractorRepertoire.from_primes(primes, max_simulate_size=max_simulate_size)
+                models_net[model_name]=ex.networkx_succession_diagram(ar,include_attractors_in_diagram=True)
+            
+            # Return the SD networks object
+            self.models_net = models_net
+            self.node_name = list(primes.keys())
+            print('Succession Diagrams calculated')
+        except ImportError:
+            print("pyboolnet and pystablemotifs libraries are not installed. Please install them to calculate the succession diagram.")
+            
     def calculate_sd_states(self):
         """
         Calculate the state distribution (SD) states for the given models.

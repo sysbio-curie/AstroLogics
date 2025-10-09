@@ -13,9 +13,7 @@ dependencies = [
     "maboss", 
     "boolsim", 
     "mpbn",
-    "seaborn",
-    "pyboolnet @ git+https://github.com/hklarner/pyboolnet#egg=3.0.16",
-    "pystablemotifs @ git+https://github.com/sysbio-curie/pystablemotifs#egg=master"
+    "seaborn"
 ]
 authors = [
   {name = "Saran Pankaew", email = "saran.pankeaw@curie.fr"},
