@@ -7,7 +7,7 @@ RUN apt-get -qq update \
     && apt clean -y \
     && rm -rf /var/lib/apt/lists/*
     
-RUN conda install -c colomoto -c vincent-noel astrologics
+RUN conda install -c colomoto astrologics
 RUN mkdir -p /notebook/AstroLogics/
 COPY Tutorial/ /notebook/AstroLogics/
 COPY models/ /notebook/models/
