@@ -1,4 +1,4 @@
-{% set name = "AstroLogics" %}
+{% set name = "astrologics" %}
 {% set version = "0.3.0" %}
 package:
   name: '{{ name|lower }}'

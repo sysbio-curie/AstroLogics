@@ -27,5 +27,6 @@ Our framework includes two major processes
    
    installation.rst
    tutorials.rst
+   api/modules.rst
 
 
