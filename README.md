@@ -13,6 +13,8 @@ Our framework includes two major processes
     - Calculated distance between models through probabilistic approxmition via [MaBoSS](https://github.com/sysbio-curie/MaBoSS).
 2. Logical function evaluation : 
     - Features logical equation and identify key logical features between model clusters
+3. Statistical analysis :
+    - Perform statistical analysis between model clusters to identify key logical featuers between clusters
 
 <p align="center">
 <img height="400" src="./doc/images/Figure_Overview_framework_version2.png" />
