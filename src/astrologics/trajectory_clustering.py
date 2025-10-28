@@ -21,7 +21,6 @@ from sklearn.manifold import MDS
 seed = 0
 np.random.seed(seed)
 
-
 class trajectory:
 
     def __init__(self, simulation_df, states_df=None):        
@@ -81,7 +80,23 @@ class trajectory:
     def calculate_distancematrix(self, 
                                  mode = ['endpoint', 'trajectory'],
                                  timepoint = None):
-        
+        """
+        Calculate the distance matrix for the simulation data.
+        Args:
+            mode (str): The mode of distance calculation. Options are 'endpoint' or 'trajectory'.
+                        'endpoint' calculates distance based on the last timepoint.
+                        'trajectory' calculates distance based on the entire trajectory using DTW.
+            timepoint (int, optional): The specific timepoint to consider for 'endpoint' mode.
+                                       If None, the maximum timepoint will be used.
+        Returns:
+            pd.DataFrame: A DataFrame representing the distance matrix between models.
+
+        Raises:
+            ValueError: If the mode is not 'endpoint' or 'trajectory'.
+        Note:
+            - For 'endpoint' mode, the distance is calculated using Euclidean distance at the specified timepoint.
+            - For 'trajectory' mode, the distance is calculated using Dynamic Time Warping (DTW) over the entire trajectory.
+        """
         # Extract the simulation DataFrame
         simulation_df = self.simulation_df
 
@@ -179,7 +194,18 @@ class trajectory:
     def calculate_kmean_cluster(self, 
                                 n_cluster, 
                                 random_state = 12345):
-
+        """
+        Calculate k-means clustering on the distance matrix.
+        Args:
+            n_cluster (int): The number of clusters to form.
+            random_state (int): Random seed for reproducibility. Default is 12345.
+        Returns:
+            None
+        Raises:
+            ValueError: If the distance matrix is not calculated yet.
+        Note:
+            - This method uses the pre-calculated distance matrix stored in self.distance_matrix.
+        """
         # Get the distance matrix
         distance_matrix = self.distance_matrix
 
@@ -195,7 +221,18 @@ class trajectory:
         print(f"Calculated k-means clustering with {n_cluster} clusters.")
     
     def calculate_MDS(self, random_state = 12345):
-        
+        """
+        Calculate MDS (Multidimensional Scaling) on the distance matrix.
+
+        Args:
+            random_state (int): Random seed for reproducibility. Default is 12345.
+        Returns:
+            None
+        Raises:
+            ValueError: If the distance matrix is not calculated yet.
+        Note:
+            - This method uses the pre-calculated distance matrix stored in self.distance_matrix.
+        """
         # Calculate the MDS coordinates
         distance_matrix = self.distance_matrix
         mds = MDS(dissimilarity='precomputed', random_state=random_state, n_init=4)
@@ -209,6 +246,23 @@ class trajectory:
     def plot_pca_trajectory(self, fig_size=(8,6), 
                     color='model_id', size=10,
                     plot_cluster = False, save_fig = False):
+        """
+        Plot PCA trajectory.
+        Args:
+            fig_size (tuple): Size of the figure.
+            color (str): Column name to color the points. Default is 'model_id'.
+            size (int): Size of the points. Default is 10.
+            plot_cluster (bool): Whether to plot clusters if k-means clustering has been calculated. Default is False.
+            save_fig (bool): Whether to save the figure as PNG and PDF files. Default is False.
+        Returns:
+            None
+        Raises:
+            None
+        Note:
+            - If plot_cluster is True, it will color the points based on the k-means clusters.
+            - Ensure that k-means clustering has been calculated before setting plot_cluster to True.
+        """
+        
         pca_df = self.pca_df
         
         # Adjust figure size
@@ -251,6 +305,18 @@ class trajectory:
         plt.close()
 
     def plot_model_distance_space(self, save_fig = False):
+
+        """
+        Plot the distance matrix as a clustermap.
+        Args:
+            save_fig (bool): Whether to save the figure as PNG and PDF files. Default is False.
+        Returns:
+            None
+        Raises:
+            None
+        Note:
+            - This method uses the pre-calculated distance matrix stored in self.distance_matrix.
+        """
         distance_matrix = self.distance_matrix
         
         # Plot Euclidean distance using clustermap
@@ -270,7 +336,22 @@ class trajectory:
     def plot_MDS(self, plot_cluster = False,
                  fig_size=(8, 6), alpha=0.5, s=50,
                  save_fig = False):
-
+        """
+        Plot the MDS projection.
+        Args:
+            plot_cluster (bool): Whether to plot clusters if k-means clustering has been calculated. Default is False.
+            fig_size (tuple): Size of the figure.
+            alpha (float): Transparency level of the points. Default is 0.5.
+            s (int): Size of the points. Default is 50.
+            save_fig (bool): Whether to save the figure as PNG and PDF files. Default is False.
+        Returns:
+            None
+        Raises:
+            None
+        Note:
+            - If plot_cluster is True, it will color the points based on the k-means clusters.
+            - Ensure that k-means clustering has been calculated before setting plot_cluster to True.
+        """
         coords = self.mds_coords
         plt.figure(figsize=fig_size)
         if plot_cluster:
@@ -292,6 +373,18 @@ class trajectory:
         plt.show()
 
     def plot_trajectory_variance(self, fig_size=(15, 7), save_fig = False):
+        """
+        Plot the variance of gene expression over time.
+        Args:
+            fig_size (tuple): Size of the figure.
+            save_fig (bool): Whether to save the figure as PNG and PDF files. Default is False.
+        Returns:
+            None
+        Raises:
+            None
+        Note:
+            - This method calculates the variance of each gene at each timepoint and visualizes it using a clustermap.
+        """
         # Assuming `model_mtx` is your DataFrame with genes as columns and 'timepoint' as one of the columns
         model_mtx = self.simulation_df
 
@@ -313,7 +406,22 @@ class trajectory:
                              fig_height = 4,
                              n_timesteps = 20,
                              save_fig = False):
-        
+        """
+        Plot the gene expression trajectories for a specific node.
+        Args:
+            node (list): List of gene names to plot.
+            fig_width (float): Width of each subplot. Default is 4.
+            fig_height (float): Height of each subplot. Default is 4.
+            n_timesteps (int): Number of timepoints to consider. Default is 20.
+            save_fig (bool): Whether to save the figure as PNG and PDF files. Default is
+        Returns:
+            None
+        Raises:
+            ValueError: If the cluster_dict is not found when plot_cluster is True.
+        Note:
+            - This method visualizes the trajectories of specified genes over time, grouped by k-means clusters if available.
+
+        """
         # Setup the gene list
         selected_genes = node
         num_timesteps = n_timesteps

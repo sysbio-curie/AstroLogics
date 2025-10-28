@@ -280,7 +280,9 @@ class logic:
         print('Flattend logic clause created')
 
     def map_model_clusters(self, cluster):
-
+        """
+        Maps model names to their respective clusters and computes the logic length for each cluster.
+        """
         # Map model names to their clusters
         self.cluster_dict = cluster
         model_cluster = pd.Series(cluster, name='cluster')
@@ -369,7 +371,17 @@ class logic:
         self.pval_threshold = pval_threshold
 
     def plot_manhattan(self, fig_size=(10, 5), show_label = False, save_fig = False):
-
+        """
+        Plot a Manhattan plot of the chi-square test results.
+        Args:
+            fig_size (tuple): Size of the figure.
+            show_label (bool): Whether to show feature labels on the plot.
+            save_fig (bool): Whether to save the figure as PNG and PDF files.
+        Returns:
+            None
+        Raises:
+            None  
+        """
         plt.figure(figsize=fig_size)
         stat_logic_df = self.stat_logic_df
         stat_logic_df['-log10_p'] = -np.log10(self.stat_logic_df['p_value'])
@@ -404,7 +416,16 @@ class logic:
         plt.close()
 
     def plot_logicstat_summary(self, fig_size=(12, 7), save_fig = False):
-
+        """
+        Plot a summary of logic statistics with two subplots: number of possible logics and number of clauses.
+        Args:
+            fig_size (tuple): Size of the figure.
+            save_fig (bool): Whether to save the figure as PNG and PDF files.
+        Returns:
+            None
+        Raises:
+            None
+        """
         encoded_df = self.encoded_df
         sorted_var_logic_length = encoded_df.max().sort_values() + 1
         # Create a figure with two subplots sharing the x-axis
@@ -470,7 +491,19 @@ class logic:
     def plot_node_logic_heatmap(self, 
                                 node, 
                                 fig_size=(10, 8), save_fig = False):       
-        
+        """
+        Plot a heatmap of logic clauses for a specific node.
+
+        Args:
+            node (str): The node to plot.
+            fig_size (tuple): Size of the figure.
+            save_fig (bool): Whether to save the figure as PNG and PDF files.
+
+        Returns:
+            None
+        Raises:
+            None
+        """
         # Load the logic statistics DataFrame 
         stat_logic_df = self.stat_logic_df
         selected_features = stat_logic_df.loc[(stat_logic_df['Node'].isin(node))].index

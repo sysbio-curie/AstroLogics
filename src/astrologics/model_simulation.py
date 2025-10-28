@@ -185,6 +185,23 @@ class simulation:
         print('Simulation completed')
 
     def run_states_simulation(self, output_nodes = None, initial_state = None, mutation = None):
+        """
+        Run MaBoSS simulations for a list of models and store the state results.
+        
+        Parameters:
+        output_nodes (list, optional): List of nodes to set as output for the simulation. 
+                                       If None, all nodes will be set as output. Default is None.
+        
+        Returns:
+        None: The results of the simulations are stored in the `self.states_df` attribute.
+        
+        The function performs the following steps:
+        1. Simulation results object
+        2. Path to the model files
+        3. List of models to simulate
+        4. Start simulation
+        
+        """
         # Simulation results object
         ensemble_results = {}
         path = self.path

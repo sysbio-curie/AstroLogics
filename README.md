@@ -15,9 +15,11 @@ Our framework includes two major processes
     - Features logical equation and identify key logical features between model clusters
 
 <p align="center">
-<img height="800" src="https://github.com/sysbio-curie/AstroLogics/raw/main/doc/images/Figure2_Overview_framework.png" />
+<img height="400" src="./doc/images/Figure_Overview_framework_version2.png" />
 <br>
-<em> Overview of the framework showing the two major processes in the framework. <strong>Dynamics</strong>: dynamical properties analysis. <strong>Logics</strong>: Logical function evaluation </em>
+<em> Overview of the framework showing the two major processes in the framework. <strong>Dynamics</strong>: dynamical properties analysis. <strong>Logics</strong>: Logical function evaluation 
+<strong>Statistics</strong>: statistical framework to link model's logic with statistics.
+</em>
 </br>
 </p>
 
