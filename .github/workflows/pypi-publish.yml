@@ -2,8 +2,6 @@ name: Build and Publish to PyPI
 
 on:
   push:
-    tags:
-      - 'v*'
     branches:
       - main
   release:
@@ -72,7 +70,7 @@ jobs:
   publish:
     needs: [build, test-install]
     runs-on: ubuntu-latest
-    if: github.event_name == 'release' || (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v'))
+    if: github.event_name == 'release'
     environment:
       name: pypi
       url: https://pypi.org/p/astrologics
