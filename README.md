@@ -17,7 +17,7 @@ Our framework includes two major processes
     - Perform statistical analysis between model clusters to identify key logical featuers between clusters
 
 <p align="center">
-<img height="400" src="./doc/images/Figure_Overview_framework_version2.png" />
+<img height="400" src="./doc/images/Figure_Overview_framework.jpeg" />
 <br>
 <em> Overview of the framework showing the two major processes in the framework. <strong>Dynamics</strong>: dynamical properties analysis. <strong>Logics</strong>: Logical function evaluation 
 <strong>Statistics</strong>: statistical framework to link model's logic with statistics.
@@ -102,4 +102,6 @@ Our documentation is available on [ReadTheDocs](https://astrologics.readthedocs.
 
 
 ## Citing AstroLogics
-Coming soon
+The manuscript of AstroLogics has been submitted. 
+In the mean time, the pre-print version can be found at https://www.biorxiv.org/content/10.1101/2025.11.17.688236v1
+
