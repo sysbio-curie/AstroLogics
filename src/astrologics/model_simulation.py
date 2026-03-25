@@ -135,8 +135,12 @@ class simulation:
             simulations.param = self.param
 
             # Set the initial condition
+            node_names = simulations.network.names
+            if initial_state is None:
+                for i in node_names:
+                    simulations.network.set_istate(i, [0.5, 0.5])
+                    
             if initial_state is not None:
-                node_names = simulations.network.names
                 assigned_node = list(initial_state.keys())
                 unassigned_node = list(set(node_names) - set(assigned_node))
 
