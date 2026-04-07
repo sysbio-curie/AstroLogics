@@ -146,50 +146,25 @@ class trajectory:
         self.distance_matrix = distance_matrix
         print("Distance matrix calculated successfully.")
         
-    # This script needs to be optimized more....    
-    # def optimize_cluster(self,data = 'pca', n_cluster = 15, method = 'euclidean'):
-    #     # Setup the variables
-    #     pca_df = self.pca_df
-    #     pca_df.model_id = pca_df.model_id.astype('category')
-    #     model_name = pca_df.model_id.cat.categories
+    def cluster_elbow_plot(self, n_cluster = 15, random_state = 12345):
+        # Setup the variables
+        distance_matrix = self.distance_matrix
 
-    #     simulation_df = self.simulation_df
-    #     simulation_df.model_id = simulation_df.model_id.astype('category')
-        
-    #     model_name = pca_df.model_id.cat.categories
-    #     model_pca_all = {}
+        # Calculate the optimal number of clusters
+        distortions = []
+        K = range(1, n_cluster)
 
-    #     node_list = self.node_list
+        # For loop to calculate the kmean distance
+        for k in tqdm(K):
+            kmeans = KMeans(n_clusters= k, random_state=random_state)
+            kmeans.fit(distance_matrix)
+            distortions.append(kmeans.inertia_)
 
-    #     if data == 'pca':
-    #         model_pca_all = {}
-    #         for i in model_name:
-    #             model_pca = pca_df.loc[pca_df.model_id == i,['pc1','pc2']].values
-    #             model_pca_all[i] = np.array(model_pca)
-    #         pca_all_trajectory = np.array(list(model_pca_all.values()))
-
-    #     elif data == 'original':
-    #         model_original_all = {}
-    #         for i in model_name:
-    #             model_original = simulation_df.loc[simulation_df.model_id == i,node_list].values
-    #             model_original_all[i] = np.array(model_original)
-    #         pca_all_trajectory = np.array(list(model_original_all.values()))   
-
-    #     # Calculate the optimal number of clusters
-    #     distortions = []
-    #     K = range(1, n_cluster)
-
-    #     # For loop to calculate inertia for each k
-    #     for k in tqdm(K):
-    #         tsmodel = TimeSeriesKMeans(n_clusters=k, metric= method, random_state=0, verbose = False)
-    #         tsmodel.fit(pca_all_trajectory)
-    #         distortions.append(tsmodel.inertia_)
-
-    #     plt.plot(K, distortions, 'bx-')
-    #     plt.xlabel('k')
-    #     plt.ylabel('Inertia')
-    #     plt.title('Elbow Method For Optimal k')
-    #     plt.show()
+        plt.plot(K, distortions, 'bx-')
+        plt.xlabel('k')
+        plt.ylabel('Inertia')
+        plt.title('Elbow Method For Optimal k')
+        plt.show()
     
     def calculate_kmean_cluster(self, 
                                 n_cluster, 
