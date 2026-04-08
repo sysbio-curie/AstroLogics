@@ -1,15 +1,14 @@
 import pandas as pd 
 import os
-os.chdir('/home/spankaew/Git/astrologics')
 import sys
-sys.path.append('/home/spankaew/Git/astrologics/')
-import astrologics as le
+sys.path.append('/home/spankaew/Git/Git_Curie/AstroLogics/src')
+import astrologics as ast
 import numpy as np
 
-path_to_model = '/home/spankaew/Git/astrologics/models/selected_BNs/'
-path_to_file = '/home/spankaew/Git/astrologics/data/attractor_group/'
+os.chdir('/home/spankaew/Git/Git_Curie/AstroLogics')
+path_to_model = '/home/spankaew/Git/Git_Curie/AstroLogics/models/selected_BNs/'
+path_to_file = '/home/spankaew/Git/Git_Curie/AstroLogics/data/attractor_group/'
 model_list = os.listdir(path_to_model)
-#model_list = ['Mammalian Cell Cycle_19118495']
 
 def gini(array):
     """Calculate Gini coefficient of array of values."""
@@ -23,7 +22,7 @@ for project_name in model_list:
     print(f'Processing project: {project_name}')
     # Load the model
     model_path = path_to_model + project_name +'/'
-    model = le.LogicEnsemble(model_path, project_name = project_name)
+    model = ast.LogicEnsemble(model_path, project_name = project_name)
     model.create_simulation()
 
     # Check if the project_name folder already exists in path_to_results
