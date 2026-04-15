@@ -10,11 +10,11 @@ AstroLogics is a Python package designed for analysing monotonous Boolean model 
 
 Our framework includes two major processes 
 1. Dynamical properties analysis : 
-    - Calculated distance between models through probabilistic approxmition via [MaBoSS](https://github.com/sysbio-curie/MaBoSS).
+    - Calculate distance between models through probabilistic approximation via [MaBoSS](https://github.com/sysbio-curie/MaBoSS).
 2. Logical function evaluation : 
-    - Features logical equation and identify key logical features between model clusters
+    - Feature logical equations and identify key logical features between model clusters
 3. Statistical analysis :
-    - Perform statistical analysis between model clusters to identify key logical featuers between clusters
+    - Perform statistical analysis between model clusters to identify key logical features between clusters
 
 <p align="center">
 <img height="400" src="./doc/images/Figure_Overview_framework.jpeg" />
@@ -40,29 +40,35 @@ Our framework includes two major processes
 
 There are several ways to install AstroLogics
 
-
 #### PyPi
 
 ```
+
 pip install astrologics
+
 ```
 
 #### Conda
 ```
+
 conda install -c colomoto astrologics
+
 ```
 
 #### From source
 First clone this directory:
 ```
-git clone https://https://github.com/sysbio-curie/AstroLogics
+
+git clone https://github.com/sysbio-curie/AstroLogics
+
 ```
 
 Then install AstroLogics with pip
 ```
-pip install AstroLogics
-```
 
+pip install AstroLogics
+
+```
 
 ## Tutorials
 
@@ -72,36 +78,40 @@ Tutorials are available as Jupyter notebooks
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/sysbio-curie/AstroLogics/main?filepath=AstroLogics)
 
-
 ### Run locally with Docker
 To run this notebook using the built docker image, run : 
 ```
+
 docker run -p 8888:8888 -d sysbiocurie/astrologics
+
 ```
 
 ### Run locally with Conda
 Creating the conda environment
 ```
+
 conda env create --file environment.yml
+
 ```
 
 To activate it : 
 ```
-conda activate astrologics
-```
 
+conda activate astrologics
+
+```
 
 To run the notebook: 
+
 ```
 jupyter-lab
+
 ```
 
 ## Documentation
 
 Our documentation is available on [ReadTheDocs](https://astrologics.readthedocs.io/)
 
-
 ## Citing AstroLogics
 The manuscript of AstroLogics has been submitted. 
 In the mean time, the pre-print version can be found at https://www.biorxiv.org/content/10.1101/2025.11.17.688236v1
-
