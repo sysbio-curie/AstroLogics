@@ -26,15 +26,29 @@ def calculate_attractors(file):
         bn = BooleanNetwork.load(file)
         a = boolsim.attractors(bn, update_mode='asynchronous')
         
-        # Make sure a has all the columns based on the model
-        for i in range(len(a)):
-            for key in bn.keys():
-                if key not in a[i]:
-                    a[i][key] = 0
-            a[i] = {k: a[i][k] for k in bn.keys()}
+        # Process attractors: handle both plain dicts and HypercubeCollections (cyclic attractors)
+        binary_strings = []
+        for attractor in a:
+            if isinstance(attractor, dict):
+                # Single steady state: fill missing keys with 0 and order by bn.keys()
+                for key in bn.keys():
+                    if key not in attractor:
+                        attractor[key] = 0
+                attractor = {k: attractor[k] for k in bn.keys()}
+                binary_strings.append(''.join(str(attractor[k]) for k in bn.keys()))
+            else:
+                # HypercubeCollection (cyclic attractor): join each state string with ' + '
+                parts = []
+                for sub_dict in attractor:
+                    sub_dict = dict(sub_dict)
+                    for key in bn.keys():
+                        if key not in sub_dict:
+                            sub_dict[key] = 0
+                    sub_dict = {k: sub_dict[k] for k in bn.keys()}
+                    parts.append(''.join(str(sub_dict[k]) for k in bn.keys()))
+                binary_strings.append(' + '.join(parts))
 
         # Convert each dictionary in the list to a string of binary values
-        binary_strings = [''.join(str(value) for value in attractor.values()) for attractor in a]
         attractors = pd.DataFrame([binary_strings],columns=binary_strings)
         attractors[:]=1
         attractors.index = [file.replace('.bnet', '')]
