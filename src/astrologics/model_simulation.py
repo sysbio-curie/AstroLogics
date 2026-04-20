@@ -3,6 +3,7 @@ from tqdm.auto import tqdm
 import collections
 import os
 import pandas as pd
+import numpy as np
 
 """
 This script is used to simulate the model with the given parameter set.
@@ -54,6 +55,61 @@ class simulation:
         self.mutations = {}
         self.mutationTypes = {}
         self.refstate = {}
+
+    def _run_single_model_probtraj(self, model_file, output_nodes=None, initial_state=None, mutation=None, sample_count=None, seed=None):
+        """
+        Run one MaBoSS simulation and return node probability trajectories.
+
+        Parameters:
+        model_file (str): Name of the model file.
+        output_nodes (list, optional): List of output nodes.
+        initial_state (dict, optional): Initial condition for selected nodes.
+        mutation (str, optional): Mutation condition name stored in ``self.mutations``.
+        sample_count (int, optional): Override value for ``sample_count``.
+        seed (int, optional): Override value for ``seed_pseudorandom``.
+
+        Returns:
+        pandas.DataFrame: Node probability trajectories.
+        """
+
+        model_path = os.path.join(self.path, model_file)
+        simulations = maboss.loadBNet(model_path)
+
+        # Setup simulation parameters
+        simulations.param = self.param.copy()
+        if sample_count is not None:
+            simulations.param['sample_count'] = int(sample_count)
+        if seed is not None:
+            simulations.param['seed_pseudorandom'] = int(seed)
+
+        # Set the initial condition
+        node_names = simulations.network.names
+        if initial_state is None:
+            for i in node_names:
+                simulations.network.set_istate(i, [0.5, 0.5])
+        else:
+            assigned_node = list(initial_state.keys())
+            unassigned_node = list(set(node_names) - set(assigned_node))
+
+            for i in assigned_node:
+                simulations.network.set_istate(i, [1 - initial_state[i], initial_state[i]])
+
+            for i in unassigned_node:
+                simulations.network.set_istate(i, [0.5, 0.5])
+
+        # Set the mutation condition
+        if mutation is not None:
+            condition = self.mutations[mutation]
+            simulations.mutate(condition[0], condition[1])
+
+        # Set simulation outputs
+        if output_nodes is not None:
+            simulations.network.set_output(output_nodes)
+        else:
+            simulations.network.set_output(simulations.network.names)
+
+        result = simulations.run()
+        return result.get_nodes_probtraj().copy()
         
     def update_parameters(self, **kwargs):
         """
@@ -270,3 +326,177 @@ class simulation:
         # Save the simulation to the object
         self.states_df = states_df
         print('Simulation completed : object states_df has been created')
+
+    def analyze_sample_count_convergence(
+        self,
+        sample_counts=None,
+        n_replicates=3,
+        tolerance=0.01,
+        output_nodes=None,
+        initial_state=None,
+        mutation=None,
+        model_subset=15,
+        metric='mean_std',
+        progress=True
+    ):
+        """
+        Analyze convergence of MaBoSS simulations as a function of ``sample_count``.
+
+        This method runs repeated simulations for each tested ``sample_count`` and
+        quantifies variability of final node probabilities across replicates.
+        The smallest ``sample_count`` satisfying ``metric <= tolerance`` is selected
+        as the recommended value.
+
+        Parameters:
+        sample_counts (list, optional): Values of ``sample_count`` to test.
+            Defaults to ``[100, 250, 500, 1000, 2500, 5000]``.
+        n_replicates (int, optional): Number of repeated simulations per
+            ``sample_count``. Defaults to 5.
+        tolerance (float, optional): Threshold used to recommend an optimal
+            ``sample_count``. Defaults to 0.01.
+        output_nodes (list, optional): Nodes used as simulation outputs.
+            If ``None``, all nodes are used.
+        initial_state (dict, optional): Initial condition for selected nodes.
+        mutation (str, optional): Name of a mutation condition already stored in
+            ``self.mutations``.
+        model_subset (int or list, optional):
+            - ``None``: use all models in ``self.path``.
+            - ``int``: use the first N models.
+            - ``list``: use the provided list of model filenames.
+        metric (str, optional): Summary metric used for recommendation.
+            Supported: ``'mean_std'``, ``'median_std'``, ``'max_std'``, ``'p95_std'``.
+        progress (bool, optional): Display progress bars. Defaults to True.
+
+        Returns:
+        dict: Dictionary with keys:
+            - ``recommended_sample_count``
+            - ``summary`` (DataFrame, per-sample_count convergence metrics)
+            - ``node_statistics`` (DataFrame, per-node variability metrics)
+            - ``raw`` (DataFrame, replicate-level probabilities)
+
+        Notes:
+        - The method stores results in:
+            ``self.convergence_raw_df``, ``self.convergence_node_stats_df``,
+            ``self.convergence_summary_df``, and ``self.recommended_sample_count``.
+        - If no tested value satisfies ``tolerance``, the largest tested
+          ``sample_count`` is returned as recommendation.
+        """
+
+        if sample_counts is None:
+            sample_counts = [100, 250, 500, 1000, 2500, 5000]
+
+        sample_counts = sorted({int(x) for x in sample_counts if int(x) > 0})
+        if len(sample_counts) == 0:
+            raise ValueError("`sample_counts` must contain at least one positive integer.")
+
+        if n_replicates < 2:
+            raise ValueError("`n_replicates` must be >= 2 to estimate convergence variability.")
+
+        model_list = sorted([m for m in os.listdir(self.path) if m.endswith('.bnet')])
+        if len(model_list) == 0:
+            raise ValueError(f"No .bnet model files found in '{self.path}'.")
+
+        if isinstance(model_subset, int):
+            if model_subset <= 0:
+                raise ValueError("`model_subset` as int must be > 0.")
+            model_list = model_list[:model_subset]
+        elif model_subset is not None:
+            model_subset = set(model_subset)
+            model_list = [m for m in model_list if m in model_subset]
+            if len(model_list) == 0:
+                raise ValueError("`model_subset` does not match any .bnet file in model path.")
+
+        supported_metrics = {'mean_std', 'median_std', 'max_std', 'p95_std'}
+        if metric not in supported_metrics:
+            raise ValueError(f"Unsupported metric '{metric}'. Supported metrics: {sorted(supported_metrics)}")
+
+        raw_records = []
+        outer_iterator = sample_counts
+        if progress:
+            outer_iterator = tqdm(sample_counts, desc='Convergence analysis', leave=True)
+
+        original_sample_count = self.param.get('sample_count', None)
+        original_seed = self.param.get('seed_pseudorandom', None)
+
+        try:
+            for sc in outer_iterator:
+                for rep in range(n_replicates):
+                    seed = rep + 1
+                    inner_iterator = model_list
+                    if progress:
+                        inner_iterator = tqdm(model_list, desc=f'sample_count={sc}, rep={rep + 1}/{n_replicates}', leave=False)
+
+                    for model_file in inner_iterator:
+                        model_id = model_file.replace('.bnet', '')
+                        probtraj = self._run_single_model_probtraj(
+                            model_file=model_file,
+                            output_nodes=output_nodes,
+                            initial_state=initial_state,
+                            mutation=mutation,
+                            sample_count=sc,
+                            seed=seed
+                        )
+
+                        final_state = probtraj.iloc[-1]
+                        for node, value in final_state.items():
+                            if pd.notna(value):
+                                raw_records.append({
+                                    'sample_count': int(sc),
+                                    'replicate': int(rep + 1),
+                                    'model_id': model_id,
+                                    'node': node,
+                                    'probability': float(value)
+                                })
+        finally:
+            if original_sample_count is not None:
+                self.param['sample_count'] = original_sample_count
+            if original_seed is not None:
+                self.param['seed_pseudorandom'] = original_seed
+
+        if len(raw_records) == 0:
+            raise RuntimeError('No simulation results were collected during convergence analysis.')
+
+        raw_df = pd.DataFrame(raw_records)
+
+        node_stats_df = (
+            raw_df
+            .groupby(['sample_count', 'model_id', 'node'], as_index=False)['probability']
+            .agg(
+                mean_probability='mean',
+                std_probability='std',
+                min_probability='min',
+                max_probability='max'
+            )
+            .fillna(0.0)
+        )
+
+        summary_df = (
+            node_stats_df
+            .groupby('sample_count', as_index=False)['std_probability']
+            .agg(
+                mean_std='mean',
+                median_std='median',
+                max_std='max',
+                p95_std=lambda x: float(np.percentile(x, 95))
+            )
+            .sort_values('sample_count')
+            .reset_index(drop=True)
+        )
+
+        recommended_sample_count = int(summary_df['sample_count'].max())
+        if tolerance is not None:
+            valid = summary_df[summary_df[metric] <= tolerance]
+            if len(valid) > 0:
+                recommended_sample_count = int(valid['sample_count'].iloc[0])
+
+        self.convergence_raw_df = raw_df
+        self.convergence_node_stats_df = node_stats_df
+        self.convergence_summary_df = summary_df
+        self.recommended_sample_count = recommended_sample_count
+
+        return {
+            'recommended_sample_count': recommended_sample_count,
+            'summary': summary_df,
+            'node_statistics': node_stats_df,
+            'raw': raw_df
+        }
