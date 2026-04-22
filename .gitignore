@@ -14,3 +14,6 @@ inferred_model_archive/
 
 # Attractor data - too big for GitHub
 data/attractor_group/calculated_attractor/BT474 Breast Cell Line Long-term ErbB Network_24970389_attractors.csv
+
+# Simulation data - too big for GitHub
+data/simulation_files/Signaling in Macrophage Activation_18433497_simulation.csv
