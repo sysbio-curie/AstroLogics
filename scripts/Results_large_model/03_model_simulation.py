@@ -3,20 +3,20 @@ import numpy as np
 import os
 
 import sys
-sys.path.append('/home/spankaew/Git/Git_Curie/AstroLogics/src')
+sys.path.append('../../src')
 import astrologics as ast
 
 ## SETTING UP THE PATHS AND IMPORTS ##
 
 # Set the working directory
-os.chdir('/home/spankaew/Git/Git_Curie/AstroLogics')
+os.chdir('../../')
 
 # Set the path to the models
-path_to_model = '/home/spankaew/Git/Git_Curie/AstroLogics/inferred_big_model/'
+path_to_model = './inferred_big_model/'
 model_list = os.listdir(path_to_model)
 
 # Set the path to simulations
-path_to_simulations = '/home/spankaew/Git/Git_Curie/AstroLogics/data/simulation_files/'
+path_to_simulations = './data/simulation_files/'
 ## MODELS SIMULATIONS ##
 
 # For loop to run the simulation

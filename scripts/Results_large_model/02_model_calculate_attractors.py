@@ -1,13 +1,13 @@
 import pandas as pd 
 import os
 import sys
-sys.path.append('/home/spankaew/Git/Git_Curie/AstroLogics/src')
+sys.path.append('../../src')
 import astrologics as ast
 import numpy as np
 
-os.chdir('/home/spankaew/Git/Git_Curie/AstroLogics')
-path_to_model = '/home/spankaew/Git/Git_Curie/AstroLogics/inferred_big_model/'
-path_to_file = '/home/spankaew/Git/Git_Curie/AstroLogics/data/attractor_group/'
+os.chdir('../../')
+path_to_model = './inferred_big_model/'
+path_to_file = './data/attractor_group/'
 model_list = os.listdir(path_to_model)
 
 def gini(array):

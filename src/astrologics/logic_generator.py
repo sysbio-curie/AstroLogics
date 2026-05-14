@@ -1,12 +1,11 @@
 import mpbn
 import bonesis
-import sys
-import os
-import shutil
+import os, shutil
 from tqdm.auto import tqdm
 import multiprocessing as mp
 import time
-import re
+from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
 
 def bonesis_ensemble_from_sif(file,
                               limit=1000,
@@ -91,62 +90,21 @@ def bonesis_ensemble_from_single_bn(bn, limit=1000,
 
     return list(view)
 
-def write_solution_file(index, solution, previous):
-    """
-    Persist a single Boolean network solution to disk.
+def write_solution_file(index, solution, outdir: Path):
+    filename = outdir / f"bn_{index}.bnet"
+    with open(filename, "w") as f:
+        f.write(solution.source())
 
-    Args:
-        index (int): Sequential identifier used to name the output file.
-        solution (mpbn.MPBooleanNetwork): Boolean network instance to serialize.
-        previous (syncmanager.ListProxy): Shared list tracking completed file indices.
+def write_bn_files(solutions, path, project_name, num_workers=15):
+    base = Path(path) if path is not None else Path.cwd()
+    outdir = base / project_name
 
-    Returns:
-        None
-    """
-    filename = f"bn_{index}.bnet"
-    with open(filename, "w") as file:
-        file.write(solution.source())
-    previous.append(index)
+    if outdir.exists():
+        shutil.rmtree(outdir)
+    outdir.mkdir(parents=True, exist_ok=True)
 
-def write_bn_files(solutions,
-                   path,
-                   project_name,
-                   num_processes = 15):
-    """
-    Persist an ensemble of Boolean networks to .bnet files using multiprocessing.
+    def _task(i):
+        write_solution_file(i, solutions[i], outdir)
 
-    Args:
-        solutions (Sequence[mpbn.MPBooleanNetwork]): Boolean networks to export.
-        path (Optional[str]): Directory in which the project folder will be created.
-        project_name (str): Name of the directory that will contain generated files.
-        num_processes (int): Maximum number of concurrent writer processes.
-
-    Returns:
-        None
-    """
-    # Multiprocessing arg
-    manager=mp.Manager()
-    previous=manager.list()
-    processes=[]
-    
-    # If path is defined
-    if path is not None:
-        os.chdir(path)
-    
-    # Make project directory (remove if exists)
-    if os.path.exists(project_name):
-        shutil.rmtree(project_name)
-    os.mkdir(project_name)
-    os.chdir(project_name)
-
-    # For loop to write bnet files
-    for i in tqdm(range(len(solutions))):
-        solution = solutions[i]
-        while len(previous)<i-(num_processes-1):
-            time.sleep(1)
-        p = mp.Process(target = write_solution_file, 
-                        args = (i,solution,previous))
-        p.start()
-        processes.append(p)
-    for process in processes:
-        process.join()
+    with ThreadPoolExecutor(max_workers=num_workers) as ex:
+        list(tqdm(ex.map(_task, range(len(solutions))), total=len(solutions)))

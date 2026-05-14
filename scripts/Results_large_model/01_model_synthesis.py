@@ -85,17 +85,17 @@ def write_bn_files(solutions, project_name, num_processes = 15):
 ###################################################################
 
 # Define path and model list
-os.chdir(path = '/home/spankaew/Git/Git_Curie/AstroLogics/models/test_bigmodel/')
+os.chdir(path = '../../models/test_bigmodel/')
 # Create a list of models based on all .bnet files in the folder (without '.bnet')
 model_files = [f for f in os.listdir() if f.endswith('.bnet')]
 model_list = [os.path.splitext(f)[0] for f in model_files]
 
 # Define the path to save the generated models
-path_to_results = "/home/spankaew/Git/Git_Curie/AstroLogics/inferred_big_model/"
+path_to_results = "./inferred_big_model/"
 
 # Create a for loop to iterate through each model in the model list
 for i in model_list:
-    os.chdir(path = '/home/spankaew/Git/Git_Curie/AstroLogics/models/test_bigmodel/')
+    os.chdir(path = '../../models/test_bigmodel/')
     project_name = i
     model_path = project_name + '.bnet'
     
