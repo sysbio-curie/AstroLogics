@@ -7,9 +7,7 @@ import seaborn as sns
 from scipy.cluster.hierarchy import linkage, fcluster
 from sklearn.manifold import MDS
 
-import pystablemotifs as sm
-from pyboolnet.file_exchange import bnet2primes
-import pystablemotifs.export as ex
+import biobalm
 import networkx as nx
 
 class SuccessionDiagram:
@@ -22,7 +20,7 @@ class SuccessionDiagram:
         """
         self.path = model_path
         
-    def calculate_succession_diagram(self, max_simulation_size = 10000):
+    def calculate_succession_diagram(self):
         """
         Calculate the Succession Diagram of a Boolean network model from a given file.
         """
@@ -36,13 +34,12 @@ class SuccessionDiagram:
         for i in tqdm(model_files): 
             # Adjust model name
             model_name = i.replace('.bnet','')
-            primes = bnet2primes(model_path + i)
-            ar = sm.AttractorRepertoire.from_primes(primes, max_simulate_size=max_simulation_size)
-            models_net[model_name]=ex.networkx_succession_diagram(ar,include_attractors_in_diagram=True)
+            model = biobalm.SuccessionDiagram.from_file(os.path.join(model_path, i))
+            model.build()
+            models_net[model_name]=model.dag
         
         # Return the SD networks object
         self.models_net = models_net
-        self.node_name = list(primes.keys())
         print('Succession Diagrams calculated')
 
     def calculate_sd_states(self):
