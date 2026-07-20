@@ -1,12 +1,15 @@
 <img align="left" width="160" src="https://github.com/sysbio-curie/AstroLogics/raw/main/doc/images/Logo_full.svg" />
 
 # An analysis framework for monotonous Boolean model ensemble
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21460314.svg)](https://doi.org/10.5281/zenodo.21460314)[![PyPI](https://img.shields.io/pypi/v/astrologics.svg)](https://pypi.org/project/astrologics/)[![Conda](https://img.shields.io/conda/vn/colomoto/astrologics.svg)](https://anaconda.org/colomoto/astrologics/)
+
 
 This is a repository of data, code and analyses of AstroLogics framework.
 A step-by step tutorial can be found in the folder tutorial. Please have a look at our [tutorials](https://astrologics.readthedocs.io/en/latest/tutorials.html). 
 
 ## Overview
 AstroLogics is a Python package designed for analysing monotonous Boolean model ensemble, a product of Boolean model synthesis from method such as [Bonesis](https://bnediction.github.io/bonesis/index.html).
+
 
 Our framework includes two major processes 
 1. Dynamical properties analysis : 

@@ -17,3 +17,6 @@ data/attractor_group/calculated_attractor/BT474 Breast Cell Line Long-term ErbB 
 
 # Simulation data - too big for GitHub
 data/simulation_files/Signaling in Macrophage Activation_18433497_simulation.csv
+
+# The archive file
+AstroLogics.zip
