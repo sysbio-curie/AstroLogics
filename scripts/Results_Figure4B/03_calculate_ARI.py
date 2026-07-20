@@ -3,7 +3,7 @@ import numpy as np
 import os
 
 import sys
-sys.path.append('/home/spankaew/Git/Git_Curie/AstroLogics/src')
+sys.path.append('../../src')
 import astrologics as le
 from tqdm import tqdm
 from sklearn.metrics import adjusted_rand_score
@@ -41,10 +41,10 @@ def calculate_total_distancematrix(simulation_df):
 ## SETTING UP THE PATHS AND IMPORTS ##
 
 # Set the working directory
-os.chdir('/home/spankaew/Git/Git_Curie/AstroLogics')
+os.chdir('../../')
 
 # Set the path to simulations
-path_to_simulations = '/home/spankaew/Git/Git_Curie/AstroLogics/data/simulation_files/'
+path_to_simulations = 'data/simulation_files/'
 simulation_list = ['Invasion_simulation_50.csv',
                    'Invasion_simulation_100.csv', 
                    'Invasion_simulation_250.csv', 
@@ -57,10 +57,10 @@ simulation_list = ['Invasion_simulation_50.csv',
                    'Invasion_simulation_10000.csv']
 
 # Set the path to attractor group
-attractor_file = '/home/spankaew/Git/Git_Curie/AstroLogics/data/attractor_group/attractor_group/Invasion_attractor_group.csv'
+attractor_file = 'data/attractor_group/attractor_group/Invasion_attractor_group.csv'
 
 # Results path
-path_to_results = '/home/spankaew/Git/Git_Curie/AstroLogics/data/rand_experiment/'
+path_to_results = 'data/rand_experiment/'
 
 ## COMPARING THE CLUSTERING WITH THE ATTRACTORS ##
 

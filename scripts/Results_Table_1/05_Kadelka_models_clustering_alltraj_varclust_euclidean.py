@@ -3,12 +3,12 @@ import numpy as np
 import os
 import sys
 
-sys.path.append("/home/spankaew/Git/Git_Curie/AstroLogics/src")
+sys.path.append("../../src")
 import astrologics as ast
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-os.chdir(path = "/home/spankaew/Git/Git_Curie/AstroLogics/")
+os.chdir(path = "../../")
 from tqdm import tqdm
 from sklearn.metrics import adjusted_rand_score
 from sklearn.cluster import KMeans
@@ -45,20 +45,20 @@ def calculate_total_distancematrix(simulation_df):
 ## SETTING UP THE PATHS AND IMPORTS ##
 
 # Set the working directory
-os.chdir('/home/spankaew/Git/Git_Curie/AstroLogics')
+os.chdir('../../')
 
 # Set the path to the models
-path_to_model = '/home/spankaew/Git/Git_Curie/AstroLogics/inferred_model/'
+path_to_model = '../../inferred_model/'
 model_list = os.listdir(path_to_model)
 model_list = [m for m in model_list if m not in ['synthetic_random_diff', 'test_bonesis', 'toy_reprogramming']] 
 
 # Set the path to simulations
-path_to_simulations = '/home/spankaew/Git/Git_Curie/AstroLogics/data/simulation_files/'
+path_to_simulations = '../../data/simulation_files/'
 # Set the path to attractor group
-path_to_attractor = '/home/spankaew/Git/Git_Curie/AstroLogics/data/attractor_group/attractor_group/'
+path_to_attractor = '../../data/attractor_group/attractor_group/'
 
 # Results path
-path_to_results = '/home/spankaew/Git/Git_Curie/AstroLogics/data/rand_experiment/'
+path_to_results = '../../data/rand_experiment/'
 
 ## COMPARING THE CLUSTERING WITH THE ATTRACTORS ##
 

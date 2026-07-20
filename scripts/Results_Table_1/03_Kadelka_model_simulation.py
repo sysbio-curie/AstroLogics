@@ -3,20 +3,20 @@ import numpy as np
 import os
 
 import sys
-sys.path.append('/home/spankaew/Git/astrologics/')
+sys.path.append('../../src')
 import astrologics as le
 
 ## SETTING UP THE PATHS AND IMPORTS ##
 
 # Set the working directory
-os.chdir('/home/spankaew/Git/astrologics')
+os.chdir('../../')
 
 # Set the path to the models
-path_to_model = '/home/spankaew/Git/astrologics/models/selected_models/'
+path_to_model = '../../models/selected_models/'
 model_list = os.listdir(path_to_model)
 
 # Set the path to simulations
-path_to_simulations = '/home/spankaew/Git/astrologics/data/simulation_files/'
+path_to_simulations = '../../data/simulation_files/'
 
 ## MODELS SIMULATIONS ##
 

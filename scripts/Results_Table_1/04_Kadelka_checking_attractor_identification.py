@@ -7,8 +7,8 @@ import time
 
 ##### SET UP ######
 # Set up the paths
-path_to_models = "/home/spankaew/Git/astrologics/models/selected_BNs/"
-path_to_data = "/home/spankaew/Git/astrologics/data/model_inference/"
+path_to_models = "../../models/selected_BNs/"
+path_to_data = "../../data/model_inference/"
 
 # Load the model
 project_list = os.listdir(path_to_models)

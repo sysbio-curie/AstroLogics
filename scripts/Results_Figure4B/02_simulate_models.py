@@ -6,7 +6,7 @@ import maboss
 import collections
 import time
 import sys
-sys.path.append('/home/spankaew/Git/Git_Curie/AstroLogics/src')
+sys.path.append('../../src')
 
 ## SETTING UP THE PATHS AND IMPORTS ##
 # Default parameter
@@ -25,13 +25,13 @@ param = collections.OrderedDict([
 ])
 
 # Set the working directory
-os.chdir('/home/spankaew/Git/Git_Curie/AstroLogics')
+os.chdir('../../')
 
 # Set the path to the models
-path_to_model = '/home/spankaew/Git/Git_Curie/AstroLogics/models/Invasion/'
+path_to_model = 'models/Invasion/'
 
 # Set the path to simulations
-path_to_simulations = '/home/spankaew/Git/Git_Curie/AstroLogics/data/simulation_files/'
+path_to_simulations = 'data/simulation_files/'
 
 ## MODELS SIMULATIONS ##
 
