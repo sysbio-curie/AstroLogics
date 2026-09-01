@@ -26,12 +26,12 @@ jobs:
     - name: Install conda-build
       shell: bash -l {0}
       run: |
-        conda install conda-build anaconda-client conda-verify
+        conda install -c conda-forge conda-build anaconda-client conda-verify
     
     - name: Build conda package
       shell: bash -l {0}
       run: |
-        conda build -c colomoto conda/ --output-folder ./conda-dist
+        conda build -c colomoto -c conda-forge conda/ --output-folder ./conda-dist
     
     - name: Upload conda artifacts
       uses: actions/upload-artifact@v4
