@@ -1,6 +1,3 @@
-nbsphinx
-nbsphinx-link
-matplotlib
 pandas
 numpy
 scipy
@@ -12,5 +9,3 @@ maboss
 boolsim
 mpbn
 seaborn
-ipython
-sphinx_rtd_theme

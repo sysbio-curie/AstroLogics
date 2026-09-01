@@ -1,5 +1,5 @@
 {% set name = "astrologics" %}
-{% set version = "0.3.2" %}
+{% set version = "0.3.3" %}
 package:
   name: '{{ name|lower }}'
   version: '{{ version }}'
@@ -12,14 +12,13 @@ build:
 
 requirements:
   build:
-    - python >3.8
+    - python >=3.10
     - setuptools
 
   run:
-    - python >3.8
+    - python >=3.10
     - pandas
     - h5py
-    - numpy<=2.2
     - scipy
     - scikit-learn
     - tslearn
@@ -40,5 +39,5 @@ test:
   
 about:
   home: https://github.com/sysbio-curie/AstroLogics
-  summary: 'An analysis framework for monotonous Boolean model ensembles'
+  summary: 'A simulation-based framework for the analysis of Boolean model ensembles.'
 

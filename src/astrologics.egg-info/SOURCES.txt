@@ -1,0 +1,13 @@
+README.md
+pyproject.toml
+src/astrologics/__init__.py
+src/astrologics/logic_generator.py
+src/astrologics/logical_rules_processing.py
+src/astrologics/model_attractors.py
+src/astrologics/model_simulation.py
+src/astrologics/trajectory_clustering.py
+src/astrologics.egg-info/PKG-INFO
+src/astrologics.egg-info/SOURCES.txt
+src/astrologics.egg-info/dependency_links.txt
+src/astrologics.egg-info/requires.txt
+src/astrologics.egg-info/top_level.txt

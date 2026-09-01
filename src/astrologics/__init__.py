@@ -2,17 +2,16 @@
 AstroLogics : A Python package for analyzing monotonous Boolean model ensembles.
 """
 __author__ = 'Saran PANKAEW'
-__version__ = '0.5'
+__version__ = '1.0'
 __maintainer__ = 'Saran PANKAEW'
 __email__ = 'saran.pankeaw@curie.fr'
-__status__ = 'development'
-__date__ = '14/10/2025'
+__status__ = 'public'
+__date__ = '01/09/2026'
 
 from .model_attractors import attractors
 from .model_simulation import simulation
 from .trajectory_clustering import trajectory
 from .logical_rules_processing import logic
-from .succession_diagram import SuccessionDiagram
 
 class ensemble:
     def __init__(self, path, project_name):
@@ -39,10 +38,6 @@ class ensemble:
     def create_logic(self):
         self.logic = logic(self.path)
         print('Logic object created')
-
-    def create_succession_diagram(self):
-        self.succession_diagram = SuccessionDiagram(self.path)
-        print('Succession diagram object created')
     
     def __repr__(self):
         print(f'AstroLogics object for the project {self.project}')
