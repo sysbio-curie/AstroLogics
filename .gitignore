@@ -20,3 +20,13 @@ data/simulation_files/Signaling in Macrophage Activation_18433497_simulation.csv
 
 # The archive file
 AstroLogics.zip
+
+# DS_Store files
+.DS_Store
+
+# dist folder
+dist/
+
+# egg folder
+src/astrologics.egg-info/
+
