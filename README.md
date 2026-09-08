@@ -1,14 +1,14 @@
 <img align="left" width="160" src="https://github.com/sysbio-curie/AstroLogics/raw/main/doc/images/Logo_full.svg" />
 
-# An analysis framework for monotonous Boolean model ensemble
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21460314.svg)](https://doi.org/10.5281/zenodo.21460314)[![PyPI](https://img.shields.io/pypi/v/astrologics.svg)](https://pypi.org/project/astrologics/)[![Conda](https://img.shields.io/conda/vn/colomoto/astrologics.svg)](https://anaconda.org/colomoto/astrologics/)
+# AstroLogics: A simulation-based framework for the analysis of Boolean model ensembles
+[![Publication: Bioinformatics](https://img.shields.io/badge/Publication-Bioinformatics-2E7D32.svg)](https://academic.oup.com/bioinformatics/article/42/8/btag555/8741836)[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21460314.svg)](https://doi.org/10.5281/zenodo.21460314)[![PyPI](https://img.shields.io/pypi/v/astrologics.svg)](https://pypi.org/project/astrologics/)[![Conda](https://img.shields.io/conda/vn/colomoto/astrologics.svg)](https://anaconda.org/colomoto/astrologics/)
 
 
 This is a repository of data, code and analyses of AstroLogics framework.
 A step-by step tutorial can be found in the folder tutorial. Please have a look at our [tutorials](https://astrologics.readthedocs.io/en/latest/tutorials.html). 
 
 ## Overview
-AstroLogics is a Python package designed for analysing monotonous Boolean model ensemble, a product of Boolean model synthesis from method such as [Bonesis](https://bnediction.github.io/bonesis/index.html).
+AstroLogics is a Python package designed for analysing Boolean model ensemble, a product of Boolean model synthesis from method such as [Bonesis](https://bnediction.github.io/bonesis/index.html).
 
 
 Our framework includes two major processes 
@@ -116,5 +116,4 @@ jupyter-lab
 Our documentation is available on [ReadTheDocs](https://astrologics.readthedocs.io/)
 
 ## Citing AstroLogics
-The manuscript of AstroLogics has been submitted. 
-In the mean time, the pre-print version can be found at https://www.biorxiv.org/content/10.1101/2025.11.17.688236v1
+To cite AstroLogics work, please refer to: https://doi.org/10.1093/bioinformatics/btag555

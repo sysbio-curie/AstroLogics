@@ -1,5 +1,5 @@
 {% set name = "astrologics" %}
-{% set version = "0.3.2" %}
+{% set version = "1.0.0" %}
 package:
   name: '{{ name|lower }}'
   version: '{{ version }}'
@@ -39,5 +39,5 @@ test:
   
 about:
   home: https://github.com/sysbio-curie/AstroLogics
-  summary: 'An analysis framework for monotonous Boolean model ensembles'
+  summary: 'A simulation-based framework for the analysis of Boolean model ensembles.'
 

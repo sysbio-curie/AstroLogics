@@ -1,6 +1,6 @@
 [project]
 name = "astrologics"
-version = "0.3.2"
+version = "1.0.0"
 requires-python = ">3.8"
 dependencies = [
     "pandas",
@@ -20,5 +20,5 @@ authors = [
   {name = "Vincent Noël", email = "vincent.noel@curie.fr"},
 ]
 readme = "README.md"
-description = "An analysis framework for monotonous Boolean model ensemble"
+description = "An analysis framework for Boolean model ensemble"
 license = "MIT"

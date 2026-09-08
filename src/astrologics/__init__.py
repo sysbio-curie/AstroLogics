@@ -2,11 +2,11 @@
 AstroLogics : A Python package for analyzing monotonous Boolean model ensembles.
 """
 __author__ = 'Saran PANKAEW'
-__version__ = '0.5'
+__version__ = '1.0.0'
 __maintainer__ = 'Saran PANKAEW'
 __email__ = 'saran.pankeaw@curie.fr'
-__status__ = 'development'
-__date__ = '14/10/2025'
+__status__ = 'public'
+__date__ = '01/09/2026'
 
 from .model_attractors import attractors
 from .model_simulation import simulation
