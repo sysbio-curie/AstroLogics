@@ -30,7 +30,7 @@ Our framework includes two major processes
 
 ## Getting Started
 ### Requirements (for AstroLogics)
-- Python version 3.8 or greater
+- Python version 3.10 or greater
 - Python's packages listed here:
     - pandas
     - numpy
