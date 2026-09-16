@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
     
     - name: Setup Miniconda
       uses: conda-incubator/setup-miniconda@v3
@@ -26,57 +26,56 @@ jobs:
     - name: Install conda-build
       shell: bash -l {0}
       run: |
-        conda install conda-build anaconda-client conda-verify
+        conda install -c conda-forge conda-build anaconda-client conda-verify
     
     - name: Build conda package
       shell: bash -l {0}
       run: |
-        conda build -c colomoto conda/ --output-folder ./conda-dist
+        conda-build -c colomoto -c conda-forge conda/ --output-folder ./conda-dist
     
     - name: Upload conda artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: conda-packages
         path: conda-dist/
 
-  # test-conda:
-  #   needs: build-conda
-  #   runs-on: ${{ matrix.os }}
-  #   strategy:
-  #     matrix:
-  #       os: [ubuntu-latest, macos-latest]
-  #       python-version: ['3.9', '3.10', '3.11', '3.12']
+  test-conda:
+    needs: build-conda
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
     
-  #   steps:
-  #   - name: Setup Miniconda
-  #     uses: conda-incubator/setup-miniconda@v3
-  #     with:
-  #       auto-update-conda: true
-  #       python-version: ${{ matrix.python-version }}
-  #       channels: conda-forge,defaults
-  #       channel-priority: true
+    steps:
+    - name: Setup Miniconda
+      uses: conda-incubator/setup-miniconda@v3
+      with:
+        auto-update-conda: true
+        python-version: ${{ matrix.python-version }}
+        channels: conda-forge,defaults
+        channel-priority: true
     
-  #   - name: Download conda artifacts
-  #     uses: actions/download-artifact@v4
-  #     with:
-  #       name: conda-packages
-  #       path: conda-dist/
+    - name: Download conda artifacts
+      uses: actions/download-artifact@v8
+      with:
+        name: conda-packages
+        path: conda-dist/
     
-  #   - name: Debug with tmate
-  #     uses: mxschmitt/action-tmate@v3
-          
-  #   - name: Install and test package
-  #     shell: bash -l {0}
-  #     run: |
-  #       conda install -c colomoto -c conda-dist
-  #       python -c "import astrologics; print('Import successful')"
+    - name: Install and test package
+      shell: bash -l {0}
+      run: |
+        conda install -y -c conda-forge conda-index
+        python -m conda_index ./conda-dist
+        conda install -y -c ./conda-dist -c colomoto -c conda-forge astrologics
+        conda list
+        python -c "import astrologics; print('Import successful')"
     
 
   publish-conda:
-    needs: [build-conda] #, test-conda] 
-    runs-on: ubuntu-latest
+    needs: [test-conda] 
     if: github.event_name == 'release'
-    
+    runs-on: ubuntu-latest
     steps:
     - name: Setup Miniconda
       uses: conda-incubator/setup-miniconda@v3
@@ -92,7 +91,7 @@ jobs:
         conda install anaconda-client
     
     - name: Download all conda artifacts
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: conda-packages
         path: conda-dist/
